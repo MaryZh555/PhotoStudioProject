@@ -1,28 +1,30 @@
-package models;
+package com.maryzh555.photo_studio.models;
 
 /**
- * Created by zhmas on 17.03.2023.
+ * Created by zhmas on 23.03.2023.
  */
+public class Order {
 
-public class User {
-    private String name;
     private String desiredPhotographerType;
+
     private Photographer desiredPhotographer;
-    private int numbersOfPeople;
+
+    private int desiredNumbersOfPeople;
+
     private PhotoType desiredPhotoType;
+
     private Locations desiredLocation;
+
     private int total;
 
+    public Order(){
 
-    public User() {
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public static int calculateTotal(Order order) {
+        int total = (order.getDesiredPhotographer().getHourlyRate() * order.getDesiredPhotoType().getHours()) + order.getDesiredLocation().getRentingCost();
+        order.setTotal(total);
+        return total;
     }
 
     public void setDesiredPhotographerType(String desiredPhotographerType) {
@@ -41,12 +43,12 @@ public class User {
         this.desiredPhotographer = desiredPhotographer;
     }
 
-    public int getNumbersOfPeople() {
-        return numbersOfPeople;
+    public int getDesiredNumbersOfPeople() {
+        return desiredNumbersOfPeople;
     }
 
-    public void setNumbersOfPeople(int number) {
-        this.numbersOfPeople = number;
+    public void setDesiredNumbersOfPeople(int number) {
+        this.desiredNumbersOfPeople = number;
     }
 
     public PhotoType getDesiredPhotoType() {
@@ -72,7 +74,4 @@ public class User {
     public void setTotal(int total) {
         this.total = total;
     }
-
 }
-
-
