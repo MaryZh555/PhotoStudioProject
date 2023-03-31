@@ -1,7 +1,7 @@
 package com.maryzh555.photo_studio.exceptions;
 
 /**
- * Created by zhmas on 23.03.2023.
+ * Created by Zhang M. on 23.03.2023.
  */
 public class NoSuchOptionException extends Exception{
 

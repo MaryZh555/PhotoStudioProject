@@ -1,17 +1,17 @@
 package com.maryzh555.photo_studio.user_console_interface;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.PhotoStudio;
 import com.maryzh555.photo_studio.models.User;
 import com.maryzh555.photo_studio.models.Order;
-import com.maryzh555.photo_studio.models.Locations;
-
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import com.maryzh555.photo_studio.enums.Location;
 
 /**
- * Created by zhmas on 20.03.2023.
+ * Created by Zhang M. on 20.03.2023.
  */
 
 public class LocationOptionMenu implements IShowRedoMenu {
@@ -24,24 +24,23 @@ public class LocationOptionMenu implements IShowRedoMenu {
             try {
                 System.out.println("\nNow the last thing. " +
                         "Our studio offers a location renting.\n" +
-                        "For " + order.getDesiredPhotoType().getName() +
-                        " PhotoType we can suggest:");
+                        "For " + order.getDesiredPhotoType().name() +
+                        " photo shoot we can suggest:");
 
                 int i = 0;
-                for (Locations location : order.getDesiredPhotoType().getLinkedLocations()) {
+                for (Location location : photoStudio.returnArrayOfLocations(order.getDesiredPhotoType())) {
                     System.out.println(
-                            " " + i + " - " + location.getName() + " :\n" +
+                            " " + i + " - " + location.name().replace("_", " ") + " :\n" +
                                     "     " + location.getDescription() + "\n     " +
                                     "Renting cost is " + location.getRentingCost() + " per hour.");
                     i++;
                 }
 
-                if (order.getDesiredPhotoType().equals(photoStudio.getPhotoTypes()[0]) ||
-                        order.getDesiredPhotoType().equals(photoStudio.getPhotoTypes()[1])) {
-                    showLocationOptions(scanner, user, order, photoStudio);
-                } else {
-                    order.setDesiredLocation(order.getDesiredPhotoType().getLinkedLocations().get(0));
+                if (order.getDesiredPhotoType().ordinal() == 2) {
+                    order.setDesiredLocation(photoStudio.getLocations().get(1));
                     showRedoMenu(scanner, user, order, photoStudio);
+                } else {
+                    showLocationOptions(scanner, user, order, photoStudio);
                 }
                 break;
             } catch (NoSuchOptionException e) {
@@ -60,11 +59,12 @@ public class LocationOptionMenu implements IShowRedoMenu {
 
         int answer = scanner.nextInt();
         if (answer < 0 || answer > 1) throw new NoSuchOptionException();
-        order.setDesiredLocation(order.getDesiredPhotoType().getLinkedLocations().get(answer));
+        order.setDesiredLocation(photoStudio.returnArrayOfLocations(order.getDesiredPhotoType())[answer]);
 
-        System.out.println("You chose a " +
-                order.getDesiredPhotoType().getLinkedLocations().get(answer).getName() +
-                " location. Good choice!");
+        System.out.println(
+                "You chose a " +
+                        order.getDesiredLocation().name().replace("_", " ") +
+                        " location. Good choice!");
 
         showRedoMenu(scanner, user, order, photoStudio);
     }

@@ -1,6 +1,7 @@
 package com.maryzh555.photo_studio.models;
+
 /**
- * Created by zhmas on 18.03.2023.
+ * Created by Zhang M. on 18.03.2023.
  */
 public class Photographer {
 
@@ -15,7 +16,6 @@ public class Photographer {
         this.yearsOfExperience = years;
         this.hourlyRate = hourlyRate;
     }
-
 
     public String getName() {
         return name;

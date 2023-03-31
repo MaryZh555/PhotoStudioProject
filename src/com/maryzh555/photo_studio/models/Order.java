@@ -1,38 +1,28 @@
 package com.maryzh555.photo_studio.models;
 
+import com.maryzh555.photo_studio.enums.Location;
+import com.maryzh555.photo_studio.enums.PhotoType;
+
 /**
- * Created by zhmas on 23.03.2023.
+ * Created by Zhang M. on 23.03.2023.
  */
 public class Order {
 
-    private String desiredPhotographerType;
-
     private Photographer desiredPhotographer;
-
-    private int desiredNumbersOfPeople;
 
     private PhotoType desiredPhotoType;
 
-    private Locations desiredLocation;
+    private Location desiredLocation;
 
     private int total;
 
-    public Order(){
+    public Order() {
 
     }
 
-    public static int calculateTotal(Order order) {
-        int total = (order.getDesiredPhotographer().getHourlyRate() * order.getDesiredPhotoType().getHours()) + order.getDesiredLocation().getRentingCost();
-        order.setTotal(total);
-        return total;
-    }
-
-    public void setDesiredPhotographerType(String desiredPhotographerType) {
-        this.desiredPhotographerType = desiredPhotographerType;
-    }
-
-    public String getDesiredPhotographerType() {
-        return desiredPhotographerType;
+    public int calculateTotal(Order order) {
+        int result = (order.getDesiredPhotographer().getHourlyRate() +order.getDesiredLocation().getRentingCost()) * order.getDesiredPhotoType().getHours();
+        return result;
     }
 
     public Photographer getDesiredPhotographer() {
@@ -43,14 +33,6 @@ public class Order {
         this.desiredPhotographer = desiredPhotographer;
     }
 
-    public int getDesiredNumbersOfPeople() {
-        return desiredNumbersOfPeople;
-    }
-
-    public void setDesiredNumbersOfPeople(int number) {
-        this.desiredNumbersOfPeople = number;
-    }
-
     public PhotoType getDesiredPhotoType() {
         return desiredPhotoType;
     }
@@ -59,19 +41,19 @@ public class Order {
         this.desiredPhotoType = desiredPhotoType;
     }
 
-    public Locations getDesiredLocation() {
+    public Location getDesiredLocation() {
         return desiredLocation;
     }
 
-    public void setDesiredLocation(Locations desiredLocation) {
+    public void setDesiredLocation(Location desiredLocation) {
         this.desiredLocation = desiredLocation;
-    }
-
-    public int getTotal() {
-        return total;
     }
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public int getTotal() {
+        return total;
     }
 }

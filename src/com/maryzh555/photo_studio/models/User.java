@@ -1,9 +1,8 @@
 package com.maryzh555.photo_studio.models;
 
 /**
- * Created by zhmas on 17.03.2023.
+ * Created by Zhang M. on 17.03.2023.
  */
-
 public class User {
 
     private String name;

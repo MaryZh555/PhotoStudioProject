@@ -1,5 +1,8 @@
 package com.maryzh555.photo_studio.user_console_interface;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.exceptions.WrongNameException;
 import com.maryzh555.photo_studio.exceptions.WrongNumberException;
@@ -8,20 +11,22 @@ import com.maryzh555.photo_studio.models.PhotoStudio;
 import com.maryzh555.photo_studio.models.User;
 import com.maryzh555.photo_studio.models.Order;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 /**
- * Created by zhmas on 20.03.2023.
+ * Created by Zhang M. on 20.03.2023.
  */
 public class MainMenu implements IShowRedoMenu {
     public MainMenu() {
         try (Scanner scanner = new Scanner(System.in)) {
             PhotoStudio photoStudio = new PhotoStudio();
             User user = new User();
-            Order order = new Order();
+
+            //TODO: DELETE
+            for (int i = 0; i < photoStudio.getPhotographers().size(); i++) {
+                System.out.println((i + 1) + ": " + photoStudio.getPhotographers().get(i).getName() + ": " + photoStudio.getPhotographers().get(i).getYearsOfExperience() + ", " + photoStudio.getPhotographers().get(i).getHourlyRate());
+            }
 
             showNameForm(scanner, user);
+            Order order = new Order();
             showRedoMenu(scanner, user, order, photoStudio);
         }
     }
@@ -35,7 +40,9 @@ public class MainMenu implements IShowRedoMenu {
                         "and should not contain any numbers or special symbols.");
                 String name = scanner.nextLine();
 
-                if (name.matches(".*\\d+.*") || name.trim().length() < 3 || !name.trim().matches("[a-zA-Z]+"))
+                if (name.matches(".*\\d+.*") ||
+                        name.trim().length() < 3 ||
+                        !name.trim().matches("[a-zA-Z]+"))
                     throw new WrongNameException();
 
                 user.setName(name.trim());
@@ -57,7 +64,9 @@ public class MainMenu implements IShowRedoMenu {
                         "and should not contain any numbers or special symbols.");
                 String surname = scanner.nextLine();
 
-                if (surname.matches(".*\\d+.*") || surname.trim().length() < 3 || !surname.trim().matches("[a-zA-Z]+"))
+                if (surname.matches(".*\\d+.*") ||
+                        surname.trim().length() < 3 ||
+                        !surname.trim().matches("[a-zA-Z]+"))
                     throw new WrongNameException();
 
                 user.setSurname(surname.trim());
@@ -73,11 +82,15 @@ public class MainMenu implements IShowRedoMenu {
     public void showContactNumberForm(Scanner scanner, User user) {
         while (true) {
             try {
-                System.out.println("Please enter your contact phone number: \n " +
-                        "* Note: Phone number should only contain 10 digits, and start with a zero.");
+                System.out.println("Please enter your contact PHONE NUMBER: \n " +
+                        "* Note: Phone number should only contain 10 digits, " +
+                        "and start with a zero.");
                 String contactNumber = scanner.nextLine();
 
-                if (contactNumber.trim().length() < 10 || contactNumber.trim().matches("[a-zA-Z]+") || !contactNumber.matches(".*\\d+.*") || contactNumber.charAt(0) != '0')
+                if (contactNumber.trim().length() != 10 ||
+                        contactNumber.trim().matches("[a-zA-Z]+") ||
+                        !contactNumber.matches(".*\\d+.*") ||
+                        contactNumber.charAt(0) != '0')
                     throw new WrongNumberException();
 
                 user.setContactNumber(contactNumber.trim());
@@ -93,12 +106,12 @@ public class MainMenu implements IShowRedoMenu {
     public void showRedoMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
         while (true) {
             try {
-                System.out.println("Please check if the contact data are correct" +
-                        "\n NAME: "+ user.getName() +
-                        "\n SURNAME: "+ user.getSurname() +
-                        "\n CONTACT NUMBER: "+ user.getContactNumber() );
+                System.out.println("Please check if the contact data is correct" +
+                        "\n NAME: " + user.getName() +
+                        "\n SURNAME: " + user.getSurname() +
+                        "\n CONTACT NUMBER: " + user.getContactNumber());
 
-                System.out.println("\nIs it correct?\n "+
+                System.out.println("\nIs it correct?\n " +
                         "1 - Yes, the data is correct.\n " +
                         "2 - No, I want to rewrite.");
 
