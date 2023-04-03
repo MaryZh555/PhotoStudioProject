@@ -12,7 +12,7 @@ import com.maryzh555.photo_studio.models.Photographer;
 import com.maryzh555.photo_studio.models.User;
 
 /**
- * Created by Zhang M. on 20.03.2023.
+ * @author Zhang M. on 20.03.2023.
  */
 
 public class PhotographersOptionMenu implements IShowRedoMenu {
@@ -24,7 +24,6 @@ public class PhotographersOptionMenu implements IShowRedoMenu {
     List<Photographer> list = null; //the list is used in both methods
 
     private void showYearsOptionsMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
-
         while (true) {
             try {
                 list = null; // empties the list when redo
@@ -33,22 +32,24 @@ public class PhotographersOptionMenu implements IShowRedoMenu {
                 int answer = scanner.nextInt();
                 if (answer < 1 || answer > 6) throw new NoSuchOptionException();
 
-                System.out.println("We have such photographers with " + answer + " years of experience: ");
+                System.out.println("Let's see which photographers have " + answer + " years of experience: ");
 
                 list = photoStudio.matchPhotographers(answer);
+
+                if(list.size() == 0 ){ //For cases when there is no photographers with needed experience
+                    System.out.println("Unfortunately, we don't have any photographer with " + answer + " years of experience.\n" +
+                            "But we can suggest some with similar experience: ");
+                    list = photoStudio.findAlternativePhotographers(answer);
+                    }
+
                 int i = 1;
                 for (Photographer photographer : list) {
                     System.out.println("  " + i + " - " + photographer.getName() +
-                            " (" + photographer.getHourlyRate() + "$/hour)");
+                            " (" + photographer.getYearsOfExperience() + " years, " + photographer.getHourlyRate() + "$/hour)");
                     i++;
                 }
 
-                if(list.size() == 0 ){ //For rare cases
-                    System.out.println("*Oops* It seems like we didn't find the photographer with needed years of experience. " +
-                            "Let's try again\n");
-                    photoStudio = new PhotoStudio();
-                    showYearsOptionsMenu(scanner, user, order, photoStudio);
-                } else if (list.size() == 1) {
+                if (list.size() == 1) {
                     System.out.println("They are the only one, who might suit you.");
                     order.setDesiredPhotographer(list.get(0));
                     showRedoMenu(scanner, user, order, photoStudio);

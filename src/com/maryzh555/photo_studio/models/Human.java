@@ -2,11 +2,18 @@ package com.maryzh555.photo_studio.models;
 
 /**
  * The abstract class Human represents a basic human with an identifier and a name.
+ *
  * @author Zhang M. on 03.04.2023.
  */
 public abstract class Human {
-    public int id;
-    public String name;
+    // The id value will be reset to 1 on every run of the program, the id field is added for the future database use.
+    // The idCounter is a temporary solution until the database will be implemented.
+    protected static int idCounter = 1;
+
+    protected int id;
+
+    protected String name;
+
 
     public String getName() {
         return name;
@@ -20,4 +27,7 @@ public abstract class Human {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -1,11 +1,9 @@
 package com.maryzh555.photo_studio.models;
 
 /**
- * Created by Zhang M. on 17.03.2023.
+ * @author Zhang M. on 17.03.2023.
  */
-public class User {
-
-    private String name;
+public class User extends Human{
 
     private String surname;
 
@@ -13,14 +11,7 @@ public class User {
 
 
     public User() {
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+        this.id = idCounter++; //temporary solution for id
     }
 
     public String getSurname() {
@@ -38,7 +29,6 @@ public class User {
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
-
 
 }
 

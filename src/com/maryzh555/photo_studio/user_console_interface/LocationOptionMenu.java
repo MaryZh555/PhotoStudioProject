@@ -11,7 +11,7 @@ import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.enums.Location;
 
 /**
- * Created by Zhang M. on 20.03.2023.
+ * @author Zhang M. on 20.03.2023.
  */
 
 public class LocationOptionMenu implements IShowRedoMenu {
@@ -24,20 +24,20 @@ public class LocationOptionMenu implements IShowRedoMenu {
             try {
                 System.out.println("\nNow the last thing. " +
                         "Our studio offers a location renting.\n" +
-                        "For " + order.getDesiredPhotoType().name() +
+                        "For " + order.getDesiredPhotoType() +
                         " photo shoot we can suggest:");
 
                 int i = 0;
-                for (Location location : photoStudio.returnArrayOfLocations(order.getDesiredPhotoType())) {
+                for (Location location : photoStudio.matchLocations(order.getDesiredPhotoType())) {
                     System.out.println(
-                            " " + i + " - " + location.name().replace("_", " ") + " :\n" +
+                            " " + i + " - " + location + " :\n" +
                                     "     " + location.getDescription() + "\n     " +
                                     "Renting cost is " + location.getRentingCost() + " per hour.");
                     i++;
                 }
 
                 if (order.getDesiredPhotoType().ordinal() == 2) {
-                    order.setDesiredLocation(photoStudio.getLocations().get(1));
+                    order.setDesiredLocation(Location.GROUP_HUB);
                     showRedoMenu(scanner, user, order, photoStudio);
                 } else {
                     showLocationOptions(scanner, user, order, photoStudio);
@@ -59,11 +59,11 @@ public class LocationOptionMenu implements IShowRedoMenu {
 
         int answer = scanner.nextInt();
         if (answer < 0 || answer > 1) throw new NoSuchOptionException();
-        order.setDesiredLocation(photoStudio.returnArrayOfLocations(order.getDesiredPhotoType())[answer]);
+        order.setDesiredLocation(photoStudio.matchLocations(order.getDesiredPhotoType())[answer]);
 
         System.out.println(
                 "You chose a " +
-                        order.getDesiredLocation().name().replace("_", " ") +
+                        order.getDesiredLocation() +
                         " location. Good choice!");
 
         showRedoMenu(scanner, user, order, photoStudio);
@@ -81,7 +81,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
 
                 switch (answer) {
                     case 1:
-                        new CalculateTotalMenu(scanner, user, order, photoStudio);
+                        new CalculateTotalMenu(scanner, user, order);
                         break;
                     case 2:
                         new PhotoTypeOptionMenu(scanner, user, order, photoStudio);

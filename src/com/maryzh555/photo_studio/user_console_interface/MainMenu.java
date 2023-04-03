@@ -12,19 +12,13 @@ import com.maryzh555.photo_studio.models.User;
 import com.maryzh555.photo_studio.models.Order;
 
 /**
- * Created by Zhang M. on 20.03.2023.
+ * @author Zhang M. on 20.03.2023.
  */
 public class MainMenu implements IShowRedoMenu {
     public MainMenu() {
         try (Scanner scanner = new Scanner(System.in)) {
             PhotoStudio photoStudio = new PhotoStudio();
             User user = new User();
-
-            //TODO: DELETE
-            for (int i = 0; i < photoStudio.getPhotographers().size(); i++) {
-                System.out.println((i + 1) + ": " + photoStudio.getPhotographers().get(i).getName() + ": " + photoStudio.getPhotographers().get(i).getYearsOfExperience() + ", " + photoStudio.getPhotographers().get(i).getHourlyRate());
-            }
-
             showNameForm(scanner, user);
             Order order = new Order();
             showRedoMenu(scanner, user, order, photoStudio);

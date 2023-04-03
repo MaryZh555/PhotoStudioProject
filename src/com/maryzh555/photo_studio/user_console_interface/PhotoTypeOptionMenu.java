@@ -11,7 +11,7 @@ import com.maryzh555.photo_studio.enums.PhotoType;
 import com.maryzh555.photo_studio.models.User;
 
 /**
- * Created by Zhang M. on 20.03.2023.
+ * @author Zhang M. on 20.03.2023.
  */
 
 public class PhotoTypeOptionMenu implements IShowRedoMenu {
@@ -31,7 +31,7 @@ public class PhotoTypeOptionMenu implements IShowRedoMenu {
                 order.setDesiredPhotoType(chosenType);
 
                 System.out.println("Got it! " +
-                        "We can suggest the " + chosenType.name() + " photo shoot. \n" +
+                        "We can suggest the " + chosenType + " photo shoot. \n" +
                         chosenType.getDescription());
 
                 showRedoMenu(scanner, user, order, photoStudio);

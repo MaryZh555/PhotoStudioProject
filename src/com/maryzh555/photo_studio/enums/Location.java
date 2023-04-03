@@ -1,7 +1,11 @@
 package com.maryzh555.photo_studio.enums;
 
 /**
- * Created by Zhang M. on 18.03.2023.
+ * Enum representing different photography locations available for rent.
+ * Each location has a renting cost and a description.
+ * The toString() method is overridden to return the name with underscores replaced by spaces for printing usage.
+ *
+ * @author Zhang M. on 18.03.2023.
  */
 public enum Location {
 
@@ -16,29 +20,25 @@ public enum Location {
             "An outdoor location featuring a picturesque view of a small bridge over a nearby river, perfect for natural and scenic photography."
     );
 
+    private final int rentingCost;
 
-    private int rentingCost;
-
-    private String description;
+    private final String description;
 
     Location(int rentingCost, String description) {
         this.rentingCost = rentingCost;
         this.description = description;
     }
 
-    public int getRentingCost() {
-        return rentingCost;
+    public String toString() {
+        return name().replace("_", " ");
     }
 
-    public void setRentingCost(int rentingCost) {
-        this.rentingCost = rentingCost;
+    public int getRentingCost() {
+        return rentingCost;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

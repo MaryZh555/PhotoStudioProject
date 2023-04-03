@@ -4,9 +4,18 @@ import com.maryzh555.photo_studio.enums.Location;
 import com.maryzh555.photo_studio.enums.PhotoType;
 
 /**
- * Created by Zhang M. on 23.03.2023.
+ * This class represents an order made by a customer, containing information about the desired photographer,
+ * photo type, and location. It also includes methods for calculating the total cost of the order.
+ *
+ * @author Zhang M. on 23.03.2023.
  */
 public class Order {
+
+    // The id value will be reset to 1 on every run of the program, the id field is added for the future database use.
+    // The idCounter is a temporary solution until the database will be added.
+    private static int idCounter = 1;
+
+    private final int id;
 
     private Photographer desiredPhotographer;
 
@@ -16,13 +25,13 @@ public class Order {
 
     private int total;
 
-    public Order() {
 
+    public Order() {
+        this.id = idCounter++; //temporary solution
     }
 
     public int calculateTotal(Order order) {
-        int result = (order.getDesiredPhotographer().getHourlyRate() +order.getDesiredLocation().getRentingCost()) * order.getDesiredPhotoType().getHours();
-        return result;
+        return (order.getDesiredPhotographer().getHourlyRate() +order.getDesiredLocation().getRentingCost()) * order.getDesiredPhotoType().getHours();
     }
 
     public Photographer getDesiredPhotographer() {
@@ -56,4 +65,9 @@ public class Order {
     public int getTotal() {
         return total;
     }
+
+    public int getId() {
+        return id;
+    }
+
 }
