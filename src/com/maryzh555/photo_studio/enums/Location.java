@@ -1,5 +1,7 @@
 package com.maryzh555.photo_studio.enums;
 
+import com.maryzh555.photo_studio.util.myFileReader;
+
 /**
  * Enum representing different photography locations available for rent.
  * Each location has a renting cost and a description.
@@ -9,24 +11,23 @@ package com.maryzh555.photo_studio.enums;
  */
 public enum Location {
 
-    CHROMA_CHARM(
-            10,
-            "A cozy and intimate space with chromakey and all necessary attributes for portrait photography."),
-    GROUP_HUB(
-            25,
-            "A spacious room perfect for group and team photo shoots with a variety of backdrops and props available."),
-    RIVER_VIEW_TERRACE(
-            30,
-            "An outdoor location featuring a picturesque view of a small bridge over a nearby river, perfect for natural and scenic photography."
-    );
+    CHROMA_CHARM(10),
+    GROUP_HUB(25),
+    RIVER_VIEW_TERRACE(30);
 
     private final int rentingCost;
 
     private final String description;
 
-    Location(int rentingCost, String description) {
+    Location(int rentingCost) {
         this.rentingCost = rentingCost;
-        this.description = description;
+        this.description = loadDescription();
+    }
+
+    private String loadDescription() {
+        String descriptionFilePath = "src/com/maryzh555/photo_studio/file/Descriptions - locations.txt";
+        myFileReader reader = new myFileReader();
+        return reader.extractDescription(toString(), descriptionFilePath);
     }
 
     public String toString() {

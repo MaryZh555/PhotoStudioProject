@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.models.Order;
-import com.maryzh555.photo_studio.models.PhotoStudio;
 import com.maryzh555.photo_studio.models.User;
 
 /**

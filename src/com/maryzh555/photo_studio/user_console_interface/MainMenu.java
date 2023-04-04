@@ -3,6 +3,8 @@ package com.maryzh555.photo_studio.user_console_interface;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.maryzh555.photo_studio.enums.Location;
+import com.maryzh555.photo_studio.enums.PhotoType;
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.exceptions.WrongNameException;
 import com.maryzh555.photo_studio.exceptions.WrongNumberException;
