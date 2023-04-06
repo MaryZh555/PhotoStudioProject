@@ -6,7 +6,7 @@ import java.util.Scanner;
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.User;
+import com.maryzh555.photo_studio.models.humans.User;
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.enums.Location;
 
@@ -22,8 +22,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
     private void showMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
         while (true) {
             try {
-                System.out.println("\nNow the last thing. " +
-                        "Our studio offers a location renting.\n" +
+                System.out.println("\nOur studio offers a location renting.\n" +
                         "For " + order.getDesiredPhotoType() +
                         " photo shoot we can suggest:");
 
@@ -73,7 +72,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
         while (true) {
             try {
                 System.out.println(
-                        " \nAre you ready to calculate the total price or you want to redo?\n " +
+                        " \nAre you ready to continue?\n " +
                                 "1 - Let's continue.\n " +
                                 "2 - I want to redo.");
 
@@ -81,7 +80,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
 
                 switch (answer) {
                     case 1:
-                        new CalculateTotalMenu(scanner, user, order);
+                        new PhotoPaperMenu(scanner, user, order, photoStudio);
                         break;
                     case 2:
                         new PhotoTypeOptionMenu(scanner, user, order, photoStudio);

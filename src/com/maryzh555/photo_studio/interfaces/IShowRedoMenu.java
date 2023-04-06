@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.User;
+import com.maryzh555.photo_studio.models.humans.User;
 
 /**
  * @author Zhang M. on 17.03.2023.

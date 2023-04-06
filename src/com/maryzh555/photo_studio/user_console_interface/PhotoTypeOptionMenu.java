@@ -8,7 +8,7 @@ import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.models.PhotoStudio;
 import com.maryzh555.photo_studio.enums.PhotoType;
-import com.maryzh555.photo_studio.models.User;
+import com.maryzh555.photo_studio.models.humans.User;
 
 /**
  * @author Zhang M. on 20.03.2023.

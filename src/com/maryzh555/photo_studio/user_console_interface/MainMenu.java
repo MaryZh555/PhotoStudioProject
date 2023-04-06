@@ -3,26 +3,24 @@ package com.maryzh555.photo_studio.user_console_interface;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.maryzh555.photo_studio.enums.Location;
-import com.maryzh555.photo_studio.enums.PhotoType;
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.exceptions.WrongNameException;
 import com.maryzh555.photo_studio.exceptions.WrongNumberException;
 import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.User;
+import com.maryzh555.photo_studio.models.humans.User;
 import com.maryzh555.photo_studio.models.Order;
+
 
 /**
  * @author Zhang M. on 20.03.2023.
  */
 public class MainMenu implements IShowRedoMenu {
-    public MainMenu() {
+    public MainMenu(PhotoStudio photoStudio, User user, Order order) {
         try (Scanner scanner = new Scanner(System.in)) {
-            PhotoStudio photoStudio = new PhotoStudio();
-            User user = new User();
+            System.out.println("Welcome to the Lumina Photo Studio!");
             showNameForm(scanner, user);
-            Order order = new Order();
+//            test.printObject(photoStudio, order, user);// todo delete
             showRedoMenu(scanner, user, order, photoStudio);
         }
     }
@@ -118,7 +116,7 @@ public class MainMenu implements IShowRedoMenu {
                         new PhotographersOptionMenu(scanner, user, order, photoStudio);
                         break;
                     case 2:
-                        new MainMenu();
+                        new MainMenu(photoStudio, user, order);
                         break;
                     default:
                         throw new NoSuchOptionException();

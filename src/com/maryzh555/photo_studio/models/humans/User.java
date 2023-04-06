@@ -1,14 +1,13 @@
-package com.maryzh555.photo_studio.models;
+package com.maryzh555.photo_studio.models.humans;
 
 /**
  * @author Zhang M. on 17.03.2023.
  */
-public class User extends Human{
+public class User extends Human {
 
     private String surname;
 
     private String contactNumber;
-
 
     public User() {
         this.id = idCounter++; //temporary solution for id

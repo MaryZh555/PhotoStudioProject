@@ -1,4 +1,4 @@
-package com.maryzh555.photo_studio.models;
+package com.maryzh555.photo_studio.models.humans;
 
 /**
  * The abstract class Human represents a basic human with an identifier and a name.

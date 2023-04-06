@@ -1,7 +1,9 @@
 package com.maryzh555.photo_studio.models;
 
 import com.maryzh555.photo_studio.enums.Location;
+import com.maryzh555.photo_studio.enums.PhotoPaper;
 import com.maryzh555.photo_studio.enums.PhotoType;
+import com.maryzh555.photo_studio.models.humans.Photographer;
 
 /**
  * This class represents an order made by a customer, containing information about the desired photographer,
@@ -23,6 +25,12 @@ public class Order {
 
     private Location desiredLocation;
 
+    private int printStandard;
+
+    private int printLarge;
+
+    private int printProfessional;
+
     private int total;
 
 
@@ -31,7 +39,11 @@ public class Order {
     }
 
     public int calculateTotal(Order order) {
-        return (order.getDesiredPhotographer().getHourlyRate() +order.getDesiredLocation().getRentingCost()) * order.getDesiredPhotoType().getHours();
+        int costOfPhoto = (order.getDesiredPhotographer().getHourlyRate() + order.getDesiredLocation().getRentingCost()) * order.getDesiredPhotoType().getHours();
+        int costOfPrinting = (order.getPrintStandard() * PhotoPaper.STANDARD.getCostPerCopy()) +
+                (order.getPrintLarge() * PhotoPaper.LARGE.getCostPerCopy()) +
+                (order.getPrintProfessional() * PhotoPaper.PROFESSIONAL.getCostPerCopy());
+        return (costOfPhoto + costOfPrinting);
     }
 
     public Photographer getDesiredPhotographer() {
@@ -70,4 +82,27 @@ public class Order {
         return id;
     }
 
+    public int getPrintStandard() {
+        return printStandard;
+    }
+
+    public void setPrintStandard(int printStandard) {
+        this.printStandard = printStandard;
+    }
+
+    public int getPrintLarge() {
+        return printLarge;
+    }
+
+    public void setPrintLarge(int printLarge) {
+        this.printLarge = printLarge;
+    }
+
+    public int getPrintProfessional() {
+        return printProfessional;
+    }
+
+    public void setPrintProfessional(int printProfessional) {
+        this.printProfessional = printProfessional;
+    }
 }
