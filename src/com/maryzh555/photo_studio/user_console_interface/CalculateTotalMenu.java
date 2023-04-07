@@ -24,16 +24,22 @@ public class CalculateTotalMenu {
                 int resultTotal = order.calculateTotal(order);
                 order.setTotal(resultTotal);
 
-                System.out.println("  Your order is a " + order.getDesiredPhotoType() +
+                System.out.println("\nYour order is a " + order.getDesiredPhotoType() +
                         " photo type, with the photographer " +
                         order.getDesiredPhotographer().getName() +
                         ". And location you are renting is the " +
                         order.getDesiredLocation() + ".");
-                System.out.println("  For printing you chose " + order.getPrintStandard() + " copies of STANDARD sized photo, "
-                        + order.getPrintLarge() + " copies of LARGE sized photo, and " +
-                        order.getPrintProfessional() + " copies of PROFESSIONAL sized photo.");
-
-                System.out.println("It will cost you " + order.getTotal() + "$ total.\n");
+                if(order.getPrintStandard() ==0 &&
+                        order.getPrintLarge() ==0 &&
+                        order.getPrintProfessional() ==0){
+                    System.out.println("You chose to have only digital photos.");
+                } else {
+                    System.out.println(
+                            "\nFor printing you chose " + order.getPrintStandard() + " copies of STANDARD sized photo, "
+                            + order.getPrintLarge() + " copies of LARGE sized photo, and " +
+                            order.getPrintProfessional() + " copies of PROFESSIONAL sized photo.");
+                }
+                System.out.println("\nIt will cost you " + order.getTotal() + "$ total.\n");
 
                 System.out.println("Is it ok, or you want to redo your order?\n " +
                         "1 - It's fine.\n " +

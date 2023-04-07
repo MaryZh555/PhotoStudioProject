@@ -1,6 +1,5 @@
 package com.maryzh555.photo_studio.user_console_interface;
 
-
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.Order;
@@ -17,8 +16,8 @@ import java.util.Scanner;
  */
 public class PhotoPaperMenu implements IShowRedoMenu {
     public PhotoPaperMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
-        test.paperTest(photoStudio);  //todo delete
-        test.printObject(photoStudio, order, user);// todo delete
+//        test.paperTest(photoStudio);  //TODO delete
+//        test.printObject(photoStudio, order, user);// todo delete
         showMenu(scanner, user, order, photoStudio);
     }
 
@@ -27,7 +26,7 @@ public class PhotoPaperMenu implements IShowRedoMenu {
             try {
                 System.out.println("\nDo you want us to print your photos?");
                 System.out.println(" 1 - Yes! I want some more copies!\n" +
-                        " 2 - No, 1 standard is fine for me.");
+                        " 2 - No, digital is fine for me.");
                 int answer = scanner.nextInt();
                 if (answer < 1 || answer > 2) throw new NoSuchOptionException();
                 switch (answer) {
@@ -68,7 +67,7 @@ public class PhotoPaperMenu implements IShowRedoMenu {
                 order.setPrintStandard(answer);
                 photoStudio.usePhotoPaper("STANDARD" , order.getPrintStandard());
 
-                test.paperTest(photoStudio);  //todo delete
+//                test.paperTest(photoStudio);  //TODO delete
 
                 showLargeSizeMenu(scanner, user, order, photoStudio);
                 break;
@@ -118,7 +117,7 @@ public class PhotoPaperMenu implements IShowRedoMenu {
                 order.setPrintProfessional(answer3);
                 photoStudio.usePhotoPaper("PROFESSIONAL", order.getPrintProfessional());
 
-                test.paperTest(photoStudio);  //todo delete
+//                test.paperTest(photoStudio);  //todo delete
 
                 showRedoMenu(scanner, user, order, photoStudio);
                 break;
@@ -141,14 +140,15 @@ public class PhotoPaperMenu implements IShowRedoMenu {
             try {
                 photoStudio.getSupplyManager().checkPhotoPaper(photoStudio);
 
-                test.paperTest(photoStudio);  //todo delete
+//                test.paperTest(photoStudio);  //todo delete
 
-                System.out.println("You choose " + order.getPrintStandard() + " additional copies of STANDARD sized photo, "
-                        + order.getPrintLarge() + " copies of LARGE sized photo, and " +
-                        order.getPrintProfessional() + " copies of PROFESSIONAL sized photo.");
-//                System.out.println("The printing work will cost you: " + costOfPrinting + "$");
+                if(order.getPrintStandard() !=0 || order.getPrintLarge() !=0 || order.getPrintProfessional() !=0) {
+                    System.out.println("You choose " + order.getPrintStandard() + " additional copies of STANDARD sized photo, "
+                            + order.getPrintLarge() + " copies of LARGE sized photo, and " +
+                            order.getPrintProfessional() + " copies of PROFESSIONAL sized photo.");
+                }
 
-                System.out.println("\nDo you want to continue or to redo?\n " +
+                System.out.println("\nDo you want to calculate the total price or to redo your printing choice?\n " +
                         "1 - Let's continue.\n " +
                         "2 - I want to redo.");
 

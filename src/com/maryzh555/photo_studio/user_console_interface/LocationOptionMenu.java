@@ -54,7 +54,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
     }
 
     private void showLocationOptions(Scanner scanner, User user, Order order, PhotoStudio photoStudio) throws NoSuchOptionException {
-        System.out.println("Which location you would prefer?");
+        System.out.println("\nWhich location you would prefer?");
 
         int answer = scanner.nextInt();
         if (answer < 0 || answer > 1) throw new NoSuchOptionException();

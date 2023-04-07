@@ -96,7 +96,7 @@ public class PhotographersOptionMenu implements IShowRedoMenu {
     public void showRedoMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
         while (true) {
             try {
-                System.out.println("Do you want to continue or to redo?\n " +
+                System.out.println("\nDo you want to continue or to redo?\n " +
                         "1 - Let's continue.\n " +
                         "2 - I want to redo.");
 
