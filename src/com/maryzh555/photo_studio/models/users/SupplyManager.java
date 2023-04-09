@@ -2,6 +2,7 @@ package com.maryzh555.photo_studio.models.humans;
 
 import com.maryzh555.photo_studio.interfaces.Report;
 import com.maryzh555.photo_studio.models.PhotoStudio;
+import com.maryzh555.photo_studio.models.Storage;
 
 /**
  * @author by Zhang M. on 04.04.2023.
@@ -19,11 +20,13 @@ public class SupplyManager extends Worker implements Report {
         int standardQty = photoStudio.getQtyOfStandardPaper();
         int largeQty = photoStudio.getQtyOfLargePaper();
         int professionalQty = photoStudio.getQtyOfProfessionalPaper();
-        if (standardQty < 50 || largeQty < 50 || professionalQty < 50) {
+        if (standardQty < 50 || largeQty < 25 || professionalQty < 10) {
         refillPhotoPaper(photoStudio, 50, 25, 10);
         }
     }
 
+
+    // todo refactor, remove some from the storage and put them into the studio?
     public void refillPhotoPaper(PhotoStudio photoStudio, int neededQtyStandard, int neededQtyLarge, int neededQtyPro) {
         photoStudio.addStandardPaper(neededQtyStandard);
         photoStudio.addLargePaper(neededQtyLarge);
@@ -33,7 +36,7 @@ public class SupplyManager extends Worker implements Report {
     @Override
     public void report() {
         //The supply manager will report the situation on the end of photoStudio instance run.
-        System.out.println("Used paper today: " + PhotoStudio.totalUseOfPaper + " photo papers.");
+//        System.out.println("Used paper today: " + totalUseOfPaper + " photo papers.");
 
         //Fixes today etc
 

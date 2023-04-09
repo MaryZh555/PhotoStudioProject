@@ -25,7 +25,7 @@ public enum Location {
     }
 
     private String loadDescription() {
-        String descriptionFilePath = "src/com/maryzh555/photo_studio/file/Descriptions - locations.txt";
+        String descriptionFilePath = "/Descriptions - locations.txt";
         myFileReader reader = new myFileReader();
         return reader.extractDescription(toString(), descriptionFilePath);
     }

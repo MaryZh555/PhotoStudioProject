@@ -25,7 +25,7 @@ public enum PhotoType{
     }
 
     private String loadDescription(){
-        String descriptionFilePath = "src/com/maryzh555/photo_studio/file/Descriptions - photo types.txt";
+        String descriptionFilePath = "/Descriptions - photo types.txt";
         myFileReader reader = new myFileReader();
         return reader.extractDescription(toString(), descriptionFilePath);
     }
