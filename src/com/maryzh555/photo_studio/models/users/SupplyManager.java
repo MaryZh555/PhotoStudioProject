@@ -1,8 +1,7 @@
-package com.maryzh555.photo_studio.models.humans;
+package com.maryzh555.photo_studio.models.users;
 
 import com.maryzh555.photo_studio.interfaces.Report;
 import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.Storage;
 
 /**
  * @author by Zhang M. on 04.04.2023.
@@ -10,25 +9,22 @@ import com.maryzh555.photo_studio.models.Storage;
 public class SupplyManager extends Worker implements Report {
     // responsible for the items restoring and fixing, they will restore the paper, fix cameras and printers
 
-    public SupplyManager(String name, int hourlyRate){
-        this.id = idCounter++; // temporary solution for id
-        this.name = name;
+    public SupplyManager(String name, int hourlyRate) {
+        super(name);//set id and name
         this.hourlyRate = hourlyRate;
     }
 
-    public void checkPhotoPaper(PhotoStudio photoStudio) {
+    public void checkPhotoPaperInStudio(PhotoStudio photoStudio) {
         int standardQty = photoStudio.getQtyOfStandardPaper();
         int largeQty = photoStudio.getQtyOfLargePaper();
         int professionalQty = photoStudio.getQtyOfProfessionalPaper();
-        if (standardQty < 50 || largeQty < 25 || professionalQty < 10) {
-        refillPhotoPaper(photoStudio, 50, 25, 10);
+        if (standardQty == 0 || largeQty == 0 || professionalQty == 0) {
+            refillPhotoPaper(photoStudio, 50, 25, 10);
         }
     }
 
-
-    // todo refactor, remove some from the storage and put them into the studio?
     public void refillPhotoPaper(PhotoStudio photoStudio, int neededQtyStandard, int neededQtyLarge, int neededQtyPro) {
-        photoStudio.addStandardPaper(neededQtyStandard);
+        photoStudio.addStandardPaperToStudio(neededQtyStandard);
         photoStudio.addLargePaper(neededQtyLarge);
         photoStudio.addProfessionalPaper(neededQtyPro);
     }
@@ -42,6 +38,5 @@ public class SupplyManager extends Worker implements Report {
 
         //Hours worked, to report salary needs, calculated with how much order was done in one run. Every new order is 1 hour for workers
     }
-
 
 }

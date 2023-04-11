@@ -1,14 +1,15 @@
 package com.maryzh555.photo_studio.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import com.maryzh555.photo_studio.enums.Location;
 import com.maryzh555.photo_studio.enums.PhotoType;
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import com.maryzh555.photo_studio.models.humans.Photographer;
-import com.maryzh555.photo_studio.models.humans.SupplyManager;
+import com.maryzh555.photo_studio.models.users.Photographer;
+import com.maryzh555.photo_studio.models.users.SupplyManager;
 
 /**
  * A class representing a photo studio that offers photography services.
@@ -22,21 +23,29 @@ public class PhotoStudio {
 
     private final List<Photographer> photographers;
 
+
+    // represents the current manager, who is having the shift today(When photoStudio is created)
+    private final SupplyManager supplyManager;
+
+
+    //contain all created orders in the run of the program
+    private List<Order> listOfOrders;
+
+    private Storage storage;
+
+
+    //represents qty in use by studio, not storage // maybe will be placed in the printer later
     private int qtyOfStandardPaper;
 
     private int qtyOfLargePaper;
 
     private int qtyOfProfessionalPaper;
 
-    public static int totalUseOfPaper;//total use of Photo Paper for a shift
-
-    private final SupplyManager supplyManager;
-    // represents the current manager, who is having the shift today(When photoStudio is created)
-
-
-    public PhotoStudio() { //workers will be past as an argument when creating photoStudio instance
+    public PhotoStudio() {
         this.photographers = fillPhotographers();
         this.supplyManager = choseSupplyManager();
+        this.storage = new Storage();
+        this.listOfOrders = new ArrayList<>();
         prepareEquipment();
     }
 
@@ -54,7 +63,7 @@ public class PhotoStudio {
     }
 
     //The method works with Random() because of lack of workers schedule and time management in current version of program
-    private SupplyManager choseSupplyManager(){
+    private SupplyManager choseSupplyManager() {
         Random random = new Random();
         List<SupplyManager> list = new ArrayList<>();
         list.add(new SupplyManager("Oleg", 15));
@@ -66,11 +75,14 @@ public class PhotoStudio {
 
     private void prepareEquipment() {
         //this method will also implement future methods of other workers.
-        this.supplyManager.checkPhotoPaper(this);
+        this.supplyManager.refillPhotoPaper(this, 50, 25, 10);
     }
 
+    public void addOrderToTheSystemList(Order order) {
+        this.listOfOrders.add(order);
+    }
 
-    public void usePhotoPaper(String paperName, int useQty) {
+    public void useStudioPhotoPaper(String paperName, int useQty) {
         switch (paperName) {
             case "STANDARD":
                 this.setQtyOfStandardPaper(this.getQtyOfStandardPaper() - useQty);
@@ -81,13 +93,21 @@ public class PhotoStudio {
             case "PROFESSIONAL":
                 this.setQtyOfProfessionalPaper(this.getQtyOfProfessionalPaper() - useQty);
         }
-        this.calculateUsedPaper(useQty);
+        test.paperTest(this);
     }
 
-
-    public int calculateUsedPaper(int useQty){
-        System.out.println(" ------------\n CALCULATE PAPER USE METHOD " + totalUseOfPaper );
-        return totalUseOfPaper += useQty;
+    public List<Photo> findPickUpPhotoPack(int orderId, PhotoStudio studio) {
+        for (Order order : studio.getListOfOrders()) {
+            if (orderId == order.getId()) {
+                List<List<Photo>> storedPhotoPacks = studio.getStorage().getStoredPhotoPacks();
+                for (List<Photo> photoPack : storedPhotoPacks) {
+                    if (photoPack.equals(order.getPhotoPack())) {
+                        return photoPack;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public PhotoType matchPhotoType(int numberOfPeople) throws NoSuchOptionException {
@@ -103,23 +123,22 @@ public class PhotoStudio {
     }
 
 
-    // The array used for compact initialization compared to List's lengthy initialization.
-    public Location[] matchLocations(PhotoType photoType) {
-        Location[] array;
-        switch (photoType.ordinal()) {
-            case 0:
-                array = new Location[]{Location.CHROMA_CHARM, Location.RIVER_VIEW_TERRACE};
+    public List<Location> matchLocations(PhotoType photoType) {
+        List<Location> list = new ArrayList<>();
+        switch (photoType) {
+            case PORTRAIT:
+                list.addAll(Arrays.asList(Location.CHROMA_CHARM, Location.RIVER_VIEW_TERRACE));
                 break;
-            case 1:
-                array = new Location[]{Location.GROUP_HUB, Location.RIVER_VIEW_TERRACE};
+            case GROUP:
+                list.addAll(Arrays.asList(Location.GROUP_HUB, Location.RIVER_VIEW_TERRACE));
                 break;
-            case 2:
-                array = new Location[]{Location.GROUP_HUB};
+            case TEAM:
+                list.add(Location.GROUP_HUB);
                 break;
             default:
-                array = null;
+                break;
         }
-        return array;
+        return list;
     }
 
     public List<Photographer> matchPhotographers(int years) {
@@ -133,31 +152,47 @@ public class PhotoStudio {
     }
 
     public List<Photographer> findAlternativePhotographers(int years) {
+
+        int maxYears = 6; // set here as the temporary solution, until HR is added, and the MaxAllowedYears variable is set
+
         List<Photographer> result = new ArrayList<>();
-        for (Photographer photographer : photographers) {
-            if (photographer.getYearsOfExperience() == years + 1 || photographer.getYearsOfExperience() == years - 1) {
-                result.add(photographer);
+        int diff = 1;
+        while (result.isEmpty()) {
+            for (Photographer photographer : photographers) {
+                if (photographer.getYearsOfExperience() == years + diff || photographer.getYearsOfExperience() == years - diff) {
+                    result.add(photographer);
+                }
+            }
+            diff++;
+            if (diff > maxYears) {
+                break;
             }
         }
         return result;
     }
 
 
-    public void addStandardPaper(int neededQty) {
+    //neededQty represents the maximum qty that can be stored in the studio itself, and not in the storage
+    //maybe will be replaced to the Printer
+    public void addStandardPaperToStudio(int neededQty) {
+        // Add from the STORAGE
         int currentQty = this.getQtyOfStandardPaper();
         int toAdd = neededQty - currentQty;
+        this.storage.setStoredStandardPaper(this.storage.getStoredStandardPaper() - toAdd);
         this.qtyOfStandardPaper += toAdd;
     }
 
     public void addLargePaper(int neededQty) {
         int currentQty = this.getQtyOfLargePaper();
         int toAdd = neededQty - currentQty;
+        this.storage.setStoredLargePaper(this.storage.getStoredLargePaper() - toAdd);
         this.qtyOfLargePaper += toAdd;
     }
 
     public void addProfessionalPaper(int neededQty) {
         int currentQty = this.getQtyOfProfessionalPaper();
         int toAdd = neededQty - currentQty;
+        this.storage.setStoredProfessionalPaper(this.storage.getStoredProfessionalPaper() - toAdd);
         this.qtyOfProfessionalPaper += toAdd;
     }
 
@@ -169,27 +204,39 @@ public class PhotoStudio {
         return qtyOfStandardPaper;
     }
 
-    public void setQtyOfStandardPaper(int qtyOfStandardPaper) {
-        this.qtyOfStandardPaper = qtyOfStandardPaper;
-    }
-
     public int getQtyOfLargePaper() {
         return qtyOfLargePaper;
-    }
-
-    public void setQtyOfLargePaper(int qtyOfLargePaper) {
-        this.qtyOfLargePaper = qtyOfLargePaper;
     }
 
     public int getQtyOfProfessionalPaper() {
         return qtyOfProfessionalPaper;
     }
 
-    public void setQtyOfProfessionalPaper(int qtyOfProfessionalPaper) {
-        this.qtyOfProfessionalPaper = qtyOfProfessionalPaper;
-    }
-
     public SupplyManager getSupplyManager() {
         return supplyManager;
+    }
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+
+    public List<Order> getListOfOrders() {
+        return listOfOrders;
+    }
+
+    public void setQtyOfStandardPaper(int qtyOfStandardPaper) {
+        this.qtyOfStandardPaper = qtyOfStandardPaper;
+    }
+
+    public void setQtyOfLargePaper(int qtyOfLargePaper) {
+        this.qtyOfLargePaper = qtyOfLargePaper;
+    }
+
+    public void setQtyOfProfessionalPaper(int qtyOfProfessionalPaper) {
+        this.qtyOfProfessionalPaper = qtyOfProfessionalPaper;
     }
 }
