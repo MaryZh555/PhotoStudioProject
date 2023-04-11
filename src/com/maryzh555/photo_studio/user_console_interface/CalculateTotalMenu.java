@@ -6,38 +6,45 @@ import java.util.Scanner;
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.humans.User;
+import com.maryzh555.photo_studio.models.test;
+import com.maryzh555.photo_studio.models.users.Client;
 
 /**
  * @author Zhang M. on 20.03.2023.
  */
 
 public class CalculateTotalMenu {
-    public CalculateTotalMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
-        showMenu(scanner, user, order, photoStudio);
-        showNewCustomerMenu(scanner, photoStudio);//uses this instance of PhotoStudio, but creates new order and user to work with
+    public CalculateTotalMenu(Scanner scanner, Client client, Order order, PhotoStudio photoStudio) {
+        showMenu(scanner, client, order, photoStudio);
     }
 
-    private void showMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
+    private void showMenu(Scanner scanner, Client client, Order order, PhotoStudio photoStudio) {
         while (true) {
             try {
                 int resultTotal = order.calculateTotal(order);
                 order.setTotal(resultTotal);
 
-                System.out.println("\nYour order is a " + order.getDesiredPhotoType() +
+                System.out.println("\nYour order is a " + order.getOrderedPhoto().getPhotoType() +
                         " photo type, with the photographer " +
                         order.getDesiredPhotographer().getName() +
                         ". And location you are renting is the " +
                         order.getDesiredLocation() + ".");
-                if(order.getPrintStandard() ==0 &&
-                        order.getPrintLarge() ==0 &&
-                        order.getPrintProfessional() ==0){
+                if (order.getOrderedPhoto().getPrintStandardQty() == 0 &&
+                        order.getOrderedPhoto().getPrintLargeQty() == 0 &&
+                        order.getOrderedPhoto().getPrintProfessionalQty() == 0) {
                     System.out.println("You chose to have only digital photos.");
                 } else {
+                    String colorInfo;
+                    if (order.getOrderedPhoto().isColored()) {
+                        colorInfo = " colored.";
+                    } else {
+                        colorInfo = " black-&-white.";
+                    }
                     System.out.println(
-                            "\nFor printing you chose " + order.getPrintStandard() + " copies of STANDARD sized photo, "
-                            + order.getPrintLarge() + " copies of LARGE sized photo, and " +
-                            order.getPrintProfessional() + " copies of PROFESSIONAL sized photo.");
+                            "\nFor printing you chose " + order.getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, "
+                                    + order.getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
+                                    order.getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo. " +
+                                    "All " + colorInfo);
                 }
                 System.out.println("\nIt will cost you " + order.getTotal() + "$ total.\n");
 
@@ -49,45 +56,33 @@ public class CalculateTotalMenu {
 
                 switch (answer) {
                     case 1:
-                        System.out.println("Great! See you in our Photo Studio, " + user.getName() +
+                        //When the order is submitted we add it to the system:
+                        ////Setting the Photo object to the Order
+                        ////If the Photo will be printed, then add it to the Storage(passing the printing process)
+                        ////The supply manager will check if there is no paper in the studio.
+                        photoStudio.addOrderToTheSystemList(order);
+
+//                        test.printOrderList(photoStudio); // todo test
+
+                        if (order.getOrderedPhoto().isToPrint()) {
+                            photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
+
+                            photoStudio.getSupplyManager().checkPhotoPaperInStudio(photoStudio);
+//                            test.paperTest(photoStudio); //todo test
+//                            test.printStoragePhotoList(photoStudio);//todo test
+                        }
+
+                        System.out.println("Great! See you in our Photo Studio, " + client.getName() +
                                 "! Your order id is #" + order.getId() +
                                 ". \nWe will contact you using the telephone number provided. " +
                                 "Have a nice day!");
+                        new NewCustomerMenu(scanner, photoStudio);
                         break;
                     case 2:
-                        new MainMenu(photoStudio, user, order); //returns to the first menu
+                        new MainMenu(photoStudio); //returns to the first menu
                         break;
                     default:
                         throw new NoSuchOptionException();
-                }
-                break;
-            } catch (NoSuchOptionException e) {
-                System.out.println(e.getMessage());
-            } catch (InputMismatchException e) {
-                System.out.println("---------\n" +
-                        "ERROR: Invalid input. Not an integer" +
-                        "\n---------");
-                scanner.next();// clear the input buffer, stops the infinite loop
-            }
-        }
-    }
-
-    private void showNewCustomerMenu(Scanner scanner, PhotoStudio photoStudio){
-        while (true) {
-            try {
-                System.out.println("\n(Is there any customers left?)\n" +
-                        " 1 - (No, they was the last one.)\n" +
-                        " 2 - (Yes, there are more customers to serve. Let's open a new order.)");
-                int answer = scanner.nextInt();
-                switch (answer){
-                    case 1:
-                        System.out.println("Great! Let's close the shift!");
-                        scanner.close();
-                        break;
-                    case 2:
-                        new MainMenu(photoStudio, new User(), new Order());
-                        break;
-                    default: throw new NoSuchOptionException();
                 }
                 break;
             } catch (NoSuchOptionException e) {

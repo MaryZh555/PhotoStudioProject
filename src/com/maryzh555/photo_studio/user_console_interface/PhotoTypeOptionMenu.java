@@ -8,18 +8,18 @@ import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.models.PhotoStudio;
 import com.maryzh555.photo_studio.enums.PhotoType;
-import com.maryzh555.photo_studio.models.humans.User;
+import com.maryzh555.photo_studio.models.users.Client;
 
 /**
  * @author Zhang M. on 20.03.2023.
  */
 
 public class PhotoTypeOptionMenu implements IShowRedoMenu {
-    public PhotoTypeOptionMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
-        showMenu(scanner, user, order, photoStudio);
+    public PhotoTypeOptionMenu(Scanner scanner, Client client, Order order, PhotoStudio photoStudio) {
+        showMenu(scanner, client, order, photoStudio);
     }
 
-    private void showMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
+    private void showMenu(Scanner scanner, Client client, Order order, PhotoStudio photoStudio) {
         while (true) {
             try {
                 System.out.println("Ok! How many people would take part in the photo shoot?");
@@ -28,13 +28,14 @@ public class PhotoTypeOptionMenu implements IShowRedoMenu {
                 if (answer < 1 || answer > 50) throw new NoSuchOptionException();
 
                 PhotoType chosenType = photoStudio.matchPhotoType(answer);
-                order.setDesiredPhotoType(chosenType);
+//                order.setDesiredPhotoType(chosenType); // todo in question
+                order.getOrderedPhoto().setPhotoType(chosenType);
 
                 System.out.println("Got it! " +
                         "We can suggest the " + chosenType + " photo shoot. \n" +
                         chosenType.getDescription());
 
-                showRedoMenu(scanner, user, order, photoStudio);
+                showRedoMenu(scanner, client, order, photoStudio);
                 break;
             } catch (NoSuchOptionException e) {
                 System.out.println("---------\n" +
@@ -49,7 +50,8 @@ public class PhotoTypeOptionMenu implements IShowRedoMenu {
         }
     }
 
-    public void showRedoMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
+
+    public void showRedoMenu(Scanner scanner, Client client, Order order, PhotoStudio photoStudio) {
         while (true) {
             try {
                 System.out.println("\nDo you want to continue or to redo?\n " +
@@ -59,10 +61,10 @@ public class PhotoTypeOptionMenu implements IShowRedoMenu {
                 int answer = scanner.nextInt();
                 switch (answer) {
                     case 1:
-                        new LocationOptionMenu(scanner, user, order, photoStudio);
+                        new LocationOptionMenu(scanner, client, order, photoStudio);
                         break;
                     case 2:
-                        new PhotoTypeOptionMenu(scanner, user, order, photoStudio);
+                        new PhotoTypeOptionMenu(scanner, client, order, photoStudio);
                         break;
                     default:
                         throw new NoSuchOptionException();

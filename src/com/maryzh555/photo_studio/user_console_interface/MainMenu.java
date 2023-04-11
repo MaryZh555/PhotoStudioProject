@@ -1,122 +1,102 @@
 package com.maryzh555.photo_studio.user_console_interface;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import com.maryzh555.photo_studio.exceptions.WrongNameException;
-import com.maryzh555.photo_studio.exceptions.WrongNumberException;
-import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
+import com.maryzh555.photo_studio.models.Photo;
 import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.humans.User;
-import com.maryzh555.photo_studio.models.Order;
-
 
 /**
  * @author Zhang M. on 20.03.2023.
  */
-public class MainMenu implements IShowRedoMenu {
-    public MainMenu(PhotoStudio photoStudio, User user, Order order) {
+public class MainMenu {
+    public MainMenu(PhotoStudio photoStudio) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Welcome to the Lumina Photo Studio!");
-            showNameForm(scanner, user);
-//            test.printObject(photoStudio, order, user);// todo delete
-            showRedoMenu(scanner, user, order, photoStudio);
+            clientDistributionMenu(scanner, photoStudio); //can be upgraded, add employeeDistributionMenu
         }
     }
 
-    public void showNameForm(Scanner scanner, User user) {
+    public void clientDistributionMenu(Scanner scanner,PhotoStudio photoStudio) {
         while (true) {
             try {
-                System.out.println("Please enter your NAME:");
-                System.out.println(" * Note: " +
-                        "The name should contain at least 3 English letters, " +
-                        "and should not contain any numbers or special symbols.");
-                String name = scanner.nextLine();
-
-                if (name.matches(".*\\d+.*") ||
-                        name.trim().length() < 3 ||
-                        !name.trim().matches("[a-zA-Z]+"))
-                    throw new WrongNameException();
-
-                user.setName(name.trim());
-
-                showSurnameForm(scanner, user);
-                break;
-            } catch (WrongNameException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public void showSurnameForm(Scanner scanner, User user) {
-        while (true) {
-            try {
-                System.out.println("Please enter your SURNAME: ");
-                System.out.println(" * Note: " +
-                        "The surname should contain at least 3 English letters, " +
-                        "and should not contain any numbers or special symbols.");
-                String surname = scanner.nextLine();
-
-                if (surname.matches(".*\\d+.*") ||
-                        surname.trim().length() < 3 ||
-                        !surname.trim().matches("[a-zA-Z]+"))
-                    throw new WrongNameException();
-
-                user.setSurname(surname.trim());
-
-                showContactNumberForm(scanner, user);
-                break;
-            } catch (WrongNameException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public void showContactNumberForm(Scanner scanner, User user) {
-        while (true) {
-            try {
-                System.out.println("Please enter your contact PHONE NUMBER: \n " +
-                        "* Note: Phone number should only contain 10 digits, " +
-                        "and start with a zero.");
-                String contactNumber = scanner.nextLine();
-
-                if (contactNumber.trim().length() != 10 ||
-                        contactNumber.trim().matches("[a-zA-Z]+") ||
-                        !contactNumber.matches(".*\\d+.*") ||
-                        contactNumber.charAt(0) != '0')
-                    throw new WrongNumberException();
-
-                user.setContactNumber(contactNumber.trim());
-
-                break;
-            } catch (WrongNumberException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    @Override
-    public void showRedoMenu(Scanner scanner, User user, Order order, PhotoStudio photoStudio) {
-        while (true) {
-            try {
-                System.out.println("Please check if the contact data is correct" +
-                        "\n NAME: " + user.getName() +
-                        "\n SURNAME: " + user.getSurname() +
-                        "\n CONTACT NUMBER: " + user.getContactNumber());
-
-                System.out.println("\nIs it correct?\n " +
-                        "1 - Yes, the data is correct.\n " +
-                        "2 - No, I want to rewrite.");
+                System.out.println("Do you want to make order, or to pick up printed photo?\n" +
+                        " 1 - Make an order.\n" +
+                        " 2 - Pick my photos.");
 
                 int answer = scanner.nextInt();
 
                 switch (answer) {
                     case 1:
-                        new PhotographersOptionMenu(scanner, user, order, photoStudio);
+                        //new Scanner resolves the bug when the NameForm instantly trows an WrongNameException
+                        new ClientDataFormMenu(new Scanner(System.in), photoStudio);
                         break;
                     case 2:
-                        new MainMenu(photoStudio, user, order);
+                        showPickUpMenu(scanner, photoStudio);
+                        break;
+                    default:
+                        throw new NoSuchOptionException();
+                }
+                break;
+            } catch (NoSuchOptionException e) {
+                System.out.println("It seems like we don't have an order with this id, please check if the inputted id is correct");
+            } catch (InputMismatchException e) {
+                System.out.println("---------\n" +
+                        "ERROR: Invalid input. Not an integer" +
+                        "\n---------");
+                scanner.next(); // clear the input buffer
+            }
+        }
+    }
+
+    public void showPickUpMenu(Scanner scanner, PhotoStudio photoStudio) {
+        while (true) {
+            try {
+                System.out.println("Please enter your order id: ");
+                int id = scanner.nextInt();
+//                    test.printStoragePhotoPackList(photoStudio); //todo  test
+                List<Photo> pack = photoStudio.findPickUpPhotoPack(id, photoStudio);
+                if (pack == null) {
+                    throw new NoSuchOptionException();
+                }
+                photoStudio.getStorage().takeFromTheStorage(pack);
+//                test.printStoragePhotoPackList(photoStudio);//todo  test
+                System.out.println("Here you go. Your " + pack.size() +
+                        " photos are ready. Have a nice day!");
+                new NewCustomerMenu(scanner, photoStudio);
+                break;
+            } catch (NoSuchOptionException e) {
+                System.out.println("---------\n" +
+                        "It seems like we don't have an order with this id, please check if the inputted id is correct" +
+                        "\n---------");
+                showQuitMenu(scanner, photoStudio);
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("---------\n" +
+                        "ERROR: Invalid input. Not an integer" +
+                        "\n---------");
+                scanner.next(); // clear the input buffer
+            }
+        }
+    }
+
+    public void showQuitMenu(Scanner scanner, PhotoStudio photoStudio) {
+        while (true) {
+            try {
+                System.out.println(" Do you want to return next time, when you check your order id? " +
+                        "\n 1 - Yes, I will come back.(quit)" +
+                        "\n 2 - No, i just mistyped it. Let me input again.");
+
+                int answer = scanner.nextInt();
+
+                switch (answer) {
+                    case 1:
+                        new NewCustomerMenu(scanner, photoStudio);
+                        break;
+                    case 2:
+                        showPickUpMenu(scanner, photoStudio);
                         break;
                     default:
                         throw new NoSuchOptionException();
