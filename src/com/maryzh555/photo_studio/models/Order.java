@@ -1,9 +1,12 @@
 package com.maryzh555.photo_studio.models;
 
 import com.maryzh555.photo_studio.enums.Location;
-import com.maryzh555.photo_studio.enums.PhotoPaper;
-import com.maryzh555.photo_studio.enums.PhotoType;
-import com.maryzh555.photo_studio.models.humans.Photographer;
+import com.maryzh555.photo_studio.enums.PhotoPaperType;
+import com.maryzh555.photo_studio.models.users.Client;
+import com.maryzh555.photo_studio.models.users.Photographer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents an order made by a customer, containing information about the desired photographer,
@@ -17,33 +20,54 @@ public class Order {
     // The idCounter is a temporary solution until the database will be added.
     private static int idCounter = 1;
 
+    private Client client;
+
     private final int id;
 
     private Photographer desiredPhotographer;
 
-    private PhotoType desiredPhotoType;
-
     private Location desiredLocation;
 
-    private int printStandard;
+    private Photo orderedPhoto;
 
-    private int printLarge;
-
-    private int printProfessional;
+    private List<Photo> photoPack = new ArrayList<>();
 
     private int total;
 
 
     public Order() {
         this.id = idCounter++; //temporary solution
+        this.orderedPhoto = new Photo(); //create a photo when the order is created
     }
 
     public int calculateTotal(Order order) {
-        int costOfPhoto = (order.getDesiredPhotographer().getHourlyRate() + order.getDesiredLocation().getRentingCost()) * order.getDesiredPhotoType().getHours();
-        int costOfPrinting = (order.getPrintStandard() * PhotoPaper.STANDARD.getCostPerCopy()) +
-                (order.getPrintLarge() * PhotoPaper.LARGE.getCostPerCopy()) +
-                (order.getPrintProfessional() * PhotoPaper.PROFESSIONAL.getCostPerCopy());
+        int costOfPhoto = (order.getDesiredPhotographer().getHourlyRate() + order.getDesiredLocation().getRentingCost()) * order.getOrderedPhoto().getPhotoType().getHours();
+
+        int colorCost; //colored photos cost +1$ per paper
+        if (order.getOrderedPhoto().isColored()) {
+            colorCost = 1; // additional 1$ per sheet
+        } else {
+            colorCost = 0; //black and white have no additional fees
+        }
+
+        //(number of photos of one type * ( cost for this type per sheet + cost for color per sheet))
+        int costOfPrinting = (order.getOrderedPhoto().getPrintStandardQty() * (PhotoPaperType.STANDARD.getCostPerCopy() + colorCost)) +
+                (order.getOrderedPhoto().getPrintLargeQty() * (PhotoPaperType.LARGE.getCostPerCopy() + colorCost)) +
+                (order.getOrderedPhoto().getPrintProfessionalQty() * (PhotoPaperType.PROFESSIONAL.getCostPerCopy() + colorCost));
+
         return (costOfPhoto + costOfPrinting);
+    }
+
+
+    /// Only for printed photos
+    public void addToPhotoPack(int photoQty, PhotoPaperType paperType, boolean isColored) {
+        if (this.orderedPhoto.isToPrint()) {
+            for (int i = 0; i < photoQty; i++) {
+                this.photoPack.add(new Photo(paperType, isColored));
+            }
+        } else {
+            this.photoPack = null;
+        }
     }
 
     public Photographer getDesiredPhotographer() {
@@ -52,14 +76,6 @@ public class Order {
 
     public void setDesiredPhotographer(Photographer desiredPhotographer) {
         this.desiredPhotographer = desiredPhotographer;
-    }
-
-    public PhotoType getDesiredPhotoType() {
-        return desiredPhotoType;
-    }
-
-    public void setDesiredPhotoType(PhotoType desiredPhotoType) {
-        this.desiredPhotoType = desiredPhotoType;
     }
 
     public Location getDesiredLocation() {
@@ -82,27 +98,23 @@ public class Order {
         return id;
     }
 
-    public int getPrintStandard() {
-        return printStandard;
+    public Photo getOrderedPhoto() {
+        return orderedPhoto;
     }
 
-    public void setPrintStandard(int printStandard) {
-        this.printStandard = printStandard;
+    public void setOrderedPhoto(Photo orderedPhoto) {
+        this.orderedPhoto = orderedPhoto;
     }
 
-    public int getPrintLarge() {
-        return printLarge;
+    public Client getClient() {
+        return client;
     }
 
-    public void setPrintLarge(int printLarge) {
-        this.printLarge = printLarge;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public int getPrintProfessional() {
-        return printProfessional;
-    }
-
-    public void setPrintProfessional(int printProfessional) {
-        this.printProfessional = printProfessional;
+    public List<Photo> getPhotoPack() {
+        return photoPack;
     }
 }
