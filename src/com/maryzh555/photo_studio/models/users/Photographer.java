@@ -1,4 +1,4 @@
-package com.maryzh555.photo_studio.models.humans;
+package com.maryzh555.photo_studio.models.users;
 
 import com.maryzh555.photo_studio.interfaces.Report;
 
@@ -13,8 +13,7 @@ public class Photographer extends Worker implements Report {
     private int yearsOfExperience;
 
     public Photographer(String name, int years, int hourlyRate) {
-        this.id = idCounter++; // temporary solution for id
-        this.name = name;
+        super(name);// for id and name
         this.yearsOfExperience = years;
         this.hourlyRate = hourlyRate;
     }
@@ -27,7 +26,6 @@ public class Photographer extends Worker implements Report {
         this.yearsOfExperience = years;
     }
 
-    // todo implement
     @Override
     public void report() {
 
