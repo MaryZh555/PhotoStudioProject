@@ -1,6 +1,7 @@
 package com.maryzh555.photo_studio.models.users;
 
 import com.maryzh555.photo_studio.interfaces.Report;
+import com.maryzh555.photo_studio.models.PhotoStudio;
 
 /**
  * This class represents a photographer, a type of human, who can work in the PhotoStudio.
@@ -12,10 +13,33 @@ public class Photographer extends Worker implements Report {
 
     private int yearsOfExperience;
 
+    private int photoShootsToday;
+
+
     public Photographer(String name, int years, int hourlyRate) {
         super(name);// for id and name
         this.yearsOfExperience = years;
         this.hourlyRate = hourlyRate;
+    }
+
+
+    public void askForRest(PhotoStudio photoStudio){
+        if(this.hoursWorkedToday == 8 ||this.hoursWorkedToday > 8){
+            //remove photographer from the list of available photographers
+            photoStudio.getDirector().removeFromAvailablePhotographers(this);
+        }
+    }
+
+    public void addToHoursWorkedToday(int hoursWorkedToday,PhotoStudio photoStudio) {
+        this.hoursWorkedToday += hoursWorkedToday;
+        this.askForRest(photoStudio);
+    }
+
+    @Override
+    public void report() {
+        System.out.println("( Photographer " + this.getName() + " reports: " +
+                "Photo shoots today: " + photoShootsToday + ". " +
+                "Hours worked: " + hoursWorkedToday + ")");
     }
 
     public int getYearsOfExperience() {
@@ -26,8 +50,16 @@ public class Photographer extends Worker implements Report {
         this.yearsOfExperience = years;
     }
 
-    @Override
-    public void report() {
 
+    public int getPhotoShootsToday() {
+        return photoShootsToday;
+    }
+
+    public void setPhotoShootsToday(int photoShootsToday) {
+        this.photoShootsToday = photoShootsToday;
+    }
+
+    public void addToPhotoShootsToday(int photoShootsToday) {
+        this.photoShootsToday += photoShootsToday;
     }
 }
