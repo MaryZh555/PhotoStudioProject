@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Storage {
 
-    private List<List<Photo>> storedPhotoPacks = new ArrayList<>();
+    private final List<List<Photo>> storedPhotoPacks = new ArrayList<>();
 
     private int storedStandardPaper = 1050;
 
@@ -16,21 +16,6 @@ public class Storage {
 
     private int storedProfessionalPaper = 110;
 
-    private int totalUseOfPaper;//total use of Photo Paper for a shift, will be used in the supplyManager report
-
-//    public void takePaperFromStorage(String paperName, int useQty){
-//        switch (paperName) {
-//            case "STANDARD":
-//                this.setStoredStandardPaper(this.getStoredStandardPaper() - useQty);
-//                break;
-//            case "LARGE":
-//                this.setStoredLargePaper(this.getStoredLargePaper() - useQty);
-//                break;
-//            case "PROFESSIONAL":
-//                this.setStoredProfessionalPaper(this.getStoredProfessionalPaper() - useQty);
-//        }
-//        totalUseOfPaper += useQty;
-//    }
 
     // will be used after printed in printer by the supply manager
     public void addPhotoPackToStore(List<Photo> photoPack){ // To store Photo as the product, before the client will come to take it.
@@ -63,13 +48,6 @@ public class Storage {
 
     public  void setStoredProfessionalPaper(int storedProfessionalPaper) {
         this.storedProfessionalPaper = storedProfessionalPaper;
-    }
-    public int getTotalUseOfPaper() {
-        return totalUseOfPaper;
-    }
-
-    public void setTotalUseOfPaper(int totalUseOfPaper) {
-        this.totalUseOfPaper = totalUseOfPaper;
     }
 
     public List<List<Photo>> getStoredPhotoPacks() {
