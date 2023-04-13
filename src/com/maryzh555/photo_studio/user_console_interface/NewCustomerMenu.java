@@ -26,9 +26,15 @@ public class NewCustomerMenu {
                     case 1:
 //                        test.printOrderList(photoStudio); // todo test
                         System.out.println("Great! Let's close the shift!");
+
+                        //reports
+                        photoStudio.getDirector().askForReport(photoStudio);
+//                        photoStudio.getSupplyManager().report();
+
                         scanner.close();
                         break;
                     case 2:
+                        test.testAvailablePhotographers(photoStudio);//todo test
                         new MainMenu(photoStudio);
                         break;
                     default: throw new NoSuchOptionException();

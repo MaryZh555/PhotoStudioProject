@@ -28,7 +28,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
                         "For " + order.getOrderedPhoto().getPhotoType() +
                         " photo shoot we can suggest:");
 
-                List<Location> locationsList = photoStudio.matchLocations(order.getOrderedPhoto().getPhotoType());
+                List<Location> locationsList = photoStudio.getDirector().getCustomerManager().matchLocations(order.getOrderedPhoto().getPhotoType());
 
                 int i = 0;
                 for (Location location : locationsList) {
@@ -65,7 +65,7 @@ public class LocationOptionMenu implements IShowRedoMenu {
 
         int answer = scanner.nextInt();
         if (answer < 0 || answer > 1) throw new NoSuchOptionException();
-        order.setDesiredLocation(photoStudio.matchLocations(order.getOrderedPhoto().getPhotoType()).get(answer));
+        order.setDesiredLocation(photoStudio.getDirector().getCustomerManager().matchLocations(order.getOrderedPhoto().getPhotoType()).get(answer));
 
         System.out.println(
                 "You chose a " +

@@ -191,9 +191,9 @@ public class PrintingMenu implements IShowRedoMenu {
                         //here all the changes are submitted
 
                         //Using the paper from the studio to print
-                        photoStudio.useStudioPhotoPaper("STANDARD", order.getOrderedPhoto().getPrintStandardQty());
-                        photoStudio.useStudioPhotoPaper("LARGE", order.getOrderedPhoto().getPrintLargeQty());
-                        photoStudio.useStudioPhotoPaper("PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
+                        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
+                        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
+                        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
 
                         //adding to the photoPack (the printing result)
                         order.addToPhotoPack(order.getOrderedPhoto().getPrintStandardQty(), PhotoPaperType.STANDARD, order.getOrderedPhoto().isColored());
@@ -205,7 +205,7 @@ public class PrintingMenu implements IShowRedoMenu {
                         new CalculateTotalMenu(scanner, client, order, photoStudio);
                         break;
                     case 2:
-                        photoStudio.getStorage().setTotalUseOfPaper(0);
+//                        photoStudio.getStorage().setTotalUseOfPaper(0);
                         new PrintingMenu(scanner, client, order, photoStudio);
                         break;
                     default:

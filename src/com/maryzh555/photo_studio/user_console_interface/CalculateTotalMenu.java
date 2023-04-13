@@ -6,6 +6,7 @@ import java.util.Scanner;
 import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.models.PhotoStudio;
+//import com.maryzh555.photo_studio.models.test;
 import com.maryzh555.photo_studio.models.test;
 import com.maryzh555.photo_studio.models.users.Client;
 
@@ -56,21 +57,22 @@ public class CalculateTotalMenu {
 
                 switch (answer) {
                     case 1:
-                        //When the order is submitted we add it to the system:
-                        ////Setting the Photo object to the Order
-                        ////If the Photo will be printed, then add it to the Storage(passing the printing process)
-                        ////The supply manager will check if there is no paper in the studio.
-                        photoStudio.addOrderToTheSystemList(order);
-
-//                        test.printOrderList(photoStudio); // todo test
-
+                        // When the order is submitted we add it to the system:
+                        //// Setting the Photo object to the Order
+                        //// If the Photo will be printed, then add it to the Storage(passing the printing process)
+                        //// The supply manager will check if there is no paper in the studio.
+                        photoStudio.getDirector().getCustomerManager().addOrderToTheSystemList(order);
+                        test.printOrderList(photoStudio); // todo test
                         if (order.getOrderedPhoto().isToPrint()) {
                             photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
-
-                            photoStudio.getSupplyManager().checkPhotoPaperInStudio(photoStudio);
-//                            test.paperTest(photoStudio); //todo test
+                            photoStudio.getDirector().getSupplyManager().checkPhotoPaperInStudio(photoStudio);
+                            test.paperTest(photoStudio); //todo test
 //                            test.printStoragePhotoList(photoStudio);//todo test
                         }
+
+                        //set hours of work for workers //todo maybe make a method in DIRECTOR
+                        order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getPhotoType().getHours(), photoStudio);
+                        order.getDesiredPhotographer().addToPhotoShootsToday(1);
 
                         System.out.println("Great! See you in our Photo Studio, " + client.getName() +
                                 "! Your order id is #" + order.getId() +

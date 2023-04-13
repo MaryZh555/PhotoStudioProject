@@ -9,6 +9,7 @@ import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import com.maryzh555.photo_studio.models.Order;
 import com.maryzh555.photo_studio.models.PhotoStudio;
+import com.maryzh555.photo_studio.models.test;
 import com.maryzh555.photo_studio.models.users.Photographer;
 import com.maryzh555.photo_studio.models.users.Client;
 
@@ -35,12 +36,12 @@ public class PhotographersOptionMenu implements IShowRedoMenu {
 
                 System.out.println("Let's see which photographers have " + answer + " years of experience: ");
 
-                list = photoStudio.matchPhotographers(answer);
+                list = photoStudio.getDirector().getCustomerManager().matchPhotographers(answer, photoStudio);
 
                 if(list.size() == 0 ){ //For cases when there is no photographers with needed experience
                     System.out.println("Unfortunately, we don't have any photographer with " + answer + " years of experience.\n" +
                             "But we can suggest some with similar experience: ");
-                    list = photoStudio.findAlternativePhotographers(answer);
+                    list = photoStudio.getDirector().getCustomerManager().findAlternativePhotographers(answer, photoStudio);
                     }
 
                 int i = 1;
@@ -109,9 +110,11 @@ public class PhotographersOptionMenu implements IShowRedoMenu {
 
                 switch (answer) {
                     case 1:
+                        test.testAvailablePhotographers(photoStudio);//todo test
                         new PhotoTypeOptionMenu(scanner, client, order, photoStudio);
                         break;
                     case 2:
+//                        order.getDesiredPhotographer().setPhotoShootsToday(0);//reset to 0 if redo
                         new PhotographersOptionMenu(scanner, client, order, photoStudio);
                         break;
                     default:

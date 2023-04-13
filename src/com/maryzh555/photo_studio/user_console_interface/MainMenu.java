@@ -15,6 +15,7 @@ public class MainMenu {
     public MainMenu(PhotoStudio photoStudio) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Welcome to the Lumina Photo Studio!");
+            photoStudio.getDirector().getCustomerManager().introduceYourself();
             clientDistributionMenu(scanner, photoStudio); //can be upgraded, add employeeDistributionMenu
         }
     }
@@ -57,7 +58,7 @@ public class MainMenu {
                 System.out.println("Please enter your order id: ");
                 int id = scanner.nextInt();
 //                    test.printStoragePhotoPackList(photoStudio); //todo  test
-                List<Photo> pack = photoStudio.findPickUpPhotoPack(id, photoStudio);
+                List<Photo> pack = photoStudio.getDirector().getSupplyManager().findPickUpPhotoPack(id, photoStudio);
                 if (pack == null) {
                     throw new NoSuchOptionException();
                 }

@@ -27,8 +27,7 @@ public class PhotoTypeOptionMenu implements IShowRedoMenu {
                 int answer = scanner.nextInt();
                 if (answer < 1 || answer > 50) throw new NoSuchOptionException();
 
-                PhotoType chosenType = photoStudio.matchPhotoType(answer);
-//                order.setDesiredPhotoType(chosenType); // todo in question
+                PhotoType chosenType = photoStudio.getDirector().getCustomerManager().matchPhotoType(answer);
                 order.getOrderedPhoto().setPhotoType(chosenType);
 
                 System.out.println("Got it! " +
@@ -61,6 +60,8 @@ public class PhotoTypeOptionMenu implements IShowRedoMenu {
                 int answer = scanner.nextInt();
                 switch (answer) {
                     case 1:
+//                        //set hours of work for workers
+//                        order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getPhotoType().getHours(), photoStudio);
                         new LocationOptionMenu(scanner, client, order, photoStudio);
                         break;
                     case 2:
