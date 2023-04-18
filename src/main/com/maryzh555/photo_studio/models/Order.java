@@ -1,9 +1,9 @@
-package com.maryzh555.photo_studio.models;
+package main.com.maryzh555.photo_studio.models;
 
-import com.maryzh555.photo_studio.enums.Location;
-import com.maryzh555.photo_studio.enums.PhotoPaperType;
-import com.maryzh555.photo_studio.models.users.Client;
-import com.maryzh555.photo_studio.models.users.Photographer;
+import main.com.maryzh555.photo_studio.enums.Location;
+import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
+import main.com.maryzh555.photo_studio.models.users.Client;
+import main.com.maryzh555.photo_studio.models.users.Photographer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class Order {
     }
 
     public int calculateTotal(Order order) {
-        int costOfPhoto = (order.getDesiredPhotographer().getHourlyRate() + order.getDesiredLocation().getRentingCost()) * order.getOrderedPhoto().getPhotoType().getHours();
+        int costOfPhoto = (order.getDesiredPhotographer().getHourlyRate() + order.getDesiredLocation().getRentingCost()) * order.getOrderedPhoto().getType().getHours();
 
         int colorCost; //colored photos cost +1$ per paper
         if (order.getOrderedPhoto().isColored()) {

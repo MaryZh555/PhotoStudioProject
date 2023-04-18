@@ -1,11 +1,11 @@
-package com.maryzh555.photo_studio.models.users;
+package main.com.maryzh555.photo_studio.models.users;
 
-import com.maryzh555.photo_studio.enums.Location;
-import com.maryzh555.photo_studio.enums.PhotoType;
-import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import com.maryzh555.photo_studio.interfaces.Report;
-import com.maryzh555.photo_studio.models.Order;
-import com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.enums.Location;
+import main.com.maryzh555.photo_studio.enums.PhotoType;
+import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
+import main.com.maryzh555.photo_studio.interfaces.IReport;
+import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author by Zhang M. on 04.04.2023.
  */
-public class CustomerManager extends Worker implements Report {
+public class CustomerManager extends Worker implements IReport {
     // Costumer manages is the one who manages the client.
     // They should introduce their name when servicing the client.
     // The client menu will have "rate our service" form. So we know how the managers works.

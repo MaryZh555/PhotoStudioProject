@@ -1,10 +1,10 @@
 package main.com.maryzh555.photo_studio.models.users;
 
 import main.com.maryzh555.photo_studio.interfaces.IReport;
-import main.com.maryzh555.photo_studio.models.Order;
-import main.com.maryzh555.photo_studio.models.Photo;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.test;
+import main.com.maryzh555.photo_studio.models.Paper;
+import main.com.maryzh555.photo_studio.models.Photo;
+import main.com.maryzh555.photo_studio.models.Order;
 
 import java.util.List;
 
@@ -21,16 +21,22 @@ public class SupplyManager extends Worker implements IReport {
         this.hourlyRate = hourlyRate;
     }
 
+
+    public void addPaperToStorage(PhotoStudio photoStudio, int qtyStandard, int qtyLarge, int qtyPro){
+        photoStudio.getStorage().addPaper(qtyStandard, qtyLarge, qtyPro);
+    }
+
     public void checkPhotoPaperInStudio(PhotoStudio photoStudio) {
-        int standardQty = photoStudio.getQtyOfStandardPaper();
-        int largeQty = photoStudio.getQtyOfLargePaper();
-        int professionalQty = photoStudio.getQtyOfProfessionalPaper();
-        if (standardQty == 0 || largeQty == 0 || professionalQty == 0) {
-            refillPhotoPaper(photoStudio, 50, 25, 10);
+        List<Paper> paperList = photoStudio.getStoredPaper();
+        int qtyStandard = paperList.get(0).getQty();
+        int qtyLarge = paperList.get(1).getQty();
+        int qtyPro = paperList.get(2).getQty();
+        if (qtyStandard == 0 || qtyLarge == 0 || qtyPro == 0 || qtyStandard == 1 || qtyLarge == 1 || qtyPro == 1 || qtyStandard < 0 || qtyLarge < 0 || qtyPro < 0) {
+            refillPhotoPaperInStudio(photoStudio, 50, 25, 10);
         }
     }
 
-    public void refillPhotoPaper(PhotoStudio photoStudio, int neededQtyStandard, int neededQtyLarge, int neededQtyPro) {
+    public void refillPhotoPaperInStudio(PhotoStudio photoStudio, int neededQtyStandard, int neededQtyLarge, int neededQtyPro) {
         this.addStandardPaperToStudio(neededQtyStandard, photoStudio);
         this.addLargePaper(neededQtyLarge, photoStudio);
         this.addProfessionalPaper(neededQtyPro, photoStudio);
@@ -39,21 +45,24 @@ public class SupplyManager extends Worker implements IReport {
     //neededQty represents the maximum qty that can be stored in the studio itself, and not in the storage
     //maybe will be replaced to the Printer
     public void addStandardPaperToStudio(int neededQty, PhotoStudio photoStudio) {
-        int currentQty = photoStudio.getQtyOfStandardPaper();
+        List<Paper> paperList = photoStudio.getStoredPaper();
+        int currentQty = paperList.get(0).getQty();
         int toAdd = neededQty - currentQty;
         photoStudio.getStorage().setStoredStandardPaper(photoStudio.getStorage().getStoredStandardPaper() - toAdd);
         photoStudio.setQtyOfStandardPaper(photoStudio.getQtyOfStandardPaper() + toAdd);
     }
 
     public void addLargePaper(int neededQty, PhotoStudio photoStudio) {
-        int currentQty = photoStudio.getQtyOfLargePaper();
+        List<Paper> paperList = photoStudio.getStoredPaper();
+        int currentQty = paperList.get(1).getQty();
         int toAdd = neededQty - currentQty;
         photoStudio.getStorage().setStoredLargePaper(photoStudio.getStorage().getStoredLargePaper() - toAdd);
         photoStudio.setQtyOfLargePaper(photoStudio.getQtyOfLargePaper() + toAdd);
     }
 
     public void addProfessionalPaper(int neededQty, PhotoStudio photoStudio) {
-        int currentQty = photoStudio.getQtyOfProfessionalPaper();
+        List<Paper> paperList = photoStudio.getStoredPaper();
+        int currentQty = paperList.get(2).getQty();
         int toAdd = neededQty - currentQty;
         photoStudio.getStorage().setStoredProfessionalPaper(photoStudio.getStorage().getStoredProfessionalPaper() - toAdd);
         photoStudio.setQtyOfProfessionalPaper(photoStudio.getQtyOfProfessionalPaper() + toAdd);
@@ -70,7 +79,7 @@ public class SupplyManager extends Worker implements IReport {
             case "PROFESSIONAL":
                 photoStudio.setQtyOfProfessionalPaper(photoStudio.getQtyOfProfessionalPaper() - useQty);
         }
-        test.paperTest(photoStudio);
+//        test.paperTest(photoStudio);
         this.addToTotalUseOfPaper(useQty);
     }
 

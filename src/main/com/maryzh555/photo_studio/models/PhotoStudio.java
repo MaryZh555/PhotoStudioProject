@@ -1,6 +1,11 @@
 package main.com.maryzh555.photo_studio.models;
 
+import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
 import main.com.maryzh555.photo_studio.models.users.Director;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A class representing a photo studio that offers photography services.
@@ -16,27 +21,27 @@ public class PhotoStudio {
 
     private Storage storage;
 
-
-    //represents qty in use by studio, not storage // maybe will be placed in the printer later
-    private int qtyOfStandardPaper;
-
-    private int qtyOfLargePaper;
-
-    private int qtyOfProfessionalPaper;
+    private List<Paper> storedPaper;
 
 
     public PhotoStudio() {
         this.director = new Director();
         this.storage = new Storage();
-        prepareEquipment();
+        prepareEquipment(this);
+//        test.paperTest(this);//todo delete
     }
 
 
-    private void prepareEquipment() {
+    private void prepareEquipment(PhotoStudio photoStudio) {
         //this method will also implement future methods of other workers.
-        this.director.getSupplyManager().refillPhotoPaper(this, 50, 25, 10);
+        photoStudio.storedPaper = photoStudio.setStoredPaper(0,0,0);
+        photoStudio.director.getSupplyManager().addPaperToStorage(photoStudio, 1050, 525, 110);
+        photoStudio.director.getSupplyManager().refillPhotoPaperInStudio(photoStudio, 50, 25, 10);
     }
 
+    public void addPaper(int qtyStandard, int qtyLarge, int qtyPro){
+        this.storedPaper = setStoredPaper(qtyStandard, qtyLarge, qtyPro);
+    }
 
     public Director getDirector() {
         return director;
@@ -47,27 +52,48 @@ public class PhotoStudio {
     }
 
     public int getQtyOfStandardPaper() {
-        return qtyOfStandardPaper;
+        for (Paper paper : storedPaper)
+            if (paper.getType() == PhotoPaperType.STANDARD) {
+                return paper.getQty();
+            }
+        return 0;
     }
 
     public int getQtyOfLargePaper() {
-        return qtyOfLargePaper;
+        for (Paper paper : storedPaper)
+            if (paper.getType() == PhotoPaperType.LARGE) {
+                return paper.getQty();
+            }
+        return 0;
     }
 
     public int getQtyOfProfessionalPaper() {
-        return qtyOfProfessionalPaper;
+        for (Paper paper : storedPaper)
+            if (paper.getType() == PhotoPaperType.PROFESSIONAL) {
+                return paper.getQty();
+            }
+        return 0;
     }
 
     public void setQtyOfStandardPaper(int qtyOfStandardPaper) {
-        this.qtyOfStandardPaper = qtyOfStandardPaper;
+        for (Paper paper : storedPaper)
+            if (paper.getType() == PhotoPaperType.STANDARD) {
+                paper.setQty(qtyOfStandardPaper);
+            }
     }
 
     public void setQtyOfLargePaper(int qtyOfLargePaper) {
-        this.qtyOfLargePaper = qtyOfLargePaper;
+        for (Paper paper : storedPaper)
+            if (paper.getType() == PhotoPaperType.LARGE) {
+                paper.setQty(qtyOfLargePaper);
+            }
     }
 
     public void setQtyOfProfessionalPaper(int qtyOfProfessionalPaper) {
-        this.qtyOfProfessionalPaper = qtyOfProfessionalPaper;
+        for (Paper paper : storedPaper)
+            if (paper.getType() == PhotoPaperType.PROFESSIONAL) {
+                paper.setQty(qtyOfProfessionalPaper);
+            }
     }
 
     public Storage getStorage() {
@@ -78,4 +104,15 @@ public class PhotoStudio {
         this.storage = storage;
     }
 
+    public List<Paper> getStoredPaper() {
+        return storedPaper;
+    }
+
+    public List<Paper> setStoredPaper(int qtyStandard, int qtyLarge, int qtyPro) {
+        return new ArrayList<>(Arrays.asList(
+                new Paper(qtyStandard, PhotoPaperType.STANDARD),
+                new Paper(qtyLarge, PhotoPaperType.LARGE),
+                new Paper(qtyPro, PhotoPaperType.PROFESSIONAL)
+        ));
+    }
 }
