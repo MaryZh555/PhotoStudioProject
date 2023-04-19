@@ -1,83 +1,105 @@
-package com.maryzh555.photo_studio.user_console_interface;
+package main.com.maryzh555.photo_studio.user_console_interface;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.maryzh555.photo_studio.enums.PhotoPaperType;
-import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import com.maryzh555.photo_studio.interfaces.ShowQuitMenu;
-import com.maryzh555.photo_studio.models.Order;
-import com.maryzh555.photo_studio.models.PhotoStudio;
-//import com.maryzh555.photo_studio.models.test;
-import com.maryzh555.photo_studio.models.test;
-import com.maryzh555.photo_studio.models.users.Client;
+import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
+import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
+import main.com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
+import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.test;
 
 /**
  * @author Zhang M. on 20.03.2023.
  */
 
-public class CalculateTotalMenu implements ShowQuitMenu {
+public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
     public CalculateTotalMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
         showMenu(scanner, order, photoStudio);
     }
 
-    private void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+
+        int resultTotal = order.calculateTotal(order);
+        order.setTotal(resultTotal);
+
+        System.out.println("\nYour order is a " + order.getOrderedPhoto().getType() +
+                " photo type, with the photographer " +
+                order.getDesiredPhotographer().getName() +
+                ". And location you are renting is the " +
+                order.getDesiredLocation() + ".");
+        if (order.getOrderedPhoto().getPrintStandardQty() == 0 &&
+                order.getOrderedPhoto().getPrintLargeQty() == 0 &&
+                order.getOrderedPhoto().getPrintProfessionalQty() == 0) {
+            System.out.println("You chose to have only digital photos.");
+        } else {
+            String colorInfo;
+            if (order.getOrderedPhoto().isColored()) {
+                colorInfo = " colored.";
+            } else {
+                colorInfo = " black-&-white.";
+            }
+            System.out.println(
+                    "\nFor printing you chose " + order.getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, "
+                            + order.getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
+                            order.getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo. " +
+                            "All " + colorInfo);
+        }
+        System.out.println("\nIt will cost you " + order.getTotal() + "$ total.\n");
+
+        showRedoMenu(scanner, order, photoStudio, this);
+
+    }
+
+    private void submitChanges(PhotoStudio photoStudio, Order order) {
+        // When the order is submitted we add it to the system:
+
+        //// Using the paper from the studio to print
+        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
+        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
+        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
+
+        // Adding to the photoPack (the printing result)
+        order.addToPhotoPack(order.getOrderedPhoto().getPrintStandardQty(), PhotoPaperType.STANDARD, order.getOrderedPhoto().isColored());
+        order.addToPhotoPack(order.getOrderedPhoto().getPrintLargeQty(), PhotoPaperType.LARGE, order.getOrderedPhoto().isColored());
+        order.addToPhotoPack(order.getOrderedPhoto().getPrintProfessionalQty(), PhotoPaperType.PROFESSIONAL, order.getOrderedPhoto().isColored());
+
+
+        //// Setting the Photo object to the Order
+        //// If the Photo will be printed, then add it to the Storage(passing the printing process)
+        //// The supply manager will control if there is no paper in the studio.
+        photoStudio.getDirector().getCustomerManager().addOrderToTheSystemList(order);
+        test.printOrderList(photoStudio); // test
+        test.printAllOrderListInfo(photoStudio);
+        if (order.getOrderedPhoto().isToPrint()) {
+            photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
+            photoStudio.getDirector().getSupplyManager().checkPhotoPaperInStudio(photoStudio);
+            test.paperTest(photoStudio); //test
+//          test.printStoragePhotoList(photoStudio);//test
+        }
+
+        //set hours of work for workers //todo maybe make a method in DIRECTOR
+        order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getType().getHours(), photoStudio);
+        order.getDesiredPhotographer().addToPhotoShootsToday(1); //check add here the te/st to print the available photographers
+
+        photoStudio.getDirector().getCustomerManager().addServicedClients();//for new order
+    }
+
+
+    @Override
+    public void showRedoMenu(Scanner scanner, Order order, PhotoStudio photoStudio, Menu menu) {
         while (true) {
             try {
-                int resultTotal = order.calculateTotal(order);
-                order.setTotal(resultTotal);
-
-                System.out.println("\nYour order is a " + order.getOrderedPhoto().getPhotoType() +
-                        " photo type, with the photographer " +
-                        order.getDesiredPhotographer().getName() +
-                        ". And location you are renting is the " +
-                        order.getDesiredLocation() + ".");
-                if (order.getOrderedPhoto().getPrintStandardQty() == 0 &&
-                        order.getOrderedPhoto().getPrintLargeQty() == 0 &&
-                        order.getOrderedPhoto().getPrintProfessionalQty() == 0) {
-                    System.out.println("You chose to have only digital photos.");
-                } else {
-                    String colorInfo;
-                    if (order.getOrderedPhoto().isColored()) {
-                        colorInfo = " colored.";
-                    } else {
-                        colorInfo = " black-&-white.";
-                    }
-                    System.out.println(
-                            "\nFor printing you chose " + order.getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, "
-                                    + order.getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
-                                    order.getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo. " +
-                                    "All " + colorInfo);
-                }
-                System.out.println("\nIt will cost you " + order.getTotal() + "$ total.\n");
-
                 System.out.println("Is it ok, or you want to redo your order?" +
                         "\n 1 - It's fine." +
-                        "\n 2 - I want to redo the whole order." +
+                        "\n 2 - I want to redo the whole order." + //todo add to previous
                         "\n 3 - Leave(quit)");
 
                 int answer = scanner.nextInt();
 
                 switch (answer) {
                     case 1:
-//                        // When the order is submitted we add it to the system:
-//                        //// Setting the Photo object to the Order
-//                        //// If the Photo will be printed, then add it to the Storage(passing the printing process)
-//                        //// The supply manager will checki if there is no paper in the studio.
-//                        photoStudio.getDirector().getCustomerManager().addOrderToTheSystemList(order);
-//                        test.printOrderList(photoStudio); // todo test
-//                        if (order.getOrderedPhoto().isToPrint()) {
-//                            photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
-//                            photoStudio.getDirector().getSupplyManager().checkPhotoPaperInStudio(photoStudio);
-//                            test.paperTest(photoStudio); //todo test
-////                            test.printStoragePhotoList(photoStudio);//todo test
-//                        }
-//
-//                        //set hours of work for workers //todo maybe make a method in DIRECTOR
-//                        order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getPhotoType().getHours(), photoStudio);
-//                        order.getDesiredPhotographer().addToPhotoShootsToday(1);
-//
-//                        photoStudio.getDirector().getCustomerManager().addServicedClients();//for new order
                         submitChanges(photoStudio, order);
 
                         System.out.println("Great! See you in our Photo Studio, " + order.getClient().getName() +
@@ -89,59 +111,8 @@ public class CalculateTotalMenu implements ShowQuitMenu {
                     case 2:
                         new MainMenu(photoStudio); //returns to the first menu
                         break;
-                    default:
-                        throw new NoSuchOptionException();
-                }
-                break;
-            } catch (NoSuchOptionException e) {
-                System.out.println(e.getMessage());
-            } catch (InputMismatchException e) {
-                System.out.println("---------\n" +
-                        "ERROR: Invalid input. Not an integer" +
-                        "\n---------");
-                scanner.next();// clear the input buffer, stops the infinite loop
-            }
-        }
-    }
-
-    private void submitChanges(PhotoStudio photoStudio, Order order) {
-        // When the order is submitted we add it to the system:
-        //// Setting the Photo object to the Order
-        //// If the Photo will be printed, then add it to the Storage(passing the printing process)
-        //// The supply manager will control if there is no paper in the studio.
-        photoStudio.getDirector().getCustomerManager().addOrderToTheSystemList(order);
-            test.printOrderList(photoStudio); // todo test
-            test.printAllOrderListInfo(photoStudio);
-        if (order.getOrderedPhoto().isToPrint()) {
-            photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
-            photoStudio.getDirector().getSupplyManager().checkPhotoPaperInStudio(photoStudio);
-                test.paperTest(photoStudio); //todo test
-//                            test.printStoragePhotoList(photoStudio);//todo test
-        }
-
-        //set hours of work for workers //todo maybe make a method in DIRECTOR
-        order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getPhotoType().getHours(), photoStudio);
-        order.getDesiredPhotographer().addToPhotoShootsToday(1); //check add here the test to print the available photographers
-
-        photoStudio.getDirector().getCustomerManager().addServicedClients();//for new order
-    }
-
-    @Override
-    public void showQuitMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
-        while (true) {
-            try {
-                System.out.println(" Are you sere you want to quit? " +
-                        "\n 1 - Yes(quit)" +
-                        "\n 2 - No ->(Redo)");
-
-                int answer = scanner.nextInt();
-
-                switch (answer) {
-                    case 1:
-                        new NewCustomerMenu(scanner, photoStudio);
-                        break;
-                    case 2:
-                        showMenu(scanner, order, photoStudio);
+                    case 3:
+                        new QuitMenu(scanner, order, photoStudio, this);
                         break;
                     default:
                         throw new NoSuchOptionException();
@@ -151,7 +122,7 @@ public class CalculateTotalMenu implements ShowQuitMenu {
                 System.out.println(e.getMessage());
             } catch (InputMismatchException e) {
                 System.out.println("---------\n" +
-                        "ERROR: Invalid input. Not an integer" +
+                        "Invalid input: Not an integer" +
                         "\n---------");
                 scanner.next(); // clear the input buffer
             }

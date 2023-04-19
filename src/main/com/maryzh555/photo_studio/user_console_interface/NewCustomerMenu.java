@@ -1,9 +1,7 @@
-package com.maryzh555.photo_studio.user_console_interface;
+package main.com.maryzh555.photo_studio.user_console_interface;
 
-import com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import com.maryzh555.photo_studio.models.PhotoStudio;
-import com.maryzh555.photo_studio.models.test;
-//import com.maryzh555.photo_studio.models.test;
+import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
+import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -24,17 +22,15 @@ public class NewCustomerMenu {
                 int answer = scanner.nextInt();
                 switch (answer){
                     case 1:
-//                        test.printOrderList(photoStudio); // todo test
+                        //test.printOrderList(photoStudio); //test
                         System.out.println("Great! Let's close the shift!");
 
                         //reports
                         photoStudio.getDirector().askForReport(photoStudio);
-//                        photoStudio.getSupplyManager().report();
-
                         scanner.close();
                         break;
                     case 2:
-                        test.testAvailablePhotographers(photoStudio);//todo test
+                        //test.testAvailablePhotographers(photoStudio);//test
                         new MainMenu(photoStudio);
                         break;
                     default: throw new NoSuchOptionException();
