@@ -32,8 +32,13 @@ public class CustomerManager extends Worker implements IReport {
         this.listOfOrders = new ArrayList<>();
     }
 
+    public CustomerManager(int neededYears) {
+        this.neededExperience = neededYears;
+        this.listOfOrders = new ArrayList<>();
+    }
 
-    public void introduceYourself(){
+
+    public void introduceYourself() {
         System.out.println("My name is " + this.getName() + ". ");
     }
 
@@ -41,11 +46,13 @@ public class CustomerManager extends Worker implements IReport {
         this.listOfOrders.add(order);
     }
 
-    public void addServicedClients(){
+    public void addServicedClients() {
         this.servicedClients++;
     }
 
-    public void removeServicedClients(){this.servicedClients--;}
+    public void removeServicedClients() {
+        this.servicedClients--;
+    }
 
 
     /// All match method can be done by the customer manager ///
@@ -106,6 +113,12 @@ public class CustomerManager extends Worker implements IReport {
             }
         }
         return result;
+    }
+
+    public int calculateMaxYearsOfExperience(int age) {
+        int maxYears;
+        maxYears = age - 18;
+        return maxYears;
     }
 
     @Override

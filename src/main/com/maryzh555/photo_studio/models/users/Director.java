@@ -22,12 +22,28 @@ public class Director extends User {
 
     private final CustomerManager customerManager;
 
+    private final HRManager hrManager;
+
+    private final List<HRManager> hrManagerList;
+
+    private final List<CustomerManager> customerManagerList;
+
+    private final List<SupplyManager> supplyManagerList;
+
+
+
 
     public Director() {
         this.allPhotographers = fillPhotographers();
         this.availablePhotographers = allPhotographers;
+        this.hrManagerList = fillHRManagers();
+        this.customerManagerList = fillCustomerManager();
+        this.supplyManagerList = fillSupplyManagers();
+
         this.supplyManager = choseSupplyManager();
         this.customerManager = choseCustomerManager();
+        this.hrManager = choseRandomHRManager();
+
     }
 
     public void askForReport(PhotoStudio photoStudio) {
@@ -41,6 +57,8 @@ public class Director extends User {
         supplyManager.report();
         //Customer Manager
         customerManager.report();
+        //HR Manager
+        hrManager.report();
     }
 
 
@@ -74,25 +92,68 @@ public class Director extends User {
     }
 
 
-    //The method works with Random() because of lack of workers schedule and time management in current version of program
-    private SupplyManager choseSupplyManager() {
-        Random random = new Random();
+    public List<HRManager> fillHRManagers(){
+        List<HRManager> list = new ArrayList<>();
+        list.add(new HRManager("Oleg", 15));
+        list.add(new HRManager("Marina", 12));
+        list.add(new HRManager("Antonina", 20));
+        return  list;
+    }
+
+    public List<SupplyManager> fillSupplyManagers(){
         List<SupplyManager> list = new ArrayList<>();
         list.add(new SupplyManager("Oleg", 15));
         list.add(new SupplyManager("Marina", 12));
         list.add(new SupplyManager("Antonina", 20));
+        return  list;
+    }
+
+    public List<CustomerManager> fillCustomerManager(){
+        List<CustomerManager> list = new ArrayList<>();
+        list.add(new CustomerManager("Oleg", 15));
+        list.add(new CustomerManager("Marina", 12));
+        list.add(new CustomerManager("Antonina", 20));
+        return  list;
+    }
+    //The method works with Random() because of lack of workers schedule and time management in current version of program
+
+
+    private HRManager choseRandomHRManager(){
+        Random random = new Random();
+        List<HRManager> list = hrManagerList;
+        int index = random.nextInt(list.size());
+        return list.get(index);
+    }
+
+    private SupplyManager choseSupplyManager() {
+        Random random = new Random();
+        List<SupplyManager> list = supplyManagerList;
         int index = random.nextInt(list.size());
         return list.get(index);
     }
 
     private CustomerManager choseCustomerManager() {
         Random random = new Random();
-        List<CustomerManager> list = new ArrayList<>();
-        list.add(new CustomerManager("Oleg", 15));
-        list.add(new CustomerManager("Marina", 12));
-        list.add(new CustomerManager("Antonina", 20));
+        List<CustomerManager> list = customerManagerList;
         int index = random.nextInt(list.size());
         return list.get(index);
+    }
+
+    public void hireJobCandidate(Candidate candidate){
+        switch (candidate.getWorkerType()){
+            case PHOTOGRAPHER:
+                allPhotographers.add(new Photographer(candidate.getName(), candidate.getYearsOfExperience(), candidate.getHourlyRate()));
+                break;
+            case HR_MANAGER:
+                hrManagerList.add(new HRManager(candidate.getName(), candidate.getHourlyRate()));
+                break;
+            case SUPPLY_MANAGER:
+                supplyManagerList.add(new SupplyManager(candidate.getName(), candidate.getHourlyRate()));
+                break;
+            case CUSTOMER_MANAGER:
+                customerManagerList.add(new CustomerManager(candidate.getName(), candidate.getHourlyRate()));
+                break;
+        }
     }
 
 
@@ -114,5 +175,21 @@ public class Director extends User {
 
     public CustomerManager getCustomerManager() {
         return customerManager;
+    }
+
+    public HRManager getHrManager() {
+        return hrManager;
+    }
+
+    public List<HRManager> getHrManagerList() {
+        return hrManagerList;
+    }
+
+    public List<CustomerManager> getCustomerManagerList() {
+        return customerManagerList;
+    }
+
+    public List<SupplyManager> getSupplyManagerList() {
+        return supplyManagerList;
     }
 }

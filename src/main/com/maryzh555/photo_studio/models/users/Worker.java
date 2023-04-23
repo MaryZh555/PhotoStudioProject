@@ -12,6 +12,8 @@ public abstract class Worker extends User implements IReport {
 
     public int hoursWorkedToday;
 
+    public int neededExperience;
+
     Worker() {
         super();
     }
@@ -38,5 +40,13 @@ public abstract class Worker extends User implements IReport {
 
     public void setHoursWorkedToday(int hoursWorkedToday) {
         this.hoursWorkedToday = hoursWorkedToday;
+    }
+
+    public int getNeededExperience() {
+        return neededExperience;
+    }
+
+    public void setNeededExperience(int neededExperience) {
+        this.neededExperience = neededExperience;
     }
 }

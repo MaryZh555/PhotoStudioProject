@@ -25,6 +25,15 @@ public class RedoMenu implements IShowRedoMenu {
                 ///// menu text previous
                 String previousMenuName;
                 switch (menu.toString()) {
+                    case "CandidateMenu":
+                        previousMenuName = "(User distribution)";
+                        break;
+                    case "CandidateDataForm":
+                        previousMenuName = "(Job Candidate)";
+                        break;
+                    case "HiringMenu":
+                        previousMenuName = "(Candidate Data Form)";
+                        break;
                     case "ClientDataFormMenu":
                         previousMenuName = "(Order/Pick up)";
                         break;
@@ -58,6 +67,13 @@ public class RedoMenu implements IShowRedoMenu {
                     case 1:
 
                         switch (menu.toString()) {
+                            case "CandidateMenu":
+                                scanner.nextLine();
+                                new CandidateDataForm(scanner, photoStudio);
+                                break;
+                            case "CandidateDataForm":
+                                new HiringMenu(scanner, photoStudio);
+                                break;
                             case "ClientDataFormMenu":
                                 new PhotographersOptionMenu(scanner, order, photoStudio);
                                 break;
@@ -84,6 +100,12 @@ public class RedoMenu implements IShowRedoMenu {
                     case 3:
 
                         switch (menu.toString()) {
+                            case "CandidateMenu":
+                                new UserDistributionMenu(scanner, photoStudio);
+                                break;
+                            case "CandidateDataForm":
+                                new CandidateMenu(scanner, photoStudio);
+                                break;
                             case "ClientDataFormMenu":
                                 new MainMenu(photoStudio);
                                 break;
