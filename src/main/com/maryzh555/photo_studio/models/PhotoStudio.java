@@ -37,6 +37,7 @@ public class PhotoStudio {
         photoStudio.storedPaper = photoStudio.setStoredPaper(0,0,0);
         photoStudio.director.getSupplyManager().addPaperToStorage(photoStudio, 1050, 525, 110);
         photoStudio.director.getSupplyManager().refillPhotoPaperInStudio(photoStudio, 50, 25, 10);
+        photoStudio.director.getSupplyManager().fillStoredCameras(photoStudio,10);
     }
 
     public void addPaper(int qtyStandard, int qtyLarge, int qtyPro){

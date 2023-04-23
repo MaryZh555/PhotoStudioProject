@@ -82,12 +82,12 @@ public class Director extends User {
     //The photographers data is written here until the database is implemented.
     public List<Photographer> fillPhotographers() {
         List<Photographer> result = new ArrayList<>();
-        result.add(new Photographer("Tasha", 1, 10));
-        result.add(new Photographer("Sasha", 2, 12));
-        result.add(new Photographer("Misha", 3, 15));
-        result.add(new Photographer("Dasha", 4, 18));
-        result.add(new Photographer("Masha", 5, 25));
-        result.add(new Photographer("Dimas", 6, 35));
+        result.add(new Photographer("Tasha", 1, 10, false, null));
+        result.add(new Photographer("Sasha", 2, 12, false, null));
+        result.add(new Photographer("Misha", 3, 15, false, null));
+        result.add(new Photographer("Dasha", 4, 18, false, null));
+        result.add(new Photographer("Masha", 5, 25, false, null));
+        result.add(new Photographer("Dimas", 6, 35, false, null));
         return result;
     }
 
@@ -139,10 +139,10 @@ public class Director extends User {
         return list.get(index);
     }
 
-    public void hireJobCandidate(Candidate candidate){
+    public void hireJobCandidate(PhotoStudio photoStudio, Candidate candidate){
         switch (candidate.getWorkerType()){
             case PHOTOGRAPHER:
-                allPhotographers.add(new Photographer(candidate.getName(), candidate.getYearsOfExperience(), candidate.getHourlyRate()));
+                allPhotographers.add(new Photographer(candidate.getName(), candidate.getYearsOfExperience(), candidate.getHourlyRate(), candidate.isBorrowCamera(), photoStudio.getDirector().getSupplyManager().findCameraForCandidate(photoStudio) ));
                 break;
             case HR_MANAGER:
                 hrManagerList.add(new HRManager(candidate.getName(), candidate.getHourlyRate()));

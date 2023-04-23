@@ -21,6 +21,9 @@ public class Candidate extends User{
 
     private int hourlyRate;
 
+    private boolean borrowCamera;
+
+
     public Candidate(){}
     public Candidate(WorkerType workerType, String name, int yearsOfExperience){
         super(name);
@@ -89,5 +92,13 @@ public class Candidate extends User{
 
     public void setHourlyRate(int hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+
+    public boolean isBorrowCamera() {
+        return borrowCamera;
+    }
+
+    public void setBorrowCamera(boolean borrowCamera) {
+        this.borrowCamera = borrowCamera;
     }
 }

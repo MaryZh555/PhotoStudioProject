@@ -1,12 +1,12 @@
 package main.com.maryzh555.photo_studio.models.users;
 
+import main.com.maryzh555.photo_studio.enums.CameraType;
 import main.com.maryzh555.photo_studio.interfaces.IReport;
-import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.Paper;
-import main.com.maryzh555.photo_studio.models.Photo;
-import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.models.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author by Zhang M. on 04.04.2023.
@@ -92,6 +92,31 @@ public class SupplyManager extends Worker implements IReport {
                         return photoPack;
                     }
                 }
+            }
+        }
+        return null;
+    }
+
+    public void fillStoredCameras(PhotoStudio photoStudio, int qty){
+        List<Camera> cameras = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < qty; i++) {
+            int numCameraTypes = CameraType.values().length;
+            CameraType randomType = CameraType.values()[random.nextInt(numCameraTypes)];
+            boolean randomIsInUse = random.nextBoolean();
+            Camera camera = new Camera(randomType, randomIsInUse);
+            cameras.add(camera);
+        }
+
+        photoStudio.getStorage().setStoredCameras(cameras);
+    }
+
+    public Camera findCameraForCandidate(PhotoStudio photoStudio){
+        List<Camera> storedCameras = photoStudio.getStorage().getStoredCameras();
+        for (Camera camera : storedCameras) {
+            if (camera.isInUse()) {
+                return camera;
             }
         }
         return null;

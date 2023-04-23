@@ -1,6 +1,7 @@
 package main.com.maryzh555.photo_studio.models.users;
 
 import main.com.maryzh555.photo_studio.interfaces.IReport;
+import main.com.maryzh555.photo_studio.models.Camera;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
 /**
@@ -15,11 +16,17 @@ public class Photographer extends Worker implements IReport {
 
     private int photoShootsToday;
 
+    private boolean usesStudioCamera;
 
-    public Photographer(String name, int years, int hourlyRate) {
+    private Camera studioCamera;
+
+
+    public Photographer(String name, int years, int hourlyRate, boolean borrowCamera, Camera studioCamera) {
         super(name);// for id and name
         this.yearsOfExperience = years;
         this.hourlyRate = hourlyRate;
+        this.usesStudioCamera = borrowCamera;
+        this.studioCamera = studioCamera;
     }
 
 
@@ -61,5 +68,21 @@ public class Photographer extends Worker implements IReport {
 
     public void addToPhotoShootsToday(int photoShootsToday) {
         this.photoShootsToday += photoShootsToday;
+    }
+
+    public boolean isUsesStudioCamera() {
+        return usesStudioCamera;
+    }
+
+    public void setUsesStudioCamera(boolean usesStudioCamera) {
+        this.usesStudioCamera = usesStudioCamera;
+    }
+
+    public Camera getStudioCamera() {
+        return studioCamera;
+    }
+
+    public void setStudioCamera(Camera studioCamera) {
+        this.studioCamera = studioCamera;
     }
 }

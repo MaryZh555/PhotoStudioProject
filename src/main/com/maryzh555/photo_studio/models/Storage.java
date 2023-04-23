@@ -15,6 +15,8 @@ public class Storage {
 
     private List<Paper> storedPaper;
 
+    private List<Camera> storedCameras;
+
     Storage() {
 
     }
@@ -97,5 +99,13 @@ public class Storage {
 
     public void setStoredPaper(List<Paper> storedPaper) {
         this.storedPaper = storedPaper;
+    }
+
+    public List<Camera> getStoredCameras() {
+        return storedCameras;
+    }
+
+    public void setStoredCameras(List<Camera> storedCameras) {
+        this.storedCameras = storedCameras;
     }
 }
