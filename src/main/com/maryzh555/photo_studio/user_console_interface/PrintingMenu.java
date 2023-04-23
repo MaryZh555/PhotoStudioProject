@@ -41,7 +41,7 @@ public class PrintingMenu extends Menu{
                         order.getOrderedPhoto().setPrintStandardQty(0);
                         order.getOrderedPhoto().setPrintLargeQty(0);
                         order.getOrderedPhoto().setPrintProfessionalQty(0);
-                        new RedoMenu(scanner, order, photoStudio, this);//showRedoMenu(scanner, order, photoStudio);
+                        new RedoMenu(scanner, order, photoStudio, this);
                         break;
                 }
                 break;
@@ -158,23 +158,7 @@ public class PrintingMenu extends Menu{
                 order.getOrderedPhoto().getPrintProfessionalQty() == 0) {
             System.out.println("Well, you chose to have no printed photos.");
         }
-        new RedoMenu(scanner, order, photoStudio, this);//showRedoMenu(scanner, order, photoStudio);
+        new RedoMenu(scanner, order, photoStudio, this);
     }
 
-
-/*    private void submitChanges(PhotoStudio photoStudio, Order order) {
-        // All the changes are submitted:
-
-        //// Using the paper from the studio to print //todo make a separate method? (photoStudio, order)
-        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
-        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
-        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
-
-        // Adding to the photoPack (the printing result)
-        order.addToPhotoPack(order.getOrderedPhoto().getPrintStandardQty(), PhotoPaperType.STANDARD, order.getOrderedPhoto().isColored());
-        order.addToPhotoPack(order.getOrderedPhoto().getPrintLargeQty(), PhotoPaperType.LARGE, order.getOrderedPhoto().isColored());
-        order.addToPhotoPack(order.getOrderedPhoto().getPrintProfessionalQty(), PhotoPaperType.PROFESSIONAL, order.getOrderedPhoto().isColored());
-
-        //test.testPhotoPack(order);//test
-    }*/
 }

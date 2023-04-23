@@ -35,19 +35,19 @@ public class CandidateMenu extends Menu {
                 Candidate newCandidate = new Candidate();
                 switch (answer) {
                     case 1:
-                        vacancies = photoStudio.getDirector().getHrManager().matchVacancies(WorkerType.PHOTOGRAPHER);
+                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.PHOTOGRAPHER);
                         newCandidate.setWorkerType(WorkerType.PHOTOGRAPHER);
                         break;
                     case 2:
-                        vacancies = photoStudio.getDirector().getHrManager().matchVacancies(WorkerType.SUPPLY_MANAGER);
+                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.SUPPLY_MANAGER);
                         newCandidate.setWorkerType(WorkerType.SUPPLY_MANAGER);
                         break;
                     case 3:
-                        vacancies = photoStudio.getDirector().getHrManager().matchVacancies(WorkerType.CUSTOMER_MANAGER);
+                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.CUSTOMER_MANAGER);
                         newCandidate.setWorkerType(WorkerType.CUSTOMER_MANAGER);
                         break;
                     case 4:
-                        vacancies = photoStudio.getDirector().getHrManager().matchVacancies(WorkerType.HR_MANAGER);
+                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.HR_MANAGER);
                         newCandidate.setWorkerType(WorkerType.HR_MANAGER);
                         break;
                     default:
@@ -77,7 +77,7 @@ public class CandidateMenu extends Menu {
                         i++;
                     }
                 }
-                photoStudio.getDirector().getHrManager().setUserCandidate(newCandidate);
+                callHRManager(photoStudio).setUserCandidate(newCandidate);
                 new RedoMenu(scanner, null, photoStudio, this);
                 break;
             } catch (NoSuchOptionException e) {

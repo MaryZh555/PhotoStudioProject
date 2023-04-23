@@ -9,7 +9,7 @@ import java.util.Scanner;
 /**
  * @author by Zhang M. on 07.04.2023.
  */
-public class NewCustomerMenu {
+public class NewCustomerMenu extends Menu{
     public NewCustomerMenu(Scanner scanner, PhotoStudio photoStudio) {
         showNewCustomerMenu(scanner, photoStudio);//uses this instance of PhotoStudio, but creates new order and user to work with
     }
@@ -26,7 +26,7 @@ public class NewCustomerMenu {
                         System.out.println("Great! Let's close the shift!");
 
                         //reports
-                        photoStudio.getDirector().askForReport(photoStudio);
+                        callDirector(photoStudio).askForReport(photoStudio);
                         scanner.close();
                         break;
                     case 2:

@@ -2,6 +2,7 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.WrongNameException;
 import main.com.maryzh555.photo_studio.exceptions.WrongNumberException;
+import main.com.maryzh555.photo_studio.interfaces.IValidateName;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
@@ -10,7 +11,7 @@ import java.util.Scanner;
 /**
  * @author by Zhang M. on 07.04.2023.
  */
-public class ClientDataFormMenu extends Menu{
+public class ClientDataFormMenu extends Menu implements IValidateName {
     public ClientDataFormMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
         showMenu(scanner, order, photoStudio);
     }
@@ -24,10 +25,7 @@ public class ClientDataFormMenu extends Menu{
                         "The name should contain at least 3 English letters, " +
                         "and should not contain any numbers or special symbols.");
                 String name = scanner.nextLine();
-                if (name.matches(".*\\d+.*") ||
-                        name.trim().length() < 3 ||
-                        !name.trim().matches("[a-zA-Z]+"))
-                    throw new WrongNameException();
+                if (validateName(name)) throw new WrongNameException();
 
                 order.getClient().setName(name.trim());
                 break;
@@ -43,11 +41,7 @@ public class ClientDataFormMenu extends Menu{
                         "and should not contain any numbers or special symbols.");
                 String surname = scanner.nextLine();
 
-                if (surname.matches(".*\\d+.*") ||
-                        surname.trim().length() < 3 ||
-                        !surname.trim().matches("[a-zA-Z]+"))
-                    throw new WrongNameException();
-
+                if (validateName(surname)) throw new WrongNameException();
                 order.getClient().setSurname(surname.trim());
                 break;
             } catch (WrongNameException e) {
@@ -74,7 +68,7 @@ public class ClientDataFormMenu extends Menu{
                         "\n SURNAME: " + order.getClient().getSurname() +
                         "\n CONTACT NUMBER: " + order.getClient().getContactNumber());
 
-                new RedoMenu(scanner, order, photoStudio, this);//this.redoMenu = new RedoMenu(scanner, order, photoStudio, this);//showRedoMenu(scanner, order, photoStudio);
+                new RedoMenu(scanner, order, photoStudio, this);
                 break;
             } catch (WrongNumberException e) {
                 System.out.println(e.getMessage());
@@ -82,4 +76,10 @@ public class ClientDataFormMenu extends Menu{
         }
     }
 
+    @Override
+    public boolean validateName(String string) {
+        return string.matches(".*\\d+.*") ||
+                string.trim().length() < 3 ||
+                !string.trim().matches("[a-zA-Z]+");
+    }
 }

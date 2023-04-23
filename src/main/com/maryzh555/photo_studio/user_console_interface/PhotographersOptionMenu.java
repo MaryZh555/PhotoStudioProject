@@ -1,14 +1,14 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
-
 import main.com.maryzh555.photo_studio.exceptions.EmptyListException;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.Photographer;
+
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author Zhang M. on 20.03.2023.
@@ -31,12 +31,12 @@ public class PhotographersOptionMenu extends Menu{
 
                 System.out.println("Let's see which photographers have " + answer + " years of experience: ");
 
-                list = photoStudio.getDirector().getCustomerManager().matchPhotographers(answer, photoStudio);
+                list = callCustomerManager(photoStudio).matchPhotographers(answer, photoStudio);
 
                 if (list.size() == 0) { //For cases when there is no photographers with needed experience
                     System.out.println("Unfortunately, we don't have any photographer with " + answer + " years of experience.\n" +
                             "But we can suggest some with similar experience: ");
-                    list = photoStudio.getDirector().getCustomerManager().findAlternativePhotographers(answer, photoStudio);
+                    list = callCustomerManager(photoStudio).findAlternativePhotographers(answer, photoStudio);
                 }
 
                 int i = 1;
@@ -51,7 +51,7 @@ public class PhotographersOptionMenu extends Menu{
                 } else if (list.size() == 1) {
                     System.out.println("They are the only one, who might suit you.");
                     order.setDesiredPhotographer(list.get(0));
-                    new RedoMenu(scanner, order, photoStudio, this);//showRedoMenu(scanner, order, photoStudio);
+                    new RedoMenu(scanner, order, photoStudio, this);
                 }
                 break;
             } catch (NoSuchOptionException e) {
@@ -79,7 +79,7 @@ public class PhotographersOptionMenu extends Menu{
                             ", who has " + order.getDesiredPhotographer().getYearsOfExperience() + " years of experience. " +
                             "They will take " + order.getDesiredPhotographer().getHourlyRate() + "$ per hour.\n");
 
-                    new RedoMenu(scanner, order, photoStudio, this);//showRedoMenu(scanner, order, photoStudio);
+                    new RedoMenu(scanner, order, photoStudio, this);
 
                     break;
                 } catch (NoSuchOptionException e) {

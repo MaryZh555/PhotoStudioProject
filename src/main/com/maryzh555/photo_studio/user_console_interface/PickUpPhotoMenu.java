@@ -23,7 +23,7 @@ public class PickUpPhotoMenu extends Menu{
                 System.out.println("Please enter your order id: ");
                 int id = scanner.nextInt();
 //                    test.printStoragePhotoPackList(photoStudio); // test
-                List<Photo> pack = photoStudio.getDirector().getSupplyManager().findPickUpPhotoPack(id, photoStudio);
+                List<Photo> pack = callSupplyManager(photoStudio).findPickUpPhotoPack(id, photoStudio);
                 if (pack == null) {
                     throw new NoSuchOptionException();
                 }
@@ -31,7 +31,7 @@ public class PickUpPhotoMenu extends Menu{
 //                test.printStoragePhotoPackList(photoStudio);//test
                 System.out.println("Here you go. Your " + pack.size() +
                         " photos are ready. Have a nice day!");
-                photoStudio.getDirector().getCustomerManager().addServicedClients();//todo submitted
+                callCustomerManager(photoStudio).addServicedClients();
                 new NewCustomerMenu(scanner, photoStudio);
                 break;
             } catch (NoSuchOptionException e) {
@@ -39,7 +39,7 @@ public class PickUpPhotoMenu extends Menu{
                         "It seems like we don't have an order with this id, please check if the inputted id is correct" +
                         "\n---------");
 
-                new RedoMenu(scanner, null, photoStudio, this);//this.redoMenu = new RedoMenu(scanner, null, photoStudio, this);//showRedoMenu(scanner, null, photoStudio);
+                new RedoMenu(scanner, null, photoStudio, this);
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("---------\n" +

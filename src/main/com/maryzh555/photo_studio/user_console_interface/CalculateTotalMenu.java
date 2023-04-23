@@ -1,15 +1,13 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.test;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
 /**
  * @author Zhang M. on 20.03.2023.
  */
@@ -56,9 +54,9 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
         // When the order is submitted we add it to the system:
 
         //// Using the paper from the studio to print
-        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
-        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
-        photoStudio.getDirector().getSupplyManager().useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
+        callSupplyManager(photoStudio).useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
+        callSupplyManager(photoStudio).useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
+        callSupplyManager(photoStudio).useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
 
         // Adding to the photoPack (the printing result)
         order.addToPhotoPack(order.getOrderedPhoto().getPrintStandardQty(), PhotoPaperType.STANDARD, order.getOrderedPhoto().isColored());
@@ -69,21 +67,21 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
         //// Setting the Photo object to the Order
         //// If the Photo will be printed, then add it to the Storage(passing the printing process)
         //// The supply manager will control if there is no paper in the studio.
-        photoStudio.getDirector().getCustomerManager().addOrderToTheSystemList(order);
-        test.printOrderList(photoStudio); // test
-        test.printAllOrderListInfo(photoStudio);
+        callCustomerManager(photoStudio).addOrderToTheSystemList(order);
+//        test.printOrderList(photoStudio); // test
+//        test.printAllOrderListInfo(photoStudio);
         if (order.getOrderedPhoto().isToPrint()) {
             photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
-            photoStudio.getDirector().getSupplyManager().checkPhotoPaperInStudio(photoStudio);
-            test.paperTest(photoStudio); //test
+            callSupplyManager(photoStudio).checkPhotoPaperInStudio(photoStudio);
+//            test.paperTest(photoStudio); //test
 //          test.printStoragePhotoList(photoStudio);//test
         }
 
-        //set hours of work for workers //todo maybe make a method in DIRECTOR
+        //set hours of work for workers
         order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getType().getHours(), photoStudio);
-        order.getDesiredPhotographer().addToPhotoShootsToday(1); //check add here the te/st to print the available photographers
+        order.getDesiredPhotographer().addToPhotoShootsToday(1);
 
-        photoStudio.getDirector().getCustomerManager().addServicedClients();//for new order
+        callCustomerManager(photoStudio).addServicedClients();//for new order
     }
 
 

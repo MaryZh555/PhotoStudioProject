@@ -3,9 +3,9 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.exceptions.WrongAgeException;
 import main.com.maryzh555.photo_studio.exceptions.WrongNameException;
+import main.com.maryzh555.photo_studio.interfaces.IValidateName;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.Candidate;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -13,20 +13,19 @@ import java.util.Scanner;
 /**
  * @author by Zhang M. on 21.04.2023.
  */
-public class CandidateDataForm extends Menu {
+public class CandidateDataForm extends Menu implements IValidateName {
 
     public CandidateDataForm(Scanner scanner, PhotoStudio photoStudio) {
         showMenu(scanner, null, photoStudio);
     }
 
-
     public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
 
-        photoStudio.getDirector().getHrManager().setMaxAgeOfCandidates(50);
-        int maxAge = photoStudio.getDirector().getHrManager().getMaxAgeOfCandidates();
+        callHRManager(photoStudio).setMaxAgeOfCandidates(50);
+        int maxAge = callHRManager(photoStudio).getMaxAgeOfCandidates();
 
-        photoStudio.getDirector().getHrManager().setRetirementAgeOfCandidate(67);
-        int retirementAge = photoStudio.getDirector().getHrManager().getRetirementAgeOfCandidate();
+        callHRManager(photoStudio).setRetirementAgeOfCandidate(67);
+        int retirementAge = callHRManager(photoStudio).getRetirementAgeOfCandidate();
 
         String name;
         int age;
@@ -40,10 +39,7 @@ public class CandidateDataForm extends Menu {
                         "The name should contain at least 3 English letters, " +
                         "and should not contain any numbers or special symbols.");
                 name = scanner.nextLine();
-                if (name.matches(".*\\d+.*") ||
-                        name.trim().length() < 3 ||
-                        !name.trim().matches("[a-zA-Z]+"))
-                    throw new WrongNameException();
+                if (validateName(name)) throw new WrongNameException();
                 break;
             } catch (WrongNameException e) {
                 System.out.println(e.getMessage());
@@ -86,7 +82,7 @@ public class CandidateDataForm extends Menu {
                         "\n If you are 18 years old, please enter 0");
 
                 yearsOfExperience = scanner.nextInt();
-                int maxPossibleYears = photoStudio.getDirector().getCustomerManager().calculateMaxYearsOfExperience(age);
+                int maxPossibleYears = callCustomerManager(photoStudio).calculateMaxYearsOfExperience(age);
 
                 if (yearsOfExperience > maxPossibleYears) {
                     throw new WrongAgeException(maxAge);
@@ -114,11 +110,10 @@ public class CandidateDataForm extends Menu {
                         "\n YEARS OF EXPERIENCE: " + yearsOfExperience +
                         "\n HOURLY RATE: " + hourlyRate);
 
-                Candidate userCandidate = photoStudio.getDirector().getHrManager().getUserCandidate();
-                userCandidate.setYearsOfExperience(yearsOfExperience);
-                userCandidate.setName(name);
-                userCandidate.setAge(age);
-                userCandidate.setHourlyRate(hourlyRate);
+                callHRManager(photoStudio).getUserCandidate().setYearsOfExperience(yearsOfExperience);
+                callHRManager(photoStudio).getUserCandidate().setName(name);
+                callHRManager(photoStudio).getUserCandidate().setAge(age);
+                callHRManager(photoStudio).getUserCandidate().setHourlyRate(hourlyRate);
 
                 new RedoMenu(scanner, null, photoStudio, this);
                 break;
@@ -131,5 +126,12 @@ public class CandidateDataForm extends Menu {
                 scanner.next(); // clear the input buffer
             }
         }
+    }
+
+    @Override
+    public boolean validateName(String string) {
+        return string.matches(".*\\d+.*") ||
+                string.trim().length() < 3 ||
+                !string.trim().matches("[a-zA-Z]+");
     }
 }

@@ -1,12 +1,12 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.enums.PhotoType;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  * @author Zhang M. on 20.03.2023.
@@ -25,13 +25,13 @@ public class PhotoTypeOptionMenu extends Menu{
                 int answer = scanner.nextInt();
                 if (answer < 1 || answer > 50) throw new NoSuchOptionException();
 
-                PhotoType chosenType = photoStudio.getDirector().getCustomerManager().matchPhotoType(answer);
+                PhotoType chosenType = callCustomerManager(photoStudio).matchPhotoType(answer);
                 order.getOrderedPhoto().setType(chosenType);
 
                 System.out.println("Got it! " +
                         "We can suggest the " + chosenType + " photo shoot. \n" +
                         chosenType.getDescription());
-                new RedoMenu(scanner, order, photoStudio, this);//showRedoMenu(scanner, order, photoStudio);
+                new RedoMenu(scanner, order, photoStudio, this);
                 break;
             } catch (NoSuchOptionException e) {
                 System.out.println("---------\n" +
