@@ -7,7 +7,7 @@ import main.com.maryzh555.photo_studio.enums.CameraType;
  */
 public class Camera {
 
-    CameraType type;
+    private CameraType type;
 
     private boolean isInUse;
 

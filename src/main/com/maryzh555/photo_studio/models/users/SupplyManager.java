@@ -2,7 +2,11 @@ package main.com.maryzh555.photo_studio.models.users;
 
 import main.com.maryzh555.photo_studio.enums.CameraType;
 import main.com.maryzh555.photo_studio.interfaces.IReport;
-import main.com.maryzh555.photo_studio.models.*;
+import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.Paper;
+import main.com.maryzh555.photo_studio.models.Photo;
+import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.models.Camera;
 
 import java.util.ArrayList;
 import java.util.List;

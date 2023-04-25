@@ -4,6 +4,7 @@ import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.users.HRManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -18,16 +19,13 @@ public class HiringMenu extends Menu{
 
 
     public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
-
-
-        boolean doHire = callHRManager(photoStudio).checkNewCandidate();
-
+        boolean doHire = callWorker(photoStudio, HRManager.class).checkNewCandidate();
         if (doHire) {
             while (true) {
                 try {
                     System.out.println("You fit our requirements, congratulations!");
                     System.out.println("We will add you to our list of workers, waiting to see you in our company!");
-                    if (callHRManager(photoStudio).getUserCandidate().getWorkerType() == WorkerType.PHOTOGRAPHER) {
+                    if (callWorker(photoStudio, HRManager.class).getUserCandidate().getWorkerType() == WorkerType.PHOTOGRAPHER) {
                         System.out.println("\nOur Studio offers new photographers to borrow professional cameras, if they don't have any." +
                                 "\n Do you have your own camera for work?" +
                                 "\n 1 - Yes" +
@@ -35,15 +33,15 @@ public class HiringMenu extends Menu{
                         int answer = scanner.nextInt();
                         switch (answer) {
                             case 1:
-                                callHRManager(photoStudio).getUserCandidate().setBorrowCamera(false);
+                                callWorker(photoStudio, HRManager.class).getUserCandidate().setBorrowCamera(false);
                                 break;
                             case 2:
-                                callHRManager(photoStudio).getUserCandidate().setBorrowCamera(true);
+                                callWorker(photoStudio, HRManager.class).getUserCandidate().setBorrowCamera(true);
                                 break;
                             default:
                                 throw new NoSuchOptionException();
                         }
-                        callDirector(photoStudio).hireJobCandidate(photoStudio, callHRManager(photoStudio).getUserCandidate());
+                        photoStudio.getDirector().hireJobCandidate(photoStudio, callWorker(photoStudio, HRManager.class).getUserCandidate());
                     }
                     break;
                 } catch (NoSuchOptionException e) {

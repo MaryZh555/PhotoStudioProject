@@ -4,6 +4,7 @@ import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.enums.PhotoType;
+import main.com.maryzh555.photo_studio.models.users.CustomerManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -25,7 +26,7 @@ public class PhotoTypeOptionMenu extends Menu{
                 int answer = scanner.nextInt();
                 if (answer < 1 || answer > 50) throw new NoSuchOptionException();
 
-                PhotoType chosenType = callCustomerManager(photoStudio).matchPhotoType(answer);
+                PhotoType chosenType = callWorker(photoStudio, CustomerManager.class).matchPhotoType(answer);
                 order.getOrderedPhoto().setType(chosenType);
 
                 System.out.println("Got it! " +

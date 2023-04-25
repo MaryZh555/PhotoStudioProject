@@ -17,9 +17,7 @@ public class Storage {
 
     private List<Camera> storedCameras;
 
-    Storage() {
-
-    }
+    public Storage() {}
 
     public void addPaper(int qtyStandard, int qtyLarge, int qtyPro){
         this.storedPaper = setStoredPaper(qtyStandard, qtyLarge, qtyPro);

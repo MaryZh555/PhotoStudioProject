@@ -28,7 +28,7 @@ public class PhotoStudio {
         this.director = new Director();
         this.storage = new Storage();
         prepareEquipment(this);
-//        test.paperTest(this);//todo delete
+//        test.paperTest(this);
     }
 
 

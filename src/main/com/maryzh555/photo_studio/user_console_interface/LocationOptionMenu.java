@@ -5,6 +5,7 @@ import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.enums.Location;
+import main.com.maryzh555.photo_studio.models.users.CustomerManager;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -25,7 +26,7 @@ public class LocationOptionMenu extends Menu{
                         "For " + order.getOrderedPhoto().getType() +
                         " photo shoot we can suggest:");
 
-                List<Location> locationsList = callCustomerManager(photoStudio).matchLocations(order.getOrderedPhoto().getType());
+                List<Location> locationsList = callWorker(photoStudio, CustomerManager.class).matchLocations(order.getOrderedPhoto().getType());
 
                 int i = 0;
                 for (Location location : locationsList) {
@@ -43,7 +44,7 @@ public class LocationOptionMenu extends Menu{
 
                     int answer = scanner.nextInt();
                     if (answer < 0 || answer > 1) throw new NoSuchOptionException();
-                    order.setDesiredLocation(callCustomerManager(photoStudio).matchLocations(order.getOrderedPhoto().getType()).get(answer));
+                    order.setDesiredLocation(callWorker(photoStudio, CustomerManager.class).matchLocations(order.getOrderedPhoto().getType()).get(answer));
 
                     System.out.println(
                             "You chose a " +

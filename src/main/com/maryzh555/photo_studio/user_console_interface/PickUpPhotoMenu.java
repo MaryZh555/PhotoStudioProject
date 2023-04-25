@@ -3,6 +3,8 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.Photo;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.users.CustomerManager;
+import main.com.maryzh555.photo_studio.models.users.SupplyManager;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -23,7 +25,7 @@ public class PickUpPhotoMenu extends Menu{
                 System.out.println("Please enter your order id: ");
                 int id = scanner.nextInt();
 //                    test.printStoragePhotoPackList(photoStudio); // test
-                List<Photo> pack = callSupplyManager(photoStudio).findPickUpPhotoPack(id, photoStudio);
+                List<Photo> pack = callWorker(photoStudio, SupplyManager.class).findPickUpPhotoPack(id, photoStudio);
                 if (pack == null) {
                     throw new NoSuchOptionException();
                 }
@@ -31,7 +33,7 @@ public class PickUpPhotoMenu extends Menu{
 //                test.printStoragePhotoPackList(photoStudio);//test
                 System.out.println("Here you go. Your " + pack.size() +
                         " photos are ready. Have a nice day!");
-                callCustomerManager(photoStudio).addServicedClients();
+                callWorker(photoStudio, CustomerManager.class).addServicedClients();
                 new NewCustomerMenu(scanner, photoStudio);
                 break;
             } catch (NoSuchOptionException e) {

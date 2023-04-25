@@ -7,7 +7,7 @@ public enum CameraType {
 
     private final String cameraName;
 
-    private CameraType(String cameraName) {
+    CameraType(String cameraName) {
         this.cameraName = cameraName;
     }
 

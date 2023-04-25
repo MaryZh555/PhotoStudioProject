@@ -5,6 +5,7 @@ import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.Candidate;
+import main.com.maryzh555.photo_studio.models.users.HRManager;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -35,19 +36,19 @@ public class CandidateMenu extends Menu {
                 Candidate newCandidate = new Candidate();
                 switch (answer) {
                     case 1:
-                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.PHOTOGRAPHER);
+                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.PHOTOGRAPHER);
                         newCandidate.setWorkerType(WorkerType.PHOTOGRAPHER);
                         break;
                     case 2:
-                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.SUPPLY_MANAGER);
+                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.SUPPLY_MANAGER);
                         newCandidate.setWorkerType(WorkerType.SUPPLY_MANAGER);
                         break;
                     case 3:
-                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.CUSTOMER_MANAGER);
+                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.CUSTOMER_MANAGER);
                         newCandidate.setWorkerType(WorkerType.CUSTOMER_MANAGER);
                         break;
                     case 4:
-                        vacancies = callHRManager(photoStudio).matchVacancies(WorkerType.HR_MANAGER);
+                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.HR_MANAGER);
                         newCandidate.setWorkerType(WorkerType.HR_MANAGER);
                         break;
                     default:
@@ -77,14 +78,11 @@ public class CandidateMenu extends Menu {
                         i++;
                     }
                 }
-                callHRManager(photoStudio).setUserCandidate(newCandidate);
+                callWorker(photoStudio, HRManager.class).setUserCandidate(newCandidate);
                 new RedoMenu(scanner, null, photoStudio, this);
                 break;
             } catch (NoSuchOptionException e) {
                 System.out.println(e.getMessage());
-            /*} catch (EmptyListException e) {
-                System.out.println(e.getMessage());
-                System.exit(0);*/
             } catch (InputMismatchException e) {
                 System.out.println("---------\n" +
                         "Invalid input: Not an integer" +

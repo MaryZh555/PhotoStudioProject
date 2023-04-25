@@ -14,11 +14,11 @@ public abstract class Worker extends User implements IReport {
 
     public int neededExperience;
 
-    Worker() {
+    public Worker() {
         super();
     }
 
-    Worker(String name) {
+    public Worker(String name) {
         super(name);
     }
 

@@ -6,6 +6,8 @@ import main.com.maryzh555.photo_studio.exceptions.WrongNameException;
 import main.com.maryzh555.photo_studio.interfaces.IValidateName;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.users.CustomerManager;
+import main.com.maryzh555.photo_studio.models.users.HRManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,11 +23,11 @@ public class CandidateDataForm extends Menu implements IValidateName {
 
     public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
 
-        callHRManager(photoStudio).setMaxAgeOfCandidates(50);
-        int maxAge = callHRManager(photoStudio).getMaxAgeOfCandidates();
+        callWorker(photoStudio, HRManager.class).setMaxAgeOfCandidates(50);
+        int maxAge = callWorker(photoStudio, HRManager.class).getMaxAgeOfCandidates();
 
-        callHRManager(photoStudio).setRetirementAgeOfCandidate(67);
-        int retirementAge = callHRManager(photoStudio).getRetirementAgeOfCandidate();
+        callWorker(photoStudio, HRManager.class).setRetirementAgeOfCandidate(67);
+        int retirementAge = callWorker(photoStudio, HRManager.class).getRetirementAgeOfCandidate();
 
         String name;
         int age;
@@ -45,7 +47,6 @@ public class CandidateDataForm extends Menu implements IValidateName {
                 System.out.println(e.getMessage());
             }
         }
-
 
         while (true) {
             try {
@@ -82,7 +83,7 @@ public class CandidateDataForm extends Menu implements IValidateName {
                         "\n If you are 18 years old, please enter 0");
 
                 yearsOfExperience = scanner.nextInt();
-                int maxPossibleYears = callCustomerManager(photoStudio).calculateMaxYearsOfExperience(age);
+                int maxPossibleYears = callWorker(photoStudio, CustomerManager.class).calculateMaxYearsOfExperience(age);
 
                 if (yearsOfExperience > maxPossibleYears) {
                     throw new WrongAgeException(maxAge);
@@ -110,10 +111,10 @@ public class CandidateDataForm extends Menu implements IValidateName {
                         "\n YEARS OF EXPERIENCE: " + yearsOfExperience +
                         "\n HOURLY RATE: " + hourlyRate);
 
-                callHRManager(photoStudio).getUserCandidate().setYearsOfExperience(yearsOfExperience);
-                callHRManager(photoStudio).getUserCandidate().setName(name);
-                callHRManager(photoStudio).getUserCandidate().setAge(age);
-                callHRManager(photoStudio).getUserCandidate().setHourlyRate(hourlyRate);
+                callWorker(photoStudio, HRManager.class).getUserCandidate().setYearsOfExperience(yearsOfExperience);
+                callWorker(photoStudio, HRManager.class).getUserCandidate().setName(name);
+                callWorker(photoStudio, HRManager.class).getUserCandidate().setAge(age);
+                callWorker(photoStudio, HRManager.class).getUserCandidate().setHourlyRate(hourlyRate);
 
                 new RedoMenu(scanner, null, photoStudio, this);
                 break;

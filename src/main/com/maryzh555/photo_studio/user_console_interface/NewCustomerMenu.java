@@ -26,7 +26,7 @@ public class NewCustomerMenu extends Menu{
                         System.out.println("Great! Let's close the shift!");
 
                         //reports
-                        callDirector(photoStudio).askForReport(photoStudio);
+                        photoStudio.getDirector().askForReport(photoStudio);
                         scanner.close();
                         break;
                     case 2:
