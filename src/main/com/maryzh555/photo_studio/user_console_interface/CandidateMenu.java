@@ -36,19 +36,19 @@ public class CandidateMenu extends Menu {
                 Candidate newCandidate = new Candidate();
                 switch (answer) {
                     case 1:
-                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.PHOTOGRAPHER);
+                        vacancies = photoStudio.getDigitalStorage().matchVacancies(WorkerType.PHOTOGRAPHER);
                         newCandidate.setWorkerType(WorkerType.PHOTOGRAPHER);
                         break;
                     case 2:
-                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.SUPPLY_MANAGER);
+                        vacancies = photoStudio.getDigitalStorage().matchVacancies(WorkerType.SUPPLY_MANAGER);
                         newCandidate.setWorkerType(WorkerType.SUPPLY_MANAGER);
                         break;
                     case 3:
-                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.CUSTOMER_MANAGER);
+                        vacancies = photoStudio.getDigitalStorage().matchVacancies(WorkerType.CUSTOMER_MANAGER);
                         newCandidate.setWorkerType(WorkerType.CUSTOMER_MANAGER);
                         break;
                     case 4:
-                        vacancies = callWorker(photoStudio, HRManager.class).matchVacancies(WorkerType.HR_MANAGER);
+                        vacancies = photoStudio.getDigitalStorage().matchVacancies(WorkerType.HR_MANAGER);
                         newCandidate.setWorkerType(WorkerType.HR_MANAGER);
                         break;
                     default:

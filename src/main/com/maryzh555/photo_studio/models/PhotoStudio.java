@@ -1,7 +1,6 @@
 package main.com.maryzh555.photo_studio.models;
 
 import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
-import main.com.maryzh555.photo_studio.models.users.Client;
 import main.com.maryzh555.photo_studio.models.users.Director;
 
 import java.util.ArrayList;
@@ -18,15 +17,17 @@ public class PhotoStudio {
 
     private Storage storage;
 
+    private DigitalStorage digitalStorage;
+
     private List<Paper> storedPaper;
 
-    private List<Client> registeredClients;
 
 
     public PhotoStudio() {
-        this.director = new Director();
+        this.digitalStorage = new DigitalStorage();
+        this.director = new Director(this);
         this.storage = new Storage();
-        this.registeredClients = new ArrayList<>();
+
         prepareEquipment(this);
 //        test.paperTest(this);
     }
@@ -40,40 +41,6 @@ public class PhotoStudio {
         photoStudio.director.getSupplyManager().fillStoredCameras(photoStudio, 10);
     }
 
-    //todo reconsider the object orientation logic for the hole code
-    // where to put registered clients list? In real life it exist in the database, make class DigitalStorage to contain DigitalLists?
-    // RegisteredClientsList, listOfOrders
-    public void addToRegisteredList(Client client) {
-        this.registeredClients.add(client);
-    }
-
-    public boolean checkIfRegistered(Client client) {
-        boolean result = false;
-        if (this.registeredClients.isEmpty()) {
-            return false;
-        } else {
-            for (Client client1 :
-                    this.registeredClients) {
-                if (client1.getName().equals(client.getName()) &&
-                        client1.getSurname().equals(client.getSurname()) &&
-                        client1.getContactNumber().equals(client.getContactNumber())) {
-                    result = true;
-                }
-            }
-        }
-        return result;
-    }
-
-    public Client returnRegisteredClient(Client client) {
-        for (Client registeredClient : this.registeredClients) {
-            if (registeredClient.getName().equals(client.getName()) &&
-                    registeredClient.getSurname().equals(client.getSurname()) &&
-                    registeredClient.getContactNumber().equals(client.getContactNumber())) {
-                return registeredClient;
-            }
-        }
-        return null;
-    }
 
     public boolean checkIfReadyToCheckOut(Order order) {
         return order.getDesiredPhotographer() != null &&
@@ -156,11 +123,11 @@ public class PhotoStudio {
         ));
     }
 
-    public List<Client> getRegisteredClients() {
-        return registeredClients;
+    public DigitalStorage getDigitalStorage() {
+        return digitalStorage;
     }
 
-    public void setRegisteredClients(List<Client> registeredClients) {
-        this.registeredClients = registeredClients;
+    public void setDigitalStorage(DigitalStorage digitalStorage) {
+        this.digitalStorage = digitalStorage;
     }
 }

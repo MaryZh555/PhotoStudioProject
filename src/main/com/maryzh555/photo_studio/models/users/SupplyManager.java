@@ -88,7 +88,7 @@ public class SupplyManager extends Worker implements IReport {
     }
 
     public List<Photo> findPickUpPhotoPack(int orderId, PhotoStudio studio) { //will be the work of the supply manager
-        for (Order order : studio.getDirector().getCustomerManager().getListOfOrders()) {
+        for (Order order : studio.getDigitalStorage().getListOfOrders()) {
             if (orderId == order.getId()) {
                 List<List<Photo>> storedPhotoPacks = studio.getStorage().getStoredPhotoPacks();
                 for (List<Photo> photoPack : storedPhotoPacks) {

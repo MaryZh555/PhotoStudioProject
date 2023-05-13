@@ -10,39 +10,39 @@ import java.util.Random;
 /**
  * @author by Zhang M. on 12.04.2023.
  */
-public class Director extends User {
+public class Director extends User { //todo the logic of Director is in question, and their List too
 // Director oversees other workers
 // All workers report to them
 
-    private final List<Photographer> allPhotographers;
+    private final List<Photographer> allPhotographers;//todo place into the digital storage
 
     private List<Photographer> availablePhotographers;
 
     private final SupplyManager supplyManager;    // represents the current manager, who is having the shift today(When photoStudio is created)//set in the director
 
-    private final CustomerManager customerManager;
+    private final CustomerManager customerManager; //todo place into the photostudio
 
     private final HRManager hrManager;
 
-    private final List<HRManager> hrManagerList;
+    /*private final List<HRManager> hrManagerList;
 
     private final List<CustomerManager> customerManagerList;
 
-    private final List<SupplyManager> supplyManagerList;
+    private final List<SupplyManager> supplyManagerList;*/
 
 
 
 
-    public Director() {
+    public Director(PhotoStudio photoStudio) {
         this.allPhotographers = fillPhotographers();
         this.availablePhotographers = allPhotographers;
-        this.hrManagerList = fillHRManagers();
+        /*this.hrManagerList = fillHRManagers();
         this.customerManagerList = fillCustomerManager();
-        this.supplyManagerList = fillSupplyManagers();
+        this.supplyManagerList = fillSupplyManagers();*/
 
-        this.supplyManager = choseSupplyManager();
-        this.customerManager = choseCustomerManager();
-        this.hrManager = choseRandomHRManager();
+        this.supplyManager = choseSupplyManager(photoStudio);
+        this.customerManager = choseCustomerManager(photoStudio);
+        this.hrManager = choseRandomHRManager(photoStudio);
 
     }
 
@@ -69,7 +69,7 @@ public class Director extends User {
 
     public List<Photographer> findPhotographersWorkedToday(PhotoStudio photoStudio) {
         List<Photographer> result = new ArrayList<>();
-        for (Order order : photoStudio.getDirector().getCustomerManager().getListOfOrders()) {
+        for (Order order : photoStudio.getDigitalStorage().getListOfOrders()) {
             Photographer photographer = order.getDesiredPhotographer();
             if (!result.contains(photographer)) {
                 result.add(photographer);
@@ -92,7 +92,7 @@ public class Director extends User {
     }
 
 
-    public List<HRManager> fillHRManagers(){
+    /*public List<HRManager> fillHRManagers(){
         List<HRManager> list = new ArrayList<>();
         list.add(new HRManager("Oleg", 15));
         list.add(new HRManager("Marina", 12));
@@ -114,29 +114,26 @@ public class Director extends User {
         list.add(new CustomerManager("Marina", 12));
         list.add(new CustomerManager("Antonina", 20));
         return  list;
-    }
+    }*/
+
+
     //The method works with Random() because of lack of workers schedule and time management in current version of program
-
-
-    private HRManager choseRandomHRManager(){
+    private HRManager choseRandomHRManager(PhotoStudio photoStudio){//todo chose but save it in the PhotoStudio 'Workers room'
         Random random = new Random();
-        List<HRManager> list = hrManagerList;
-        int index = random.nextInt(list.size());
-        return list.get(index);
+        int index = random.nextInt(photoStudio.getDigitalStorage().getHrManagerList().size());
+        return photoStudio.getDigitalStorage().fillHRManagers().get(index);
     }
 
-    private SupplyManager choseSupplyManager() {
+    private SupplyManager choseSupplyManager(PhotoStudio photoStudio) {
         Random random = new Random();
-        List<SupplyManager> list = supplyManagerList;
-        int index = random.nextInt(list.size());
-        return list.get(index);
+        int index = random.nextInt(photoStudio.getDigitalStorage().getSupplyManagerList().size());
+        return photoStudio.getDigitalStorage().getSupplyManagerList().get(index);
     }
 
-    private CustomerManager choseCustomerManager() {
+    private CustomerManager choseCustomerManager(PhotoStudio photoStudio) {
         Random random = new Random();
-        List<CustomerManager> list = customerManagerList;
-        int index = random.nextInt(list.size());
-        return list.get(index);
+        int index = random.nextInt(photoStudio.getDigitalStorage().getCustomerManagerList().size());
+        return photoStudio.getDigitalStorage().getCustomerManagerList().get(index);
     }
 
     public void hireJobCandidate(PhotoStudio photoStudio, Candidate candidate){
@@ -145,13 +142,13 @@ public class Director extends User {
                 allPhotographers.add(new Photographer(candidate.getName(), candidate.getYearsOfExperience(), candidate.getHourlyRate(), candidate.isBorrowCamera(), photoStudio.getDirector().getSupplyManager().findCameraForCandidate(photoStudio) ));
                 break;
             case HR_MANAGER:
-                hrManagerList.add(new HRManager(candidate.getName(), candidate.getHourlyRate()));
+                photoStudio.getDigitalStorage().getHrManagerList().add(new HRManager(candidate.getName(), candidate.getHourlyRate()));
                 break;
             case SUPPLY_MANAGER:
-                supplyManagerList.add(new SupplyManager(candidate.getName(), candidate.getHourlyRate()));
+                photoStudio.getDigitalStorage().getSupplyManagerList().add(new SupplyManager(candidate.getName(), candidate.getHourlyRate()));
                 break;
             case CUSTOMER_MANAGER:
-                customerManagerList.add(new CustomerManager(candidate.getName(), candidate.getHourlyRate()));
+                photoStudio.getDigitalStorage().getCustomerManagerList().add(new CustomerManager(candidate.getName(), candidate.getHourlyRate()));
                 break;
         }
     }
@@ -181,7 +178,7 @@ public class Director extends User {
         return hrManager;
     }
 
-    public List<HRManager> getHrManagerList() {
+    /*public List<HRManager> getHrManagerList() {
         return hrManagerList;
     }
 
@@ -191,5 +188,5 @@ public class Director extends User {
 
     public List<SupplyManager> getSupplyManagerList() {
         return supplyManagerList;
-    }
+    }*/
 }

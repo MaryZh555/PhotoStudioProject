@@ -18,8 +18,8 @@ public class HiringMenu extends Menu{
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
-        boolean doHire = callWorker(photoStudio, HRManager.class).checkNewCandidate();
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){ //todo rewrite till this menu is only for the photographers
+        boolean doHire = callWorker(photoStudio, HRManager.class).checkNewCandidate(photoStudio);
         if (doHire) {
             while (true) {
                 try {
@@ -41,7 +41,8 @@ public class HiringMenu extends Menu{
                             default:
                                 throw new NoSuchOptionException();
                         }
-                        photoStudio.getDirector().hireJobCandidate(photoStudio, callWorker(photoStudio, HRManager.class).getUserCandidate());
+                        photoStudio.getDirector().hireJobCandidate(photoStudio, callWorker(photoStudio, HRManager.class).getUserCandidate());//todo rewrite to match digital storage // or not
+                        photoStudio.getDirector().getHrManager().addCandidate();
                     }
                     break;
                 } catch (NoSuchOptionException e) {
@@ -56,6 +57,7 @@ public class HiringMenu extends Menu{
         } else {
             System.out.println("Sorry! You don't fit our job requirements, we can't offer you a job.");
             System.out.println("Have a nice day!");
+            photoStudio.getDirector().getHrManager().addCandidate();
         }
         //test.printAllWorkers(photoStudio);//test
         new NewCustomerMenu(scanner, photoStudio);

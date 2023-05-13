@@ -71,13 +71,6 @@ public class RegisterSignInMenu extends Menu implements IValidateName {
 
                 client.setContactNumber(contactNumber.trim());
 
-                /*System.out.println("Please c/heck if the contact data is correct" +
-                        "\n NAME: " + client.getName() +
-                        "\n SURNAME: " + client.getSurname() +
-                        "\n CONTACT NUMBER: " + client.getContactNumber());*/
-                /*
-                new RedoMenu(scanner, null, photoStudio, this);
-                */
                 break;
             } catch (WrongNumberException e) {
                 System.out.println(e.getMessage());
@@ -88,7 +81,7 @@ public class RegisterSignInMenu extends Menu implements IValidateName {
             //CHECKING Register
             while (true) {
                 try {
-                    if (photoStudio.checkIfRegistered(client)) {
+                    if (photoStudio.getDigitalStorage().checkIfRegistered(client)) {
                         System.out.println("---------\n" +
                                 "ERROR: The client with these data is already registered." +
                                 "\n---------");
@@ -106,7 +99,7 @@ public class RegisterSignInMenu extends Menu implements IValidateName {
                         switch (answer) {
                             case 1:
                                 System.out.println("Registration successful!");
-                                photoStudio.addToRegisteredList(client);
+                                photoStudio.getDigitalStorage().addToRegisteredList(client);
                                     test.printRegisteredList(photoStudio);//test
                                 new ClientOptionMenu(scanner, client, photoStudio);
                                 break;
@@ -133,13 +126,13 @@ public class RegisterSignInMenu extends Menu implements IValidateName {
             }
         } else if (choice.matches("SignIn")) {
             //CHECKING Sign In
-            if (!photoStudio.checkIfRegistered(client)) {
+            if (!photoStudio.getDigitalStorage().checkIfRegistered(client)) {
                 System.out.println("---------\n" +
                         "ERROR: No client with these data." +
                         "\n---------");
                 new RedoMenu(scanner, null, photoStudio, this);
             } else {
-                client = photoStudio.returnRegisteredClient(client);
+                client = photoStudio.getDigitalStorage().returnRegisteredClient(client);
                 System.out.println("Sign In Successful!");
                 new ClientOptionMenu(scanner, client, photoStudio);
             }

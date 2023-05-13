@@ -16,13 +16,6 @@ import java.util.List;
  * @author by Zhang M. on 04.04.2023.
  */
 public class CustomerManager extends Worker implements IReport {
-    // Costumer manages is the one who manages the client.
-    // They should introduce their name when servicing the client.
-    // The client menu will have "rate our service" form. So we know how the managers works.
-    // What to report? CustomerManager reports how many customers they serviced and how customers rated their work.
-    // If 5 client in row rates less than 3, the manager should talk with director about their performance
-
-    private final List<Order> listOfOrders;
 
     private int servicedClients;
 
@@ -30,12 +23,10 @@ public class CustomerManager extends Worker implements IReport {
     public CustomerManager(String name, int hourlyRate) {
         super(name);//set id and name
         this.hourlyRate = hourlyRate;
-        this.listOfOrders = new ArrayList<>();
     }
 
     public CustomerManager(int neededYears) {
         this.neededExperience = neededYears;
-        this.listOfOrders = new ArrayList<>();
     }
 
 
@@ -43,8 +34,8 @@ public class CustomerManager extends Worker implements IReport {
         System.out.println("My name is " + this.getName() + ". ");
     }
 
-    public void addOrderToTheSystemList(Order order) {
-        this.listOfOrders.add(order);
+    public void addOrderToTheSystemList(PhotoStudio photoStudio, Order order) {
+        photoStudio.getDigitalStorage().addOrder(order);
     }
 
     public void addServicedClients() {
@@ -150,9 +141,6 @@ public class CustomerManager extends Worker implements IReport {
                 "Serviced clients today: " + this.servicedClients + " )");
     }
 
-    public List<Order> getListOfOrders() {
-        return listOfOrders;
-    }
 
     public int getServicedClients() {
         return servicedClients;

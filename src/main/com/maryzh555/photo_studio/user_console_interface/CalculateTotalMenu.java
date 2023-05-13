@@ -74,7 +74,8 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
         //// Setting the Photo object to the Order
         //// If the Photo will be printed, then add it to the Storage(passing the printing process)
         //// The supply manager will control if there is no paper in the studio.
-        callWorker(photoStudio, CustomerManager.class).addOrderToTheSystemList(order);
+        callWorker(photoStudio, CustomerManager.class).addOrderToTheSystemList(photoStudio, order);
+
 //        test.printOrderList(photoStudio); // test
 //        test.printAllOrderListInfo(photoStudio);
         if (order.getOrderedPhoto().isToPrint()) {
