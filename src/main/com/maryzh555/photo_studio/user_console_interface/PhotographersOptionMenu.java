@@ -2,6 +2,7 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.EmptyListException;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.CustomerManager;
@@ -15,13 +16,40 @@ import java.util.Scanner;
  * @author Zhang M. on 20.03.2023.
  */
 
-public class PhotographersOptionMenu extends Menu{
+public class PhotographersOptionMenu extends Menu {
     public PhotographersOptionMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
-        showMenu(scanner, order, photoStudio);
+        while (true) {
+            try {
+                if (order.getDesiredPhotographer() != null) {
+                    System.out.println("You already chose " + order.getDesiredPhotographer().getName() +
+                            ". Do you want to chose another one?" +
+                            "\n 1 - Chose the new one" +
+                            "\n 2 - Back to the Order Menu");
+                    int answer = scanner.nextInt();
+                    switch (answer) {
+                        case 2:
+                            new OrderMenu(scanner, order, photoStudio);
+                            break;
+                        case 1:
+                            order.setDesiredPhotographer(null);
+                            showMenu(scanner, order, photoStudio);
+                            break;
+                        default:
+                            throw new NoSuchOptionException();
+                    }
+                } else{
+                    showMenu(scanner, order, photoStudio);
+                }
+                break;
+            } catch (NoSuchOptionException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
-        System.out.println("Hi " + order.getClient().getName() + " " + order.getClient().getSurname() + "!");
+    @Override
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+        System.out.println("Hi " + ((Order)orderOrClient).getClient().getName() + " " + ((Order)orderOrClient).getClient().getSurname() + "!");
         List<Photographer> list;
         while (true) {
             try {
@@ -52,8 +80,8 @@ public class PhotographersOptionMenu extends Menu{
                     throw new EmptyListException("PHOTOGRAPHERS");
                 } else if (list.size() == 1) {
                     System.out.println("They are the only one, who might suit you.");
-                    order.setDesiredPhotographer(list.get(0));
-                    new RedoMenu(scanner, order, photoStudio, this);
+                    ((Order)orderOrClient).setDesiredPhotographer(list.get(0));
+                    new RedoMenu(scanner, ((Order)orderOrClient), photoStudio, this);//returns to this showMenu
                 }
                 break;
             } catch (NoSuchOptionException e) {
@@ -69,19 +97,19 @@ public class PhotographersOptionMenu extends Menu{
             }
         }
 
-        if(list.size() > 1) {
+        if (list.size() > 1) {
             while (true) {
                 try {
                     System.out.println("Which one would you prefer?");
                     int answer = scanner.nextInt();
                     if (answer > list.size() || answer < 1) throw new NoSuchOptionException();
-                    order.setDesiredPhotographer(list.get(answer - 1));
+                    ((Order)orderOrClient).setDesiredPhotographer(list.get(answer - 1));
 
-                    System.out.println("You chose a photographer " + order.getDesiredPhotographer().getName() +
-                            ", who has " + order.getDesiredPhotographer().getYearsOfExperience() + " years of experience. " +
-                            "They will take " + order.getDesiredPhotographer().getHourlyRate() + "$ per hour.\n");
+                    System.out.println("You chose a photographer " + ((Order)orderOrClient).getDesiredPhotographer().getName() +
+                            ", who has " + ((Order)orderOrClient).getDesiredPhotographer().getYearsOfExperience() + " years of experience. " +
+                            "They will take " + ((Order)orderOrClient).getDesiredPhotographer().getHourlyRate() + "$ per hour.\n");
 
-                    new RedoMenu(scanner, order, photoStudio, this);
+                    new RedoMenu(scanner, ((Order)orderOrClient), photoStudio, this);//redo to this showMenu
 
                     break;
                 } catch (NoSuchOptionException e) {

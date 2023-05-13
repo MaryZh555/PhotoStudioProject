@@ -2,6 +2,7 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.EmptyListException;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.enums.Location;
@@ -16,17 +17,45 @@ import java.util.Scanner;
 
 public class LocationOptionMenu extends Menu{
     public LocationOptionMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
-        showMenu(scanner, order, photoStudio);
+        while (true) {
+            try {
+                if(order.getDesiredLocation() != null){
+                    System.out.println("You already chose " + order.getDesiredLocation().name() +
+                            ". Do you want to chose another one?" +
+                            "\n 1 - Chose the new one" +
+                            "\n 2 - Back to the Order Menu");
+                    int answer = scanner.nextInt();
+
+                    switch (answer) {
+                        case 2:
+                            new OrderMenu(scanner, order, photoStudio);
+                            break;
+                        case 1:
+                            order.setDesiredLocation(null);
+                            showMenu(scanner, order, photoStudio);
+                            break;
+                        default:
+                            throw new NoSuchOptionException();
+                    }
+                } else{
+                    showMenu(scanner, order, photoStudio);
+                }
+                break;
+            } catch (NoSuchOptionException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+    @Override
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
         while (true) {
             try {
                 System.out.println("\nOur studio offers a location renting.\n" +
-                        "For " + order.getOrderedPhoto().getType() +
+                        "For " + ((Order)orderOrClient).getOrderedPhoto().getType() +
                         " photo shoot we can suggest:");
 
-                List<Location> locationsList = callWorker(photoStudio, CustomerManager.class).matchLocations(order.getOrderedPhoto().getType());
+                List<Location> locationsList = callWorker(photoStudio, CustomerManager.class).matchLocations(((Order)orderOrClient).getOrderedPhoto().getType());
 
                 int i = 0;
                 for (Location location : locationsList) {
@@ -37,22 +66,22 @@ public class LocationOptionMenu extends Menu{
                     i++;
                 }
                 if (locationsList.isEmpty()) throw new EmptyListException("LOCATIONS");
-                if (order.getOrderedPhoto().getType().ordinal() == 2) {
-                    order.setDesiredLocation(Location.GROUP_HUB);
+                if (((Order)orderOrClient).getOrderedPhoto().getType().ordinal() == 2) {
+                    ((Order)orderOrClient).setDesiredLocation(Location.GROUP_HUB);
                 } else {
                     System.out.println("\nWhich location you would prefer?");
 
                     int answer = scanner.nextInt();
                     if (answer < 0 || answer > 1) throw new NoSuchOptionException();
-                    order.setDesiredLocation(callWorker(photoStudio, CustomerManager.class).matchLocations(order.getOrderedPhoto().getType()).get(answer));
+                    ((Order)orderOrClient).setDesiredLocation(callWorker(photoStudio, CustomerManager.class).matchLocations(((Order)orderOrClient).getOrderedPhoto().getType()).get(answer));
 
                     System.out.println(
                             "You chose a " +
-                                    order.getDesiredLocation() +
+                                    ((Order)orderOrClient).getDesiredLocation() +
                                     " location. Good choice!");
 
                 }
-                new RedoMenu(scanner, order, photoStudio,this);
+                new RedoMenu(scanner, ((Order)orderOrClient), photoStudio,this);
                 break;
             } catch (NoSuchOptionException e) {
                 System.out.println(e.getMessage());

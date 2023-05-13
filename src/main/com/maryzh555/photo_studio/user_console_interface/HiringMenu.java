@@ -2,7 +2,7 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.HRManager;
 
@@ -17,8 +17,8 @@ public class HiringMenu extends Menu{
         showMenu(scanner, null, photoStudio);
     }
 
-
-    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+    @Override
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
         boolean doHire = callWorker(photoStudio, HRManager.class).checkNewCandidate();
         if (doHire) {
             while (true) {

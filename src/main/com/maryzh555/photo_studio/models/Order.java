@@ -2,6 +2,7 @@ package main.com.maryzh555.photo_studio.models;
 
 import main.com.maryzh555.photo_studio.enums.Location;
 import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.users.Client;
 import main.com.maryzh555.photo_studio.models.users.Photographer;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Zhang M. on 23.03.2023.
  */
-public class Order {
+public class Order implements OrderOrClient {
 
     // The id value will be reset to 1 on every run of the program, the id field is added for the future database use.
     // The idCounter is a temporary solution until the database will be added.
@@ -22,7 +23,7 @@ public class Order {
 
     private Client client;
 
-    private final int id;
+    private int id;
 
     private Photographer desiredPhotographer;
 
@@ -36,9 +37,9 @@ public class Order {
 
 
     public Order() {
-        this.id = idCounter++; //temporary solution
         this.orderedPhoto = new Photo(); //create a photo when the order is created
         this.client = new Client();
+        this.orderedPhoto.setPrintStandardQty(-1);//this value is set to '-1' to use it in checking to check_out. If the user did not change any printing options the value will still be -1, but if opened the printing menu, then will be changed
     }
 
     public int calculateTotal(Order order) {
@@ -97,6 +98,11 @@ public class Order {
 
     public int getId() {
         return id;
+    }
+
+    public void setId() {
+        this.id = idCounter;
+        idCounter++;
     }
 
     public Photo getOrderedPhoto() {

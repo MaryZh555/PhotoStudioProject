@@ -2,8 +2,10 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.users.Client;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -18,12 +20,20 @@ public class RedoMenu implements IShowRedoMenu {
     }
 
     @Override
-    public void showRedoMenu(Scanner scanner, Order order, PhotoStudio photoStudio, Menu menu) {
+    public <T extends OrderOrClient> void showRedoMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio, Menu menu) {
+        Order order = null;
+        Client client = null;
+        if (orderOrClient instanceof Order) {
+            order = (Order) orderOrClient;
+        } else if (orderOrClient instanceof Client) {
+            client = (Client) orderOrClient;
+        }
         while (true) {
             try {
                 //test.testMenuName(menu);//test
                 ///// menu text previous
                 String previousMenuName;
+                String message = null;
                 switch (menu.toString()) {
                     case "CandidateMenu":
                         previousMenuName = "(User distribution)";
@@ -34,39 +44,69 @@ public class RedoMenu implements IShowRedoMenu {
                     case "HiringMenu":
                         previousMenuName = "(Candidate Data Form)";
                         break;
-                    case "ClientDataFormMenu":
-                        previousMenuName = "(Order/Pick up)";
+
+                    case "ClientDistributionMenu":
+                        previousMenuName = "(User distribution)";
+                        message = "\nDo you want to quit or to redo?" +
+                                "\n 2 - Redo" +
+                                "\n 3 - Go to previous ->" + previousMenuName +
+                                "\n 4 - Leave(quit)";
                         break;
+
+                    case "ClientOptionMenu":
+                        previousMenuName = "(Client distribution)";
+                        message = "\nDo you want to quit or to redo?" +
+                                "\n 2 - Redo" +
+                                "\n 3 - Go to previous ->" + previousMenuName +
+                                "\n 4 - Leave(quit)";
+                        break;
+
+                    case "PickUpPhotoMenu":
+                    case "RegisterSignInMenu":
+                        previousMenuName = "(Client distribution)";
+                        message = "\nDo you want to quit or to redo?" +
+                                "\n 2 - Redo ->" + previousMenuName +
+                                "\n 4 - Leave(quit)";
+                        break;
+
+                    case "OrderMenu":
+                        previousMenuName = "(Client option Menu)";
+                        message = "\nDo you want to quit or to redo?" +
+                                "\n 2 - Redo" +
+                                "\n 3 - Go to previous ->" + previousMenuName +
+                                "\n 4 - Leave(quit)";
+                        break;
+
                     case "PhotographersOptionMenu":
-                        previousMenuName = "(Client Data)";
-                        break;
                     case "PhotoTypeOptionMenu":
-                        previousMenuName = "(Photographers)";
-                        break;
                     case "LocationOptionMenu":
-                        previousMenuName = "(Photo Type)";
-                        break;
                     case "PrintingMenu":
-                        previousMenuName = "(Location)";
+                        previousMenuName = "(Order Menu)";
                         break;
+
                     default:
                         previousMenuName = "";
                         break;
                 }
-                /////
-                System.out.println("\nDo you want to continue or to redo?" +
-                        "\n 1 - Let's continue." +
-                        "\n 2 - Redo." +
-                        "\n 3 - Go to previous ->" + previousMenuName +
-                        "\n 4 - Leave(quit)");
+
+
+                if (message == null) {
+                    message = "\nDo you want to continue or to redo?" +
+                            "\n 1 - Let's continue." +
+                            "\n 2 - Redo." +
+                            "\n 3 - Go to previous ->" + previousMenuName +
+                            "\n 4 - Leave(quit)";
+                }
+
+                System.out.println(message);
 
                 int answer = scanner.nextInt();
-
 
                 switch (answer) {
                     case 1:
 
                         switch (menu.toString()) {
+
                             case "CandidateMenu":
                                 scanner.nextLine();
                                 new CandidateDataForm(scanner, photoStudio);
@@ -74,57 +114,63 @@ public class RedoMenu implements IShowRedoMenu {
                             case "CandidateDataForm":
                                 new HiringMenu(scanner, photoStudio);
                                 break;
-                            case "ClientDataFormMenu":
-                                new PhotographersOptionMenu(scanner, order, photoStudio);
-                                break;
                             case "PhotographersOptionMenu":
-                                new PhotoTypeOptionMenu(scanner, order, photoStudio);
-                                break;
                             case "PhotoTypeOptionMenu":
-                                new LocationOptionMenu(scanner, order, photoStudio);
-                                break;
                             case "LocationOptionMenu":
-                                new PrintingMenu(scanner, order, photoStudio);
-                                break;
                             case "PrintingMenu":
-                                new CalculateTotalMenu(scanner, order, photoStudio);
+                                new OrderMenu(scanner, order, photoStudio);
                                 break;
+                            case "PickUpPhotoMenu":
+                            case "RegisterSignInMenu":
+                            case "ClientDistributionMenu":
+                            case "ClientOptionMenu":
+                            case "OrderMenu":
+                                throw new NoSuchOptionException();
+
                         }
                         break;
 
                     case 2:
-                        scanner.nextLine();
-                        menu.showMenu(scanner, order, photoStudio);
-                        break;
 
+                        switch (menu.toString()) {
+                            case "RegisterSignInMenu":
+                            case "PickUpPhotoMenu":
+                                new ClientDistributionMenu(scanner, order, photoStudio);
+                                break;
+                            default:
+                                scanner.nextLine();
+                                menu.showMenu(scanner, order, photoStudio);
+                                break;
+                        }
+                        break;
                     case 3:
 
                         switch (menu.toString()) {
                             case "CandidateMenu":
-                                new UserDistributionMenu(scanner, photoStudio);
+                            case "ClientDistributionMenu":
+                                new UserDistributionMenu(scanner, order, photoStudio);
                                 break;
                             case "CandidateDataForm":
                                 new CandidateMenu(scanner, photoStudio);
                                 break;
-                            case "ClientDataFormMenu":
-                                new MainMenu(photoStudio);
-                                break;
                             case "PhotographersOptionMenu":
-                                scanner.nextLine();
-                                new ClientDataFormMenu(scanner, order, photoStudio);
-                                break;
                             case "PhotoTypeOptionMenu":
-                                new PhotographersOptionMenu(scanner, order, photoStudio);
-                                break;
                             case "LocationOptionMenu":
-                                new PhotoTypeOptionMenu(scanner, order, photoStudio);
-                                break;
                             case "PrintingMenu":
-                                new LocationOptionMenu(scanner, order, photoStudio);
+                                scanner.nextLine();
+                                new OrderMenu(scanner, order, photoStudio);
                                 break;
+                            case "PickUpPhotoMenu":
+                            case "ClientOptionMenu":
+                                new ClientDistributionMenu(scanner, order, photoStudio);
+                                break;
+                            case "OrderMenu":
+                                new ClientOptionMenu(scanner, client, photoStudio);
+                                break;
+                            case "RegisterSignInMenu":
+                                throw new NoSuchOptionException();
                         }
                         break;
-
                     case 4:
                         new QuitMenu(scanner, order, photoStudio, menu);
                         break;

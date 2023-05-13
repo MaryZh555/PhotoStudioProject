@@ -18,7 +18,7 @@ public class MainMenu extends Menu {
     private void showMenu(Scanner scanner, PhotoStudio photoStudio) {
         System.out.println("Welcome to the Lumina Photo Studio!");
         callWorker(photoStudio, CustomerManager.class).introduceYourself();
-        new UserDistributionMenu(scanner, photoStudio);
+        new UserDistributionMenu(scanner, null, photoStudio);
     }
 }
 

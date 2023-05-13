@@ -1,6 +1,7 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
@@ -10,38 +11,39 @@ import java.util.Scanner;
 /**
  * @author by Zhang M. on 15.04.2023.
  */
-public class ClientDistributionMenu {
+public class ClientDistributionMenu extends Menu {
 
-    public ClientDistributionMenu(Scanner scanner, PhotoStudio photoStudio) {
-        showMenu(scanner, photoStudio);
+    public ClientDistributionMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+        showMenu(scanner, order, photoStudio);
     }
 
-    public void showMenu(Scanner scanner, PhotoStudio photoStudio) {
+    @Override
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
         while (true) {
             try {
-                System.out.println("Do you want to make order, or to pick up printed photo?\n" +
-                        " 1 - Make an order.\n" +
-                        " 2 - Pick up my photos.\n" +
-                        " 3 - Leave(quit)");
-
-                int answer = scanner.nextInt();
-                switch (answer) {
+                System.out.println("Please choose:" +
+                        "\n 1 - Register" +
+                        "\n 2 - Sign In" +
+                        "\n 3 - Leave(quit)");
+                int choice = scanner.nextInt();
+                switch (choice) {
                     case 1:
                         scanner.nextLine();
-                        new ClientDataFormMenu(scanner, new Order(), photoStudio);
+                        new RegisterSignInMenu(scanner, "Register", photoStudio);
                         break;
                     case 2:
-                        new PickUpPhotoMenu(scanner, photoStudio);
+                        scanner.nextLine();
+                        new RegisterSignInMenu(scanner, "SignIn", photoStudio);
                         break;
                     case 3:
-                        new NewCustomerMenu(scanner, photoStudio);
+                        new QuitMenu(scanner, null, photoStudio, this);
                         break;
                     default:
                         throw new NoSuchOptionException();
                 }
                 break;
             } catch (NoSuchOptionException e) {
-                System.out.println("It seems like we don't have an order with this id, please check if the inputted id is correct");
+                System.out.println(e.getMessage());
             } catch (InputMismatchException e) {
                 System.out.println("---------\n" +
                         "ERROR: Invalid input. Not an integer" +

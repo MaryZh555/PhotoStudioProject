@@ -4,7 +4,7 @@ import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.exceptions.WrongAgeException;
 import main.com.maryzh555.photo_studio.exceptions.WrongNameException;
 import main.com.maryzh555.photo_studio.interfaces.IValidateName;
-import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.CustomerManager;
 import main.com.maryzh555.photo_studio.models.users.HRManager;
@@ -21,7 +21,8 @@ public class CandidateDataForm extends Menu implements IValidateName {
         showMenu(scanner, null, photoStudio);
     }
 
-    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+    @Override
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
 
         callWorker(photoStudio, HRManager.class).setMaxAgeOfCandidates(50);
         int maxAge = callWorker(photoStudio, HRManager.class).getMaxAgeOfCandidates();

@@ -2,7 +2,7 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.models.Order;
+import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.Candidate;
 import main.com.maryzh555.photo_studio.models.users.HRManager;
@@ -20,8 +20,8 @@ public class CandidateMenu extends Menu {
         showMenu(scanner, null, photoStudio);
     }
 
-
-    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+    @Override
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio) {
         while (true) {
             try {
                 System.out.println("We are glad you chose our company!");
@@ -65,7 +65,7 @@ public class CandidateMenu extends Menu {
                             showMenu(scanner, null, photoStudio);
                             break;
                         case 2:
-                            new UserDistributionMenu(scanner, photoStudio);
+                            new UserDistributionMenu(scanner, null, photoStudio);
                             break;
                         default:
                             throw new NoSuchOptionException();

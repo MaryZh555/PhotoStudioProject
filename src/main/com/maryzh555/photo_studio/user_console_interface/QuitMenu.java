@@ -4,6 +4,7 @@ import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.IShowQuitMenu;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.users.Client;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class QuitMenu implements IShowQuitMenu {
     public void showQuitMenu(Scanner scanner, Order order, PhotoStudio photoStudio, Menu menu) {
         while (true) {
             try {
-                System.out.println(" Are you sere you want to quit? " +
+                System.out.println(" Are you sure you want to quit? " +
                         "\n 1 - Yes(quit)" +
                         "\n 2 - No ->(Redo)");
 
@@ -32,7 +33,7 @@ public class QuitMenu implements IShowQuitMenu {
                         new NewCustomerMenu(scanner, photoStudio);
                         break;
                     case 2:
-                        menu.callRedoMenu(scanner, order, photoStudio, menu);//menu.showRedoMenu(scanner, order, photoStudio);
+                        menu.callRedoMenu(scanner, order, photoStudio, menu);
                         break;
                     default:
                         throw new NoSuchOptionException();
