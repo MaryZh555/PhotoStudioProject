@@ -6,8 +6,6 @@ import main.com.maryzh555.photo_studio.exceptions.WrongNameException;
 import main.com.maryzh555.photo_studio.interfaces.IValidateName;
 import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.CustomerManager;
-import main.com.maryzh555.photo_studio.models.users.HRManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -23,12 +21,6 @@ public class CandidateDataForm extends Menu implements IValidateName {
 
     @Override
     public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
-
-        callWorker(photoStudio, HRManager.class).setMaxAgeOfCandidates(50);
-        int maxAge = callWorker(photoStudio, HRManager.class).getMaxAgeOfCandidates();
-
-        callWorker(photoStudio, HRManager.class).setRetirementAgeOfCandidate(67);
-        int retirementAge = callWorker(photoStudio, HRManager.class).getRetirementAgeOfCandidate();
 
         String name;
         int age;
@@ -52,7 +44,7 @@ public class CandidateDataForm extends Menu implements IValidateName {
         while (true) {
             try {
                 System.out.println("Please enter your AGE:");
-                System.out.println(" * Note: We consider minimum age as 18, and maximum as retirement age - " + retirementAge);
+                System.out.println(" * Note: We consider minimum age as 18, and maximum as retirement age - " + photoStudio.getHrManager().getUserCandidate().getRetirementAge());
                 System.out.println(" IF you are YOUNGER or OLDER than legal hiring age, please enter 'quit' to leave the program.");
                 String answer = scanner.nextLine();
 
@@ -65,7 +57,7 @@ public class CandidateDataForm extends Menu implements IValidateName {
                 }
 
                 age = Integer.parseInt(answer);
-                if (age < 18 || age > retirementAge) throw new WrongAgeException(maxAge);
+                if (age < photoStudio.getHrManager().getUserCandidate().getLegalWorkingAge() || age > photoStudio.getHrManager().getUserCandidate().getRetirementAge()) throw new WrongAgeException(photoStudio.getHrManager().getUserCandidate().getRetirementAge());
 
                 break;
             } catch (WrongAgeException | NoSuchOptionException e) {
@@ -84,10 +76,10 @@ public class CandidateDataForm extends Menu implements IValidateName {
                         "\n If you are 18 years old, please enter 0");
 
                 yearsOfExperience = scanner.nextInt();
-                int maxPossibleYears = callWorker(photoStudio, CustomerManager.class).calculateMaxYearsOfExperience(age);
+                int maxPossibleYears = photoStudio.getCustomerManager().calculateMaxYearsOfExperience(age);
 
                 if (yearsOfExperience > maxPossibleYears) {
-                    throw new WrongAgeException(maxAge);
+                    throw new WrongAgeException(photoStudio.getHrManager().getUserCandidate().getRetirementAge());
                 }
 
                 break;
@@ -112,10 +104,10 @@ public class CandidateDataForm extends Menu implements IValidateName {
                         "\n YEARS OF EXPERIENCE: " + yearsOfExperience +
                         "\n HOURLY RATE: " + hourlyRate);
 
-                callWorker(photoStudio, HRManager.class).getUserCandidate().setYearsOfExperience(yearsOfExperience);
-                callWorker(photoStudio, HRManager.class).getUserCandidate().setName(name);
-                callWorker(photoStudio, HRManager.class).getUserCandidate().setAge(age);
-                callWorker(photoStudio, HRManager.class).getUserCandidate().setHourlyRate(hourlyRate);
+                photoStudio.getHrManager().getUserCandidate().setYearsOfExperience(yearsOfExperience);
+                photoStudio.getHrManager().getUserCandidate().setName(name);
+                photoStudio.getHrManager().getUserCandidate().setAge(age);
+                photoStudio.getHrManager().getUserCandidate().setHourlyRate(hourlyRate);
 
                 new RedoMenu(scanner, null, photoStudio, this);
                 break;

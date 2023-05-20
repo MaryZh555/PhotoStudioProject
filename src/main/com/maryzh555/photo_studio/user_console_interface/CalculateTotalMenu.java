@@ -6,8 +6,6 @@ import main.com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
 import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.CustomerManager;
-import main.com.maryzh555.photo_studio.models.users.SupplyManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -61,9 +59,9 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
         order.getClient().addToOrderList(order);
 
         //// Using the paper from the studio to print
-        callWorker(photoStudio, SupplyManager.class).useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
-        callWorker(photoStudio, SupplyManager.class).useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
-        callWorker(photoStudio, SupplyManager.class).useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
+        photoStudio.getSupplyManager().useStudioPhotoPaper(photoStudio, "STANDARD", order.getOrderedPhoto().getPrintStandardQty());
+        photoStudio.getSupplyManager().useStudioPhotoPaper(photoStudio, "LARGE", order.getOrderedPhoto().getPrintLargeQty());
+        photoStudio.getSupplyManager().useStudioPhotoPaper(photoStudio, "PROFESSIONAL", order.getOrderedPhoto().getPrintProfessionalQty());
 
         // Adding to the photoPack (the printing result)
         order.addToPhotoPack(order.getOrderedPhoto().getPrintStandardQty(), PhotoPaperType.STANDARD, order.getOrderedPhoto().isColored());
@@ -74,13 +72,13 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
         //// Setting the Photo object to the Order
         //// If the Photo will be printed, then add it to the Storage(passing the printing process)
         //// The supply manager will control if there is no paper in the studio.
-        callWorker(photoStudio, CustomerManager.class).addOrderToTheSystemList(photoStudio, order);
+        photoStudio.getCustomerManager().addOrderToTheSystemList(photoStudio, order);
 
 //        test.printOrderList(photoStudio); // test
 //        test.printAllOrderListInfo(photoStudio);
         if (order.getOrderedPhoto().isToPrint()) {
             photoStudio.getStorage().addPhotoPackToStore(order.getPhotoPack());
-            callWorker(photoStudio, SupplyManager.class).checkPhotoPaperInStudio(photoStudio);
+            photoStudio.getSupplyManager().checkPhotoPaperInStudio(photoStudio);
 //            test.paperTest(photoStudio); //test
 //          test.printStoragePhotoList(photoStudio);//test
         }
@@ -89,7 +87,7 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
         order.getDesiredPhotographer().addToHoursWorkedToday(order.getOrderedPhoto().getType().getHours(), photoStudio);
         order.getDesiredPhotographer().addToPhotoShootsToday(1);
 
-        callWorker(photoStudio, CustomerManager.class).addServicedClients();//for new order
+        photoStudio.getCustomerManager().addServicedClients();//for new order
     }
 
 

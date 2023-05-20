@@ -4,8 +4,8 @@ import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.Vacancy;
 import main.com.maryzh555.photo_studio.models.users.Candidate;
-import main.com.maryzh555.photo_studio.models.users.HRManager;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -32,7 +32,7 @@ public class CandidateMenu extends Menu {
                         "\n 4 - HR Manager");
 
                 int answer = scanner.nextInt();
-                List<Candidate> vacancies;
+                List<Vacancy> vacancies;
                 Candidate newCandidate = new Candidate();
                 switch (answer) {
                     case 1:
@@ -70,15 +70,16 @@ public class CandidateMenu extends Menu {
                         default:
                             throw new NoSuchOptionException();
                     }
+                    break;
                 } else {
                     System.out.println("We have these opened vacancies:");
                     int i = 1;
-                    for (Candidate candidate : vacancies) {
-                        System.out.println(" " + i + " - " + candidate.getWorkerType() + ", with minimum " + candidate.getMinExperience() + " years of experience.");
+                    for (Vacancy vacancy : vacancies) {
+                        System.out.println(" " + i + " - " + vacancy.getWorkerType() + ", with minimum " + vacancy.getMinExperience() + " years of experience.");
                         i++;
                     }
                 }
-                callWorker(photoStudio, HRManager.class).setUserCandidate(newCandidate);
+                photoStudio.getHrManager().setUserCandidate(newCandidate);
                 new RedoMenu(scanner, null, photoStudio, this);
                 break;
             } catch (NoSuchOptionException e) {

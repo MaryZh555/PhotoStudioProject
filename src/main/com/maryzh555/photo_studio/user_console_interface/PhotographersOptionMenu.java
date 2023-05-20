@@ -5,7 +5,6 @@ import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.CustomerManager;
 import main.com.maryzh555.photo_studio.models.users.Photographer;
 
 import java.util.InputMismatchException;
@@ -53,7 +52,7 @@ public class PhotographersOptionMenu extends Menu {
         List<Photographer> list;
         while (true) {
             try {
-                int[] maxMinValues = callWorker(photoStudio, CustomerManager.class).calculateYearsOfExperience(photoStudio);
+                int[] maxMinValues = photoStudio.getCustomerManager().calculateYearsOfExperience(photoStudio);
                 System.out.println("Please enter the number of years of experience you prefer for your photographer: " +
                         "\n* Note: Our photographers have between " + maxMinValues[0] + " to " + maxMinValues[1] + " years of experience.");
                 int answer = scanner.nextInt();
@@ -61,12 +60,12 @@ public class PhotographersOptionMenu extends Menu {
 
                 System.out.println("Let's see which photographers have " + answer + " years of experience: ");
 
-                list = callWorker(photoStudio, CustomerManager.class).matchPhotographers(answer, photoStudio);
+                list = photoStudio.getCustomerManager().matchPhotographers(answer, photoStudio);
 
                 if (list.size() == 0) { //For cases when there is no photographers with needed experience
                     System.out.println("Unfortunately, we don't have any photographer with " + answer + " years of experience.\n" +
                             "But we can suggest some with similar experience: ");
-                    list = callWorker(photoStudio, CustomerManager.class).findAlternativePhotographers(answer, photoStudio);
+                    list = photoStudio.getCustomerManager().findAlternativePhotographers(answer, photoStudio);
                 }
 
                 int i = 1;

@@ -1,7 +1,6 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.CustomerManager;
 
 import java.util.Scanner;
 /**
@@ -17,7 +16,7 @@ public class MainMenu extends Menu {
 
     private void showMenu(Scanner scanner, PhotoStudio photoStudio) {
         System.out.println("Welcome to the Lumina Photo Studio!");
-        callWorker(photoStudio, CustomerManager.class).introduceYourself();
+        photoStudio.getCustomerManager().introduceYourself();
         new UserDistributionMenu(scanner, null, photoStudio);
     }
 }

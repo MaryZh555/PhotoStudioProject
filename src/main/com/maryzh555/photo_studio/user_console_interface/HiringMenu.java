@@ -4,7 +4,6 @@ import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.HRManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -18,14 +17,14 @@ public class HiringMenu extends Menu{
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){ //todo rewrite till this menu is only for the photographers
-        boolean doHire = callWorker(photoStudio, HRManager.class).checkNewCandidate(photoStudio);
+    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+        boolean doHire = photoStudio.getHrManager().checkNewCandidate(photoStudio, photoStudio.getHrManager().getUserCandidate());
         if (doHire) {
             while (true) {
                 try {
                     System.out.println("You fit our requirements, congratulations!");
                     System.out.println("We will add you to our list of workers, waiting to see you in our company!");
-                    if (callWorker(photoStudio, HRManager.class).getUserCandidate().getWorkerType() == WorkerType.PHOTOGRAPHER) {
+                    if (photoStudio.getHrManager().getUserCandidate().getWorkerType() == WorkerType.PHOTOGRAPHER) {
                         System.out.println("\nOur Studio offers new photographers to borrow professional cameras, if they don't have any." +
                                 "\n Do you have your own camera for work?" +
                                 "\n 1 - Yes" +
@@ -33,17 +32,21 @@ public class HiringMenu extends Menu{
                         int answer = scanner.nextInt();
                         switch (answer) {
                             case 1:
-                                callWorker(photoStudio, HRManager.class).getUserCandidate().setBorrowCamera(false);
+                                photoStudio.getHrManager().getUserCandidate().setBorrowCamera(false);
                                 break;
                             case 2:
-                                callWorker(photoStudio, HRManager.class).getUserCandidate().setBorrowCamera(true);
+                                photoStudio.getHrManager().getUserCandidate().setBorrowCamera(true);
+                                System.out.println("We will give you the camera for working use.");
                                 break;
                             default:
                                 throw new NoSuchOptionException();
                         }
-                        photoStudio.getDirector().hireJobCandidate(photoStudio, callWorker(photoStudio, HRManager.class).getUserCandidate());//todo rewrite to match digital storage // or not
-                        photoStudio.getDirector().getHrManager().addCandidate();
                     }
+                    photoStudio.getDirector().hireJobCandidate(photoStudio, photoStudio.getHrManager().getUserCandidate());
+                    photoStudio.getDigitalStorage().deleteVacancy(photoStudio.getHrManager().findSuitableVacancy(photoStudio, photoStudio.getHrManager().getUserCandidate()));
+                    photoStudio.getHrManager().addCandidate();
+                    System.out.println("See you in the company office then! Have a nice day!");
+//                    testVacancyList(photoStudio.getDigitalStorage().getVacancies());//test
                     break;
                 } catch (NoSuchOptionException e) {
                     System.out.println("It seems like we don't have an order with this id, please check if the inputted id is correct");
@@ -57,7 +60,7 @@ public class HiringMenu extends Menu{
         } else {
             System.out.println("Sorry! You don't fit our job requirements, we can't offer you a job.");
             System.out.println("Have a nice day!");
-            photoStudio.getDirector().getHrManager().addCandidate();
+            photoStudio.getHrManager().addCandidate();
         }
         //test.printAllWorkers(photoStudio);//test
         new NewCustomerMenu(scanner, photoStudio);

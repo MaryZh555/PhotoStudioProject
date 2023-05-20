@@ -1,5 +1,6 @@
 package main.com.maryzh555.photo_studio.interfaces;
 
+import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.Worker;
 
@@ -8,5 +9,5 @@ import main.com.maryzh555.photo_studio.models.users.Worker;
  */
 public interface ICallWorkers {
 
-    <T extends Worker> T callWorker(PhotoStudio photoStudio, Class<T> clazz);
+    <T extends Worker> T callWorker(PhotoStudio photoStudio, WorkerType type);
 }

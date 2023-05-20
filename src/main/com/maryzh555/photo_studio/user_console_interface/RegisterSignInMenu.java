@@ -5,7 +5,6 @@ import main.com.maryzh555.photo_studio.exceptions.WrongNameException;
 import main.com.maryzh555.photo_studio.exceptions.WrongNumberException;
 import main.com.maryzh555.photo_studio.interfaces.IValidateName;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.test;
 import main.com.maryzh555.photo_studio.models.users.Client;
 
 import java.util.InputMismatchException;
@@ -100,7 +99,7 @@ public class RegisterSignInMenu extends Menu implements IValidateName {
                             case 1:
                                 System.out.println("Registration successful!");
                                 photoStudio.getDigitalStorage().addToRegisteredList(client);
-                                    test.printRegisteredList(photoStudio);//test
+//                                    test.printRegisteredList(photoStudio);//test
                                 new ClientOptionMenu(scanner, client, photoStudio);
                                 break;
                             case 2:

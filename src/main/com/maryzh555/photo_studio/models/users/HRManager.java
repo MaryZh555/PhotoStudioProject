@@ -2,6 +2,7 @@ package main.com.maryzh555.photo_studio.models.users;
 
 import main.com.maryzh555.photo_studio.interfaces.IReport;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
+import main.com.maryzh555.photo_studio.models.Vacancy;
 
 
 /**
@@ -10,11 +11,7 @@ import main.com.maryzh555.photo_studio.models.PhotoStudio;
 public class HRManager extends Worker implements IReport {
 
 
-    private int maxAgeOfCandidates;
-
-    private int retirementAgeOfCandidate;
-
-    private Candidate userCandidate;
+    private Candidate userCandidate;//todo in question does it need to be here or maybe in the photostudio?
 
     private int candidatesToday;
 
@@ -24,21 +21,20 @@ public class HRManager extends Worker implements IReport {
     }
 
 
-    public boolean checkNewCandidate(PhotoStudio photoStudio) {
-        Candidate userCandidate = this.userCandidate;
+    public boolean checkNewCandidate(PhotoStudio photoStudio, Candidate candidate) {
         boolean result = false;
 
-        boolean ageRequirements = userCandidate.getAge() >= 18 && userCandidate.getAge() <= maxAgeOfCandidates;
+        boolean ageRequirements = candidate.getAge() >= candidate.getLegalWorkingAge() && userCandidate.getAge() <= candidate.getRetirementAge();
         boolean experienceRequirements = false;
         boolean salaryRequirements = false;
 
-        for (Candidate vacancyCandidate : photoStudio.getDigitalStorage().getVacancies()) {
-            if (vacancyCandidate.getWorkerType() == userCandidate.getWorkerType()) {
+        for (Vacancy vacancy : photoStudio.getDigitalStorage().getVacancies()) {
+            if (vacancy.getWorkerType() == candidate.getWorkerType()) {
 
-                if (userCandidate.getYearsOfExperience() >= vacancyCandidate.getMinExperience() && userCandidate.getYearsOfExperience() <= vacancyCandidate.getMaxExperience()) {
+                if (candidate.getYearsOfExperience() >= vacancy.getMinExperience() && userCandidate.getYearsOfExperience() <= vacancy.getMaxExperience()) {
                     experienceRequirements = true;
                 }
-                if (userCandidate.getHourlyRate() <= vacancyCandidate.getMaxSalary()) {
+                if (candidate.getHourlyRate() <= vacancy.getMaxSalary()) {
                     salaryRequirements = true;
                 }
 
@@ -54,6 +50,33 @@ public class HRManager extends Worker implements IReport {
         return result;
     }
 
+    public Vacancy findSuitableVacancy(PhotoStudio photoStudio, Candidate candidate){
+        boolean ageRequirements = false;
+        boolean experienceRequirements = false;
+        boolean salaryRequirements = false;
+
+        for (Vacancy vacancyCandidate : photoStudio.getDigitalStorage().getVacancies()) {
+            if (vacancyCandidate.getWorkerType() == candidate.getWorkerType()) {
+                if( candidate.getAge() >= candidate.getLegalWorkingAge() && candidate.getAge() <= candidate.getRetirementAge()){
+                    ageRequirements = true;
+                }
+
+                if (candidate.getYearsOfExperience() >= vacancyCandidate.getMinExperience() && candidate.getYearsOfExperience() <= vacancyCandidate.getMaxExperience()) {
+                    experienceRequirements = true;
+                }
+                if (candidate.getHourlyRate() <= vacancyCandidate.getMaxSalary()) {
+                    salaryRequirements = true;
+                }
+
+                if (ageRequirements && experienceRequirements && salaryRequirements) {
+                    // Exit
+                    return vacancyCandidate;
+                }
+            }
+        }
+        return null;
+    }
+
     public void addCandidate(){
         this.candidatesToday++;
     }
@@ -63,22 +86,6 @@ public class HRManager extends Worker implements IReport {
         System.out.println("( HR Manager " + this.getName() + " reports: " + "Checked candidates today: " + this.candidatesToday + " )");
     }
 
-
-    public int getMaxAgeOfCandidates() {
-        return maxAgeOfCandidates;
-    }
-
-    public void setMaxAgeOfCandidates(int maxAgeOfCandidates) {
-        this.maxAgeOfCandidates = maxAgeOfCandidates;
-    }
-
-    public int getRetirementAgeOfCandidate() {
-        return retirementAgeOfCandidate;
-    }
-
-    public void setRetirementAgeOfCandidate(int retirementAgeOfCandidate) {
-        this.retirementAgeOfCandidate = retirementAgeOfCandidate;
-    }
 
     public Candidate getUserCandidate() {
         return userCandidate;

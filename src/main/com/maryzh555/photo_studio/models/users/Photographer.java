@@ -33,7 +33,7 @@ public class Photographer extends Worker implements IReport {
     public void askForRest(PhotoStudio photoStudio){
         if(this.hoursWorkedToday == 8 ||this.hoursWorkedToday > 8){
             //remove photographer from the list of available photographers
-            photoStudio.getDirector().removeFromAvailablePhotographers(this);
+            photoStudio.getDirector().removeFromAvailablePhotographers(photoStudio, this);
         }
     }
 

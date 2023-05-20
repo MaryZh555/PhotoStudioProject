@@ -1,7 +1,11 @@
 package main.com.maryzh555.photo_studio.models;
 
 import main.com.maryzh555.photo_studio.enums.WorkerType;
-import main.com.maryzh555.photo_studio.models.users.*;
+import main.com.maryzh555.photo_studio.models.users.Client;
+import main.com.maryzh555.photo_studio.models.users.CustomerManager;
+import main.com.maryzh555.photo_studio.models.users.HRManager;
+import main.com.maryzh555.photo_studio.models.users.Photographer;
+import main.com.maryzh555.photo_studio.models.users.SupplyManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +25,9 @@ public class DigitalStorage {
 
     private final List<SupplyManager> supplyManagerList;  // from Director
 
-    private List<Candidate> vacancies;  //from HRManager
+    private final List<Photographer> allPhotographers; // from Director
 
-    //todo put the final fields of max and minYears of experience for candidates here?
+    private List<Vacancy> vacancies;  //from HRManager
 
 
     public DigitalStorage() {
@@ -32,6 +36,7 @@ public class DigitalStorage {
         this.hrManagerList = fillHRManagers();
         this.customerManagerList = fillCustomerManager();
         this.supplyManagerList = fillSupplyManagers();
+        this.allPhotographers = fillPhotographers();
         this.vacancies = fillVacancies();
     }
 
@@ -43,28 +48,58 @@ public class DigitalStorage {
         this.listOfOrders.add(order);
     }
 
+
+    //NOTE:
+    // The ArrayList is used instead of List.of to avoid the UnsupportedOperationException exception when the new worker is added to the list when hiring
     public List<HRManager> fillHRManagers() {
-        return List.of(
-                new HRManager("Oleg", 15),
-                new HRManager("Marina", 12),
-                new HRManager("Antonina", 20)
-        );
+        List<HRManager> result = new ArrayList<>();
+        result.add(new HRManager("Oleg", 15));
+        result.add(new HRManager("Marina", 12));
+        result.add(new HRManager("Antonina", 20));
+        return result;
+
     }
 
     public List<SupplyManager> fillSupplyManagers() {
-        return List.of(
-                new SupplyManager("Oleg", 15),
-                new SupplyManager("Marina", 12),
-                new SupplyManager("Antonina", 20)
-        );
+        List<SupplyManager> result = new ArrayList<>();
+        result.add(new SupplyManager("Oleg", 15));
+        result.add(new SupplyManager("Marina", 12));
+        result.add(new SupplyManager("Antonina", 20));
+        return result;
+
     }
 
     public List<CustomerManager> fillCustomerManager() {
-        return List.of(
-                new CustomerManager("Oleg", 15),
-                new CustomerManager("Marina", 12),
-                new CustomerManager("Antonina", 20)
-        );
+        List<CustomerManager> result = new ArrayList<>();
+        result.add(new CustomerManager("Oleg", 15));
+        result.add(new CustomerManager("Marina", 12));
+        result.add(new CustomerManager("Antonina", 20));
+        return result;
+    }
+
+    //The photographers data is written here until the database is implemented.
+    public List<Photographer> fillPhotographers() {
+        List<Photographer> result = new ArrayList<>();
+        result.add(new Photographer("Tasha", 1, 10, false, null));
+        result.add(new Photographer("Sasha", 2, 12, false, null));
+        result.add(new Photographer("Misha", 3, 15, false, null));
+        result.add(new Photographer("Dasha", 4, 18, false, null));
+        result.add(new Photographer("Masha", 5, 25, false, null));
+        result.add(new Photographer("Dimas", 6, 35, false, null));
+        return result;
+    }
+
+    private List<Vacancy> fillVacancies() {
+        ArrayList<Vacancy> result = new ArrayList<>();
+        result.add(new Vacancy(WorkerType.PHOTOGRAPHER, 5, 49, 30));
+        result.add(new Vacancy(WorkerType.PHOTOGRAPHER, 10, 49, 30));
+        result.add(new Vacancy(WorkerType.SUPPLY_MANAGER, 1, 49, 15));
+        return result;
+
+    }
+
+    public void deleteVacancy(Vacancy vacancy){
+        this.vacancies.remove(vacancy);
     }
 
     public boolean checkIfRegistered(Client client) {
@@ -96,19 +131,11 @@ public class DigitalStorage {
         return null;
     }
 
-    private List<Candidate> fillVacancies() {
-        List<Candidate> result = new ArrayList<>();
-        result.add(new Candidate(WorkerType.PHOTOGRAPHER, 5, 49, 30));//67-18 = 49 // maxExperience can be whatever number HRmanager chooses;
-        result.add(new Candidate(WorkerType.PHOTOGRAPHER, 10, 49, 30));
-        result.add(new Candidate(WorkerType.SUPPLY_MANAGER, 1, 49, 15));
-        return result;
-    }
-
-    public List<Candidate> matchVacancies(WorkerType type) {
-        List<Candidate> result = new ArrayList<>();
-        for (Candidate candidate : this.vacancies) {
-            if (candidate.getWorkerType() == type) {
-                result.add(candidate);
+    public List<Vacancy> matchVacancies(WorkerType type) {
+        List<Vacancy> result = new ArrayList<>();
+        for (Vacancy vacancy : this.vacancies) {
+            if (vacancy.getWorkerType() == type) {
+                result.add(vacancy);
             }
         }
         return result;
@@ -139,11 +166,16 @@ public class DigitalStorage {
         return supplyManagerList;
     }
 
-    public List<Candidate> getVacancies() {
+    public List<Vacancy> getVacancies() {
         return vacancies;
     }
 
-    public void setVacancies(List<Candidate> vacancies) {
+    public List<Photographer> getAllPhotographers() {
+        return allPhotographers;
+    }
+
+    public void setVacancies(List<Vacancy> vacancies) {
         this.vacancies = vacancies;
     }
+
 }

@@ -9,12 +9,6 @@ public class Candidate extends User{
 
     private WorkerType workerType;
 
-    private int minExperience;
-
-    private int maxExperience;
-
-    private int maxSalary;
-
     private int yearsOfExperience;
 
     private int age;
@@ -23,51 +17,14 @@ public class Candidate extends User{
 
     private boolean borrowCamera;
 
+    private final int retirementAge;
 
-    public Candidate(){}
-    public Candidate(WorkerType workerType, String name, int yearsOfExperience){
-        super(name);
-        this.workerType = workerType;
-        this.yearsOfExperience = yearsOfExperience;
-    }
+    private final int legalWorkingAge;
 
-    public Candidate(WorkerType workerType, int minExperience, int maxExperience, int maxSalary) {
-        this.workerType = workerType;
-        this.minExperience = minExperience;
-        this.maxExperience = maxExperience;
-        this.maxSalary = maxSalary;
-    }
 
-    public WorkerType getWorkerType() {
-        return workerType;
-    }
-
-    public void setWorkerType(WorkerType workerType) {
-        this.workerType = workerType;
-    }
-
-    public int getMinExperience() {
-        return minExperience;
-    }
-
-    public void setMinExperience(int minExperience) {
-        this.minExperience = minExperience;
-    }
-
-    public int getMaxExperience() {
-        return maxExperience;
-    }
-
-    public void setMaxExperience(int maxExperience) {
-        this.maxExperience = maxExperience;
-    }
-
-    public int getMaxSalary() {
-        return maxSalary;
-    }
-
-    public void setMaxSalary(int maxSalary) {
-        this.maxSalary = maxSalary;
+    public Candidate(){
+        this.retirementAge = 64;//represent the company admitted age of retirement
+        this.legalWorkingAge = 18;//represents the minimum legal age of the worker
     }
 
     public int getYearsOfExperience() {
@@ -100,5 +57,21 @@ public class Candidate extends User{
 
     public void setBorrowCamera(boolean borrowCamera) {
         this.borrowCamera = borrowCamera;
+    }
+
+    public WorkerType getWorkerType() {
+        return workerType;
+    }
+
+    public void setWorkerType(WorkerType workerType) {
+        this.workerType = workerType;
+    }
+
+    public int getRetirementAge() {
+        return retirementAge;
+    }
+
+    public int getLegalWorkingAge() {
+        return legalWorkingAge;
     }
 }

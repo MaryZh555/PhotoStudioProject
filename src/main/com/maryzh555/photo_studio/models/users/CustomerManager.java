@@ -25,10 +25,6 @@ public class CustomerManager extends Worker implements IReport {
         this.hourlyRate = hourlyRate;
     }
 
-    public CustomerManager(int neededYears) {
-        this.neededExperience = neededYears;
-    }
-
 
     public void introduceYourself() {
         System.out.println("My name is " + this.getName() + ". ");
@@ -44,7 +40,7 @@ public class CustomerManager extends Worker implements IReport {
 
 
     public int[] calculateYearsOfExperience(PhotoStudio photoStudio) throws EmptyListException {
-        if (photoStudio.getDirector().getAllPhotographers().isEmpty()) {
+        if (photoStudio.getDigitalStorage().getAllPhotographers().isEmpty()) {
             System.out.println("The list of photographers is empty.");
             throw new EmptyListException("All Photographers");
         }
@@ -53,7 +49,7 @@ public class CustomerManager extends Worker implements IReport {
         int minExperience = Integer.MAX_VALUE;
         int maxExperience = Integer.MIN_VALUE;
 
-        for (Photographer photographer : photoStudio.getDirector().getAllPhotographers()) {
+        for (Photographer photographer : photoStudio.getDigitalStorage().getAllPhotographers()) {
             int yearsOfExperience = photographer.getYearsOfExperience();
             if (yearsOfExperience < minExperience) {
                 minExperience = yearsOfExperience;
@@ -103,7 +99,7 @@ public class CustomerManager extends Worker implements IReport {
 
     public List<Photographer> matchPhotographers(int years, PhotoStudio photoStudio) {
         List<Photographer> result = new ArrayList<>();
-        for (Photographer photographer : photoStudio.getDirector().getAllPhotographers()) {
+        for (Photographer photographer : photoStudio.getDigitalStorage().getAllPhotographers()) {
             if (photographer.getYearsOfExperience() == years) {
                 result.add(photographer);
             }
@@ -116,7 +112,7 @@ public class CustomerManager extends Worker implements IReport {
         List<Photographer> result = new ArrayList<>();
         int diff = 1;
         while (result.isEmpty()) {
-            for (Photographer photographer : photoStudio.getDirector().getAllPhotographers()) {
+            for (Photographer photographer : photoStudio.getDigitalStorage().getAllPhotographers()) {
                 if (photographer.getYearsOfExperience() == years + diff || photographer.getYearsOfExperience() == years - diff) {
                     result.add(photographer);
                 }

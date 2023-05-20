@@ -1,7 +1,11 @@
 package main.com.maryzh555.photo_studio.models;
 
 import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
+import main.com.maryzh555.photo_studio.models.users.CustomerManager;
 import main.com.maryzh555.photo_studio.models.users.Director;
+import main.com.maryzh555.photo_studio.models.users.HRManager;
+import main.com.maryzh555.photo_studio.models.users.Photographer;
+import main.com.maryzh555.photo_studio.models.users.SupplyManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,13 +25,25 @@ public class PhotoStudio {
 
     private List<Paper> storedPaper;
 
+    private List<Photographer> availablePhotographers;
+
+    private final SupplyManager supplyManager;    // represents the current manager, who is having the shift today(When photoStudio is created)//set in the director
+
+    private final CustomerManager customerManager;
+
+    private final HRManager hrManager;
+
 
 
     public PhotoStudio() {
         this.digitalStorage = new DigitalStorage();
-        this.director = new Director(this);
         this.storage = new Storage();
+        this.director = new Director();
 
+        this.availablePhotographers = digitalStorage.fillPhotographers();
+        this.supplyManager = director.choseRandomSupplyManager(this);
+        this.customerManager = director.choseRandomCustomerManager(this);
+        this.hrManager = director.choseRandomHRManager(this);
         prepareEquipment(this);
 //        test.paperTest(this);
     }
@@ -36,9 +52,9 @@ public class PhotoStudio {
     private void prepareEquipment(PhotoStudio photoStudio) {
         //this method will also implement future methods of other workers.
         photoStudio.storedPaper = photoStudio.setStoredPaper(0, 0, 0);
-        photoStudio.director.getSupplyManager().addPaperToStorage(photoStudio, 1050, 525, 110);
-        photoStudio.director.getSupplyManager().refillPhotoPaperInStudio(photoStudio, 50, 25, 10);
-        photoStudio.director.getSupplyManager().fillStoredCameras(photoStudio, 10);
+        photoStudio.getSupplyManager().addPaperToStorage(photoStudio, 1050, 525, 110);
+        photoStudio.getSupplyManager().refillPhotoPaperInStudio(photoStudio, 50, 25, 10);
+        photoStudio.getSupplyManager().fillStoredCameras(photoStudio, 10);
     }
 
 
@@ -129,5 +145,23 @@ public class PhotoStudio {
 
     public void setDigitalStorage(DigitalStorage digitalStorage) {
         this.digitalStorage = digitalStorage;
+    }
+    public List<Photographer> getAvailablePhotographers() {
+        return availablePhotographers;
+    }
+
+    public void setAvailablePhotographers(List<Photographer> availablePhotographers) {
+        this.availablePhotographers = availablePhotographers;
+    }
+    public SupplyManager getSupplyManager() {
+        return supplyManager;
+    }
+
+    public CustomerManager getCustomerManager() {
+        return customerManager;
+    }
+
+    public HRManager getHrManager() {
+        return hrManager;
     }
 }
