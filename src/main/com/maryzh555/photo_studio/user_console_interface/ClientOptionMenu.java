@@ -1,7 +1,7 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
+import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.users.Client;
 
@@ -18,7 +18,7 @@ public class ClientOptionMenu extends Menu {
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio) {
+    public void showMenu(Scanner scanner, Client client, PhotoStudio photoStudio) {
         System.out.println("\nWelcome to the Option Menu!");
         while (true) {
             try {
@@ -29,18 +29,20 @@ public class ClientOptionMenu extends Menu {
                 int answer = scanner.nextInt();
                 switch (answer) {
                     case 1:
-                        new OrderMenu(scanner, ((Client)orderOrClient), photoStudio);
+                        Order order = new Order();
+                        order.setClient(client);
+                        new OrderMenu(scanner, order, photoStudio);
                         break;
                     case 2:
-                        if (((Client)orderOrClient).getOrderList().isEmpty()) {
+                        if (client.getOrderList().isEmpty()) {
                             System.out.println("You didn't order any photos yet.");
-                            showMenu(scanner, ((Client)orderOrClient),photoStudio);
+                            showMenu(scanner, client, photoStudio);
                         } else {
-                            new PickUpPhotoMenu(scanner, ((Client)orderOrClient), photoStudio);
+                            new PickUpPhotoMenu(scanner, client, photoStudio);
                         }
                         break;
                     case 3:
-                        new QuitMenu(scanner, null, photoStudio, this);
+                        new QuitMenu(scanner, null, photoStudio, this); //todo does the order in the quit menu should be null?
                         break;
                     default:
                         throw new NoSuchOptionException();

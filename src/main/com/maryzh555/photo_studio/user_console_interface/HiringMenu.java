@@ -2,7 +2,6 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
 import java.util.InputMismatchException;
@@ -13,11 +12,11 @@ import java.util.Scanner;
  */
 public class HiringMenu extends Menu{
     public HiringMenu(Scanner scanner, PhotoStudio photoStudio) {
-        showMenu(scanner, null, photoStudio);
+        showMenu(scanner, photoStudio);
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+    public  void showMenu(Scanner scanner, PhotoStudio photoStudio){
         boolean doHire = photoStudio.getHrManager().checkNewCandidate(photoStudio, photoStudio.getHrManager().getUserCandidate());
         if (doHire) {
             while (true) {

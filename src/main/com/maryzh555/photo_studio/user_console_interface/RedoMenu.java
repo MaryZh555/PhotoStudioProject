@@ -2,14 +2,13 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.Client;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+//todo PickUophoto redo
 /**
  * @author by Zhang M. on 18.04.2023.
  */
@@ -20,14 +19,7 @@ public class RedoMenu implements IShowRedoMenu {
     }
 
     @Override
-    public <T extends OrderOrClient> void showRedoMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio, Menu menu) {
-        Order order = null;
-        Client client = null;
-        if (orderOrClient instanceof Order) {
-            order = (Order) orderOrClient;
-        } else if (orderOrClient instanceof Client) {
-            client = (Client) orderOrClient;
-        }
+    public void showRedoMenu(Scanner scanner, Order order, PhotoStudio photoStudio, Menu menu) {
         while (true) {
             try {
                 //test.testMenuName(menu);//test
@@ -61,7 +53,6 @@ public class RedoMenu implements IShowRedoMenu {
                                 "\n 4 - Leave(quit)";
                         break;
 
-                    case "PickUpPhotoMenu":
                     case "RegisterSignInMenu":
                         previousMenuName = "(Client distribution)";
                         message = "\nDo you want to quit or to redo?" +
@@ -69,6 +60,7 @@ public class RedoMenu implements IShowRedoMenu {
                                 "\n 4 - Leave(quit)";
                         break;
 
+                    case "PickUpPhotoMenu":
                     case "OrderMenu":
                         previousMenuName = "(Client option Menu)";
                         message = "\nDo you want to quit or to redo?" +
@@ -134,8 +126,11 @@ public class RedoMenu implements IShowRedoMenu {
 
                         switch (menu.toString()) {
                             case "RegisterSignInMenu":
-                            case "PickUpPhotoMenu":
                                 new ClientDistributionMenu(scanner, order, photoStudio);
+                                break;
+                            case "PickUpPhotoMenu":
+                                scanner.nextLine();
+                                menu.showMenu(scanner, order.getClient(), photoStudio);
                                 break;
                             default:
                                 scanner.nextLine();
@@ -160,12 +155,12 @@ public class RedoMenu implements IShowRedoMenu {
                                 scanner.nextLine();
                                 new OrderMenu(scanner, order, photoStudio);
                                 break;
-                            case "PickUpPhotoMenu":
                             case "ClientOptionMenu":
                                 new ClientDistributionMenu(scanner, order, photoStudio);
                                 break;
+                            case "PickUpPhotoMenu":
                             case "OrderMenu":
-                                new ClientOptionMenu(scanner, client, photoStudio);
+                                new ClientOptionMenu(scanner, order.getClient(), photoStudio);
                                 break;
                             case "RegisterSignInMenu":
                                 throw new NoSuchOptionException();
@@ -188,4 +183,5 @@ public class RedoMenu implements IShowRedoMenu {
             }
         }
     }
+
 }

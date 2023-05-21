@@ -3,7 +3,6 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
 import main.com.maryzh555.photo_studio.interfaces.IShowRedoMenu;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
@@ -20,37 +19,36 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio) {
+    public void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
 
-        int resultTotal = ((Order) orderOrClient).calculateTotal(((Order) orderOrClient));
-        ((Order) orderOrClient).setTotal(resultTotal);
+        int resultTotal = order.calculateTotal(order);
+        order.setTotal(resultTotal);
 
-        System.out.println("\nYour order is a " + ((Order) orderOrClient).getOrderedPhoto().getType() +
+        System.out.println("\nYour order is a " + order.getOrderedPhoto().getType() +
                 " photo type, with the photographer " +
-                ((Order) orderOrClient).getDesiredPhotographer().getName() +
+                order.getDesiredPhotographer().getName() +
                 ". And location you are renting is the " +
-                ((Order) orderOrClient).getDesiredLocation() + ".");
-        if (((Order) orderOrClient).getOrderedPhoto().getPrintStandardQty() == 0 &&
-                ((Order) orderOrClient).getOrderedPhoto().getPrintLargeQty() == 0 &&
-                ((Order) orderOrClient).getOrderedPhoto().getPrintProfessionalQty() == 0) {
+                order.getDesiredLocation() + ".");
+        if (order.getOrderedPhoto().getPrintStandardQty() == 0 &&
+                order.getOrderedPhoto().getPrintLargeQty() == 0 &&
+                order.getOrderedPhoto().getPrintProfessionalQty() == 0) {
             System.out.println("You chose to have only digital photos.");
         } else {
             String colorInfo;
-            if (((Order) orderOrClient).getOrderedPhoto().isColored()) {
+            if (order.getOrderedPhoto().isColored()) {
                 colorInfo = " colored.";
             } else {
                 colorInfo = " black-&-white.";
             }
             System.out.println(
-                    "\nFor printing you chose " + ((Order) orderOrClient).getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, "
-                            + ((Order) orderOrClient).getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
-                            ((Order) orderOrClient).getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo. " +
+                    "\nFor printing you chose " + order.getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, "
+                            + order.getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
+                            order.getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo. " +
                             "All " + colorInfo);
         }
-        System.out.println("\nIt will cost you " + ((Order) orderOrClient).getTotal() + "$ total.\n");
+        System.out.println("\nIt will cost you " + order.getTotal() + "$ total.\n");
 
-        showRedoMenu(scanner, ((Order) orderOrClient), photoStudio, this);
-
+        showRedoMenu(scanner, order, photoStudio, this);
     }
 
     private void submitChanges(PhotoStudio photoStudio, Order order) {
@@ -92,7 +90,7 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
 
 
     @Override
-    public <T extends OrderOrClient> void showRedoMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio, Menu menu) {
+    public void showRedoMenu(Scanner scanner, Order order, PhotoStudio photoStudio, Menu menu) {
 
         while (true) {
             try {
@@ -105,19 +103,19 @@ public class CalculateTotalMenu extends Menu implements IShowRedoMenu {
 
                 switch (answer) {
                     case 1:
-                        submitChanges(photoStudio, (Order) orderOrClient);
+                        submitChanges(photoStudio, order);
 
-                        System.out.println("Great! See you in our Photo Studio, " + ((Order) orderOrClient).getClient().getName() +
-                                "! Your order id is #" + ((Order) orderOrClient).getId() +
+                        System.out.println("Great! See you in our Photo Studio, " + order.getClient().getName() +
+                                "! Your order id is #" + order.getId() +
                                 ". \nWe will contact you using the telephone number provided. " +
                                 "Have a nice day!");
-                        new ClientOptionMenu(scanner, ((Order) orderOrClient).getClient(), photoStudio);/*new NewCustomerMenu(scanner, photoStudio);*/
+                        new ClientOptionMenu(scanner, order.getClient(), photoStudio);/*new NewCustomerMenu(scanner, photoStudio);*/
                         break;
                     case 2:
-                        new OrderMenu(scanner, ((Order) orderOrClient), photoStudio);
+                        new OrderMenu(scanner, order, photoStudio);
                         break;
                     case 3:
-                        new QuitMenu(scanner, ((Order) orderOrClient), photoStudio, this);
+                        new QuitMenu(scanner, order, photoStudio, this);
                         break;
                     default:
                         throw new NoSuchOptionException();

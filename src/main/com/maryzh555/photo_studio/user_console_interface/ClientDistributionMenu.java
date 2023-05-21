@@ -1,7 +1,6 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
@@ -18,7 +17,7 @@ public class ClientDistributionMenu extends Menu {
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+    public  void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio){
         while (true) {
             try {
                 System.out.println("Please choose:" +
@@ -36,7 +35,7 @@ public class ClientDistributionMenu extends Menu {
                         new RegisterSignInMenu(scanner, "SignIn", photoStudio);
                         break;
                     case 3:
-                        new QuitMenu(scanner, null, photoStudio, this);
+                        new QuitMenu(scanner, order, photoStudio, this);
                         break;
                     default:
                         throw new NoSuchOptionException();

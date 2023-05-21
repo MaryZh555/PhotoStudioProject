@@ -1,7 +1,6 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.enums.PhotoType;
@@ -46,7 +45,7 @@ public class PhotoTypeOptionMenu extends Menu{
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+    public  void showMenu(Scanner scanner,  Order order, PhotoStudio photoStudio){
         while (true) {
             try {
                 System.out.println("Ok! How many people would take part in the photo shoot?");
@@ -55,12 +54,12 @@ public class PhotoTypeOptionMenu extends Menu{
                 if (answer < 1 || answer > 50) throw new NoSuchOptionException();
 
                 PhotoType chosenType = photoStudio.getCustomerManager().matchPhotoType(answer);
-                ((Order)orderOrClient).getOrderedPhoto().setType(chosenType);
+                order.getOrderedPhoto().setType(chosenType);
 
                 System.out.println("Got it! " +
                         "We can suggest the " + chosenType + " photo shoot. \n" +
                         chosenType.getDescription());
-                new RedoMenu(scanner, ((Order)orderOrClient), photoStudio, this);
+                new RedoMenu(scanner, order, photoStudio, this);
                 break;
             } catch (NoSuchOptionException e) {
                 System.out.println("---------\n" +

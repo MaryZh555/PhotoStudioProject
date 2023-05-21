@@ -1,10 +1,8 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
-import main.com.maryzh555.photo_studio.models.users.Client;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -14,20 +12,12 @@ import java.util.Scanner;
  */
 public class OrderMenu extends Menu {
 
-    public <T extends OrderOrClient> OrderMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio) {
-        showMenu(scanner, orderOrClient, photoStudio);
+    public OrderMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
+        showMenu(scanner, order, photoStudio);
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio) {
-        Order order;
-        if (orderOrClient instanceof Client) {
-            order = new Order();
-            order.setClient((Client) orderOrClient);
-        } else {
-            order = (Order) orderOrClient;
-        }
-
+    public  void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
         //test.testOrderMenu(order);//test
 
         while (true) {

@@ -2,7 +2,6 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.enums.WorkerType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 import main.com.maryzh555.photo_studio.models.Vacancy;
 import main.com.maryzh555.photo_studio.models.users.Candidate;
@@ -17,11 +16,11 @@ import java.util.Scanner;
 public class CandidateMenu extends Menu {
 
     public CandidateMenu(Scanner scanner, PhotoStudio photoStudio) {
-        showMenu(scanner, null, photoStudio);
+        showMenu(scanner, photoStudio);
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio) {
+    public  void showMenu(Scanner scanner,  PhotoStudio photoStudio) {
         while (true) {
             try {
                 System.out.println("We are glad you chose our company!");
@@ -62,7 +61,7 @@ public class CandidateMenu extends Menu {
                     int answer2 = scanner.nextInt();
                     switch (answer2) {
                         case 1:
-                            showMenu(scanner, null, photoStudio);
+                            showMenu(scanner, photoStudio);
                             break;
                         case 2:
                             new UserDistributionMenu(scanner, null, photoStudio);

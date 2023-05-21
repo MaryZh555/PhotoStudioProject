@@ -1,7 +1,6 @@
 package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
@@ -18,7 +17,7 @@ public class UserDistributionMenu extends Menu {
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+    public  void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio){
         while (true) {
             try {
                 System.out.println("Are you a client or a job candidate?\n" +
@@ -29,7 +28,7 @@ public class UserDistributionMenu extends Menu {
                 int answer = scanner.nextInt();
                 switch (answer) {
                     case 1:
-                        new ClientDistributionMenu(scanner, (Order)orderOrClient, photoStudio);
+                        new ClientDistributionMenu(scanner, order, photoStudio);
                         break;
                     case 2:
                         new CandidateMenu(scanner, photoStudio);

@@ -2,7 +2,6 @@ package main.com.maryzh555.photo_studio.user_console_interface;
 
 import main.com.maryzh555.photo_studio.enums.PhotoPaperType;
 import main.com.maryzh555.photo_studio.exceptions.NoSuchOptionException;
-import main.com.maryzh555.photo_studio.interfaces.OrderOrClient;
 import main.com.maryzh555.photo_studio.models.Order;
 import main.com.maryzh555.photo_studio.models.PhotoStudio;
 
@@ -60,7 +59,7 @@ public class PrintingMenu extends Menu {
     }
 
     @Override
-    public <T extends OrderOrClient> void showMenu(Scanner scanner, T orderOrClient, PhotoStudio photoStudio){
+    public  void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio){
         //TO PRINT true/false
         boolean toPrint = false;
         while (true) {
@@ -74,7 +73,7 @@ public class PrintingMenu extends Menu {
 
                 switch (answer) {
                     case 1:
-                        ((Order)orderOrClient).getOrderedPhoto().setToPrint(true);
+                        order.getOrderedPhoto().setToPrint(true);
                         System.out.println("Ok! So, we can offer you 3 types of photo paper sizes to print: ");
                         for (PhotoPaperType type : PhotoPaperType.values()) {
                             System.out.println(" - " + type + " (" + type.getSizeInInches() + ", " +
@@ -83,10 +82,10 @@ public class PrintingMenu extends Menu {
                         toPrint = true;
                         break;
                     case 2:
-                        ((Order)orderOrClient).getOrderedPhoto().setToPrint(false);
-                        ((Order)orderOrClient).getOrderedPhoto().setPrintStandardQty(0);
-                        ((Order)orderOrClient).getOrderedPhoto().setPrintLargeQty(0);
-                        ((Order)orderOrClient).getOrderedPhoto().setPrintProfessionalQty(0);
+                        order.getOrderedPhoto().setToPrint(false);
+                        order.getOrderedPhoto().setPrintStandardQty(0);
+                        order.getOrderedPhoto().setPrintLargeQty(0);
+                        order.getOrderedPhoto().setPrintProfessionalQty(0);
                         break;
                 }
                 break;
@@ -108,7 +107,7 @@ public class PrintingMenu extends Menu {
                     int answer = scanner.nextInt();
                     if (answer < 0 || answer > 50) throw new NoSuchOptionException();
 
-                    ((Order)orderOrClient).getOrderedPhoto().setPrintStandardQty(answer);
+                    order.getOrderedPhoto().setPrintStandardQty(answer);
                     break;
                 } catch (NoSuchOptionException e) {
                     System.out.println(e.getMessage());
@@ -127,7 +126,7 @@ public class PrintingMenu extends Menu {
                     int answer2 = scanner.nextInt();
                     if (answer2 < 0 || answer2 > 25) throw new NoSuchOptionException();
 
-                    ((Order)orderOrClient).getOrderedPhoto().setPrintLargeQty(answer2);
+                    order.getOrderedPhoto().setPrintLargeQty(answer2);
 
                     break;
                 } catch (NoSuchOptionException e) {
@@ -147,7 +146,7 @@ public class PrintingMenu extends Menu {
                     int answer3 = scanner.nextInt();
                     if (answer3 < 0 || answer3 > 10) throw new NoSuchOptionException();
 
-                    ((Order)orderOrClient).getOrderedPhoto().setPrintProfessionalQty(answer3);
+                    order.getOrderedPhoto().setPrintProfessionalQty(answer3);
 
                     break;
                 } catch (NoSuchOptionException e) {
@@ -171,10 +170,10 @@ public class PrintingMenu extends Menu {
                     int answer = scanner.nextInt();
                     switch (answer) {
                         case 1:
-                            ((Order)orderOrClient).getOrderedPhoto().setColored(false);
+                            order.getOrderedPhoto().setColored(false);
                             break;
                         case 2:
-                            ((Order)orderOrClient).getOrderedPhoto().setColored(true);
+                            order.getOrderedPhoto().setColored(true);
                             break;
                         default:
                             throw new NoSuchOptionException();
@@ -190,22 +189,22 @@ public class PrintingMenu extends Menu {
                 }
             }
             //SUMMARY
-            if (((Order)orderOrClient).getOrderedPhoto().getPrintStandardQty() != 0 ||
-                    ((Order)orderOrClient).getOrderedPhoto().getPrintLargeQty() != 0 ||
-                    ((Order)orderOrClient).getOrderedPhoto().getPrintProfessionalQty() != 0) {
+            if (order.getOrderedPhoto().getPrintStandardQty() != 0 ||
+                    order.getOrderedPhoto().getPrintLargeQty() != 0 ||
+                    order.getOrderedPhoto().getPrintProfessionalQty() != 0) {
                 System.out.println(
                         "You choose " +
-                                ((Order)orderOrClient).getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, " +
-                                ((Order)orderOrClient).getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
-                                ((Order)orderOrClient).getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo.");
+                                order.getOrderedPhoto().getPrintStandardQty() + " copies of STANDARD sized photo, " +
+                                order.getOrderedPhoto().getPrintLargeQty() + " copies of LARGE sized photo, and " +
+                                order.getOrderedPhoto().getPrintProfessionalQty() + " copies of PROFESSIONAL sized photo.");
             }
-            if (((Order)orderOrClient).getOrderedPhoto().getPrintStandardQty() == 0 &&
-                    ((Order)orderOrClient).getOrderedPhoto().getPrintLargeQty() == 0 &&
-                    ((Order)orderOrClient).getOrderedPhoto().getPrintProfessionalQty() == 0) {
+            if (order.getOrderedPhoto().getPrintStandardQty() == 0 &&
+                    order.getOrderedPhoto().getPrintLargeQty() == 0 &&
+                    order.getOrderedPhoto().getPrintProfessionalQty() == 0) {
                 System.out.println("Well, you chose to have no printed photos.");
             }
 
         }
-        new RedoMenu(scanner, ((Order)orderOrClient), photoStudio, this);
+        new RedoMenu(scanner, order, photoStudio, this);
     }
 }
