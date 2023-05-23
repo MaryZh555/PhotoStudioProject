@@ -29,6 +29,6 @@ public class myFileReader {
             e.printStackTrace();
             System.out.println("ERROR catch --- myFileReader");
         }
-        return "-----";
+        return "-- ERROR: No file found---";
     }
 }

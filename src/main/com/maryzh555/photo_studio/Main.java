@@ -10,6 +10,7 @@ import main.com.maryzh555.photo_studio.user_console_interface.MainMenu;
  */
 public class Main {
     public static void main(String[] args) {
+        System.setProperty("log4j.configurationFile", "log4j2.xml");
         new MainMenu(new PhotoStudio());
     }
 }

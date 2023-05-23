@@ -19,7 +19,7 @@ public class OrderMenu extends Menu {
     @Override
     public  void showMenu(Scanner scanner, Order order, PhotoStudio photoStudio) {
         //test.testOrderMenu(order);//test
-
+//todo don't allow the location chosing before photo type
         while (true) {
             try {
                 System.out.println("-- Order Menu --");
@@ -40,7 +40,12 @@ public class OrderMenu extends Menu {
                         new PhotoTypeOptionMenu(scanner, order, photoStudio);
                         break;
                     case 3:
-                        new LocationOptionMenu(scanner, order, photoStudio);
+                        if(order.getOrderedPhoto().getType() == null){
+                            System.out.println("ERROR: Please choose photo Type first.");
+                            showMenu(scanner, order, photoStudio);
+                        } else {
+                            new LocationOptionMenu(scanner, order, photoStudio);
+                        }
                         break;
                     case 4:
                         new PrintingMenu(scanner, order, photoStudio);

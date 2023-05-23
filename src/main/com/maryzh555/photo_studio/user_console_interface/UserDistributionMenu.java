@@ -41,7 +41,7 @@ public class UserDistributionMenu extends Menu {
                 }
                 break;
             } catch (NoSuchOptionException e) {
-                System.out.println("It seems like we don't have an order with this id, please check if the inputted id is correct");
+                System.out.println(e.getMessage());
             } catch (InputMismatchException e) {
                 System.out.println("---------\n" +
                         "ERROR: Invalid input. Not an integer" +
